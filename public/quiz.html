@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz-App-Advance</title>
+    <link rel="stylesheet" href="./src/output.css">
+
+</head>
+
+<body class="bg-[#121212] text-white">
+    <div id="nextAlert" class="fixed hidden top-20 left-1/2 -translate-x-1/2 p-3 border border-[#a66ffe] rounded-lg z-[100] bg-black text-white font-bold text-lg">
+        Only admin can proceed to next !
+    </div>
+
+    <header class="sticky inset-x-0 top-0 z-50 w-full border-b border-white bg-[#121212] px-4">
+        <nav class="mx-auto  flex max-w-7xl justify-between items-center py-2">
+            <div class="flex justify-between">
+                <svg width="150" height="60" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Background -->
+                    <rect width="100%" height="100%" fill="#121212" />
+
+                    <!-- Gradient Definition -->
+                    <defs>
+                        <linearGradient id="textGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color: #a66ffe; stop-opacity: 1" />
+                            <stop offset="100%" style="stop-color: #ae7aff; stop-opacity: 1" />
+                        </linearGradient>
+                        <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+                            <feDropShadow dx="2" dy="4" stdDeviation="3" flood-color="#00000099" />
+                        </filter>
+                    </defs>
+
+                    <!-- Text with Gradient Fill -->
+                    <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle"
+                        font-family="Arial, Helvetica, sans-serif" font-size="40" font-weight="bold"
+                        fill="url(#textGradient)" filter="url(#shadow)">
+                        QUIZ
+                    </text>
+                </svg>
+
+                <div class="flex justify-center items-center absolute right-5 ">
+                    <h1 id="countDown" class="text-3xl font-bold ">30</h1>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div>
+        <div class="py-3 text-2xl font-bold flex justify-center">
+
+        </div>
+        <div class="py-4 px-6 flex justify-center">
+            <span id="firstAnswerDiv" class="text-lg font-bold hidden"><a id="firstAnswerUser" class="text-green-400 font-bold">Sai Suman Sandeeb Das</a>
+                gave the correct answer first !</span>
+        </div>
+    </div>
+
+    <div class="flex justify-center p-4">
+
+        <div class="border border-[#ae7aff] rounded-md p-4">
+            <div class="mb-4">
+                <span id="noOfQ" class="font-bold text-xl"> </span>
+                <span id="question" class="font-bold text-xl"> </span>
+            </div>
+
+            <div id="optionsDiv">
+
+            </div>
+
+            <button id="nextBtn" class="bg-[#ae7aff] px-4 py-3 text-black rounded-sm mt-5">Next</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { DOMAIN, socket } from "./constant.js"
+
+        const params = new URLSearchParams(window.location.search);
+        const roomID = params.get("roomID");
+        const admin = params.get("admin");
+        const topic = params.get("topic");
+        const leadID = params.get("leadID");
+        const answerLS = localStorage.getItem("answer");
+        let currentUser;
+
+        fetch(`${DOMAIN}/api/v1/user/getCurrentUser`).then(res => res.json())
+        .then(user =>{
+            if(user){
+                currentUser = user.data
+            }
+        })
+
+        // WILL ALWAYS BE IN THE ROOM
+        socket.emit("joinQuiz", { roomID, topic });
+
+        if (admin == "true") {
+            socket.emit("startQuiz", { roomID, topic });
+        }
+
+        socket.on("countDown", (timer) => {
+            document.getElementById("countDown").innerHTML = timer;
+        })
+
+        if(localStorage.getItem("firstAnswer")){
+            localStorage.getItem("firstAnswer");
+            document.getElementById("firstAnswerUser").innerHTML = localStorage.getItem("firstAnswer");
+            document.getElementById("firstAnswerDiv").classList.remove("hidden");
+        }
+
+        socket.on("currentQuestion", ({ question, options, answer, qNo }) => {
+            document.getElementById("optionsDiv").innerHTML = "";
+            document.getElementById("noOfQ").innerHTML = qNo + " . ";
+            document.getElementById("optionsDiv").dataset.answer = answer;
+            document.getElementById("question").innerHTML = question;
+            options.forEach((option, index) => {
+                let html = `
+                    <button id=${"o" + (++index)} ${admin=="true"? "disabled" : ""} class="optionButton w-full border-2 hover:border-[#ae7aff] px-4 py-2 mt-2 rounded-md text-left "> ${option} </button>
+                `
+                document.getElementById("optionsDiv").insertAdjacentHTML("beforeend", html);
+            });
+            // CHOOSING CORRECT / WRONG ANSWER
+            document.querySelectorAll(".optionButton").forEach(btn => {
+                const answerLS = localStorage.getItem("answer");
+
+                if (answerLS) {
+                    const obj = JSON.parse(answerLS);
+                    document.querySelectorAll(".optionButton").forEach(button => {
+                        button.disabled = true;
+                    });
+
+                    document.querySelectorAll(".optionButton").forEach(button => {
+                        if (button.id === obj.correctAnswer) {
+                            button.classList.add("bg-green-500");
+                        } else if (button.id === obj.myAnswer) {
+                            button.classList.add("bg-red-500");
+                        }
+                    });
+                }
+
+                btn.addEventListener("click", (e) => {
+                    const points = Number(document.getElementById("countDown").innerHTML);
+                    const correctAnswer = e.currentTarget.parentElement.dataset.answer;
+                    const myAnswer = e.currentTarget.id;
+
+                    localStorage.setItem("answer", JSON.stringify({
+                        correctAnswer: correctAnswer,
+                        myAnswer: myAnswer
+                    }));
+
+                    document.querySelectorAll(".optionButton").forEach(button => {
+                        button.disabled = true;
+                    });
+
+                    if (myAnswer === correctAnswer) {
+                        e.currentTarget.classList.add("bg-green-500");
+                        // FIRST TO ANSWER LOGIC
+                        if(!localStorage.getItem("firstAnswer")){
+                            socket.emit("firstAnswer", { roomID, fullname: currentUser.fullname })
+                        }
+                        // CORRECT ANSWER LOGIC
+                        fetch(`${DOMAIN}/api/v1/leaderboard/updatePoints/${leadID}`, {
+                            method: "POST",
+                            headers: {
+                                "Content-type": "application/json"
+                            },
+                            body: JSON.stringify({
+                                id: currentUser._id,
+                                points
+                            })
+                        })
+                        .then(res => res.json())
+                        .then(data => {
+                            console.log(data);
+                        })
+                    }
+                    else {
+                        e.currentTarget.classList.add("bg-red-500");
+                        document.querySelectorAll(".optionButton").forEach(button => {
+                            if (button.id === correctAnswer) {
+                                button.classList.add("bg-green-500");
+                            }
+                        });
+                        console.log(points);
+                        // WRONG ANSWER LOGIC
+                        fetch(`${DOMAIN}/api/v1/leaderboard/updatePoints/${leadID}`, {
+                            method: "POST",
+                            headers: {
+                                "Content-type": "application/json"
+                            },
+                            body: JSON.stringify({
+                                id: currentUser._id,
+                                points: -5
+                            })
+                        })
+                        .then(res => res.json())
+                        .then(data => {
+                            console.log(data);
+                        })
+                    }
+                });
+            });
+        })
+
+        socket.on("newQuestion", ({ question, options, answer, qNo }) => {
+            localStorage.clear("answer");
+            localStorage.clear("firstAnswer");
+            document.getElementById("firstAnswerDiv").classList.add("hidden");
+            document.getElementById("noOfQ").innerHTML = qNo + " . ";
+            document.getElementById("optionsDiv").innerHTML = "";
+            document.getElementById("optionsDiv").dataset.answer = answer;
+            document.getElementById("question").innerHTML = question;
+            options.forEach((option, index) => {
+                let html = `
+                    <button id=${"o" + (++index)} ${admin=="true"? "disabled" : ""} class="optionButton w-full border-2 hover:border-[#ae7aff] px-4 py-2 mt-2 rounded-md text-left "> ${option} </button>
+                `
+                document.getElementById("optionsDiv").insertAdjacentHTML("beforeend", html);
+            });
+            // CHOOSING CORRECT / WRONG ANSWER
+            document.querySelectorAll(".optionButton").forEach(btn => {
+                const answerLS = localStorage.getItem("answer");
+
+                if (answerLS) {
+                    const obj = JSON.parse(answerLS);
+                    btn.disabled = true;
+
+                    if (obj.correctAnswer === btn.id) {
+                        btn.classList.add("bg-green-500");
+                    } else if (obj.myAnswer === btn.id && obj.correctAnswer !== obj.myAnswer) {
+                        btn.classList.add("bg-red-500");
+                    }
+                } 
+                else {
+                    btn.addEventListener("click", (e) => {
+                        const correctAnswer = e.currentTarget.parentElement.dataset.answer;
+                        const myAnswer = e.currentTarget.id;
+                        const points = Number(document.getElementById("countDown").innerHTML);
+
+                        localStorage.setItem("answer", JSON.stringify({
+                            correctAnswer: correctAnswer,
+                            myAnswer: myAnswer
+                        }));
+
+                        document.querySelectorAll(".optionButton").forEach(btn => {
+                            btn.disabled = true;
+                        });
+
+                        if (myAnswer === correctAnswer) {
+                            e.currentTarget.classList.add("bg-green-500");
+                            if(!localStorage.getItem("firstAnswer")){
+                                socket.emit("firstAnswer", { roomID, fullname: currentUser.fullname })
+                            }
+                            // CORRECT ANSWER LOGIC
+                            fetch(`${DOMAIN}/api/v1/leaderboard/updatePoints/${leadID}`, {
+                                method: "POST",
+                                headers: {
+                                    "Content-type": "application/json"
+                                },
+                                body: JSON.stringify({
+                                    id: currentUser._id,
+                                    points
+                                })
+                            })
+                            .then(res => res.json())
+                            .then(data => {
+                                console.log(data);
+                            })
+                        }
+                        else {
+                            e.currentTarget.classList.add("bg-red-500");
+                            console.log(-5);
+                            // WRONG ANSWER LOGIC
+                            fetch(`${DOMAIN}/api/v1/leaderboard/updatePoints/${leadID}`, {
+                                method: "POST",
+                                headers: {
+                                    "Content-type": "application/json"
+                                },
+                                body: JSON.stringify({
+                                    id: currentUser._id,
+                                    points: -5
+                                })
+                            })
+                            .then(res => res.json())
+                            .then(data => {
+                                console.log(data);
+                            })
+                        }
+
+                        document.querySelectorAll(".optionButton").forEach(btn => {
+                            if (btn.id === correctAnswer) {
+                                btn.classList.add("bg-green-500");
+                            }
+                        });
+                    });
+                }
+            });
+        })
+
+        // FIRST TO ANSWER EVENT LISTENER
+        socket.on("firstUserToAns", (fullname)=>{
+            if(!localStorage.getItem("firstAnswer")){
+                localStorage.setItem("firstAnswer", fullname)
+                document.getElementById("firstAnswerUser").innerHTML = fullname;
+                document.getElementById("firstAnswerDiv").classList.remove("hidden");
+            }
+        })
+
+        // NEXT BUTTON LOGIC
+        document.getElementById("nextBtn").addEventListener("click", ()=>{
+            if(admin == "true"){
+                socket.emit("nextQuestion", roomID);
+            }
+            else{
+                document.getElementById("nextAlert").classList.remove("hidden");
+                setInterval(() => {
+                    document.getElementById("nextAlert").classList.add("hidden");
+                }, 3000);
+            }
+        })
+
+        // END OF QUIZ ---> LEADERBOARD
+        socket.on("navigateToLead", ()=>{
+            window.location.href = `/leaderboard?leadID=${leadID}&userID=${currentUser._id}&roomID=${roomID}`;
+        })
+
+
+    </script>
+</body>

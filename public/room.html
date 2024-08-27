@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="./src/output.css">
+
+</head>
+
+<body class="bg-[#121212] text-white font-[Roboto]">
+    <div id="idCopied" class="fixed hidden top-20 left-1/2 -translate-x-1/2 p-3 border border-[#a66ffe] rounded-lg z-[100] bg-black text-white font-bold text-lg">
+        Id Copied !
+    </div>
+
+    <header class="sticky inset-x-0 top-0 z-50 w-full border-b border-white bg-[#121212] px-4">
+        <nav class="mx-auto flex max-w-7xl justify-between items-center py-2">
+            <div class="">
+                <svg width="150" height="60" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Background -->
+                    <rect width="100%" height="100%" fill="#121212" />
+
+                    <!-- Gradient Definition -->
+                    <defs>
+                        <linearGradient id="textGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color: #a66ffe; stop-opacity: 1" />
+                            <stop offset="100%" style="stop-color: #ae7aff; stop-opacity: 1" />
+                        </linearGradient>
+                        <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+                            <feDropShadow dx="2" dy="4" stdDeviation="3" flood-color="#00000099" />
+                        </filter>
+                    </defs>
+
+                    <!-- Text with Gradient Fill -->
+                    <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle"
+                        font-family="Arial, Helvetica, sans-serif" font-size="40" font-weight="bold"
+                        fill="url(#textGradient)" filter="url(#shadow)">
+                        QUIZ
+                    </text>
+                </svg>
+            </div>
+        </nav>
+    </header>
+
+    <div class="flex justify-center px-2">
+        <div class="p-2 sm:w-[55%]">
+            <div class="font-bold flex gap-3 text-lg">
+                <span class="text-gray-400">Room Name :</span>
+                <h1 id="roomName">  </h1>
+            </div>
+            <div class="font-bold flex gap-3 text-lg">
+                <span class="text-gray-400">Quiz Topic :</span>
+                <h1 id="topic">  </h1>
+            </div>
+            <div class="font-bold flex gap-3 text-lg">
+                <span class="text-gray-400">ID :</span>
+                <h1 id="roomID">  </h1>
+                <span id="copyID" class="material-symbols-outlined cursor-pointer">content_copy</span>
+            </div>
+    
+            <div class="flex relative items-center gap-4 rounded-full mt-5 border border-green-300 px-4 py-1.5">
+                <span class="text-green-300 material-symbols-outlined">supervisor_account</span>
+                <h3 id="adminName"> </h3>
+                <div class="font-bold bg-green-300 rounded-full absolute right-1 text-black px-2 py-0.5">Room Admin</div>
+            </div>
+            
+            <div class="flex justify-center py-4">
+                <button id="startQuizBtn" class="bg-[#a66ffe] rounded-sm text-black px-5 py-2">Start Quiz</button>
+            </div>
+
+            <div class="p-4 border border-[#a66ffe] rounded-lg mt-2">
+                <h1 class="font-bold text-2xl text-center mb-3">Participants</h1>
+                <div class="font-bold flex gap-3 text-xl mb-5">
+                    <span class="text-gray-400">Total :</span>
+                    <h1 id="noOfPart"> </h1>
+                </div>
+
+                <div id="participantsDiv">
+                    
+                    <!-- <div class="flex gap-4 rounded-full mt-2 border border-blue-300 px-4 py-1.5">
+                        <span class="text-blue-300 material-symbols-outlined">person</span>
+                        <h3>Avishek Adhikary</h3>
+                    </div>
+                    <div class="flex gap-4 relative rounded-full mt-2 border border-blue-300 px-4 py-1.5">
+                        <span class="text-blue-300 material-symbols-outlined">person</span>
+                        <h3>Sai Suman Sandeeb Das</h3>
+                        <div class="absolute right-1 mt-0 font-bold bg-blue-300 rounded-full text-black px-3 py-0.5">You</div>
+                    </div> -->
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { DOMAIN, socket } from "./constant.js"
+
+        const params = new URLSearchParams(window.location.search);
+        const roomID = params.get("roomID");
+        const admin = params.get("admin");
+        let adminName;
+        let roomName;
+        let topic;
+        let leadID;
+        
+        let currentUser;
+        fetch(`${DOMAIN}/api/v1/user/getCurrentUser`).then(res => res.json())
+        .then(user =>{
+            currentUser = user.data
+
+            // SOCKET, ROOMS & ALL THOSE STUFF
+            socket.emit("joinRoom", {
+                roomID: roomID,
+                user: currentUser,
+                admin: (admin == "true")
+            })
+
+            // ROOM ADMIN AND PARTICIPANTS
+            fetch(`${DOMAIN}/api/v1/room/getRoom/${roomID}`).then(res => res.json())
+            .then(data => {
+                adminName = data.data.admin;
+                document.getElementById("adminName").innerHTML = data.data.admin;
+                document.getElementById("roomName").innerHTML = data.data.name;
+                roomName = data.data.name;
+                document.getElementById("topic").innerHTML = data.data.topic == "meme"? "Trending memes" : "General Knowledge";
+                topic = data.data.topic;
+                document.getElementById("roomID").innerHTML = data.data._id;
+                document.getElementById("noOfPart").innerHTML = data.data.participants.length;
+
+                data.data.participants.forEach(user =>{
+                    let html;
+                    if(currentUser._id == user._id){
+                        html = `
+                            <div data-userid=${user._id} class="user flex gap-4 relative rounded-full mt-2 border border-blue-300 px-4 py-1.5">
+                                <span class="text-blue-300 material-symbols-outlined">person</span>
+                                <h3>${user.fullname}</h3>
+                                <div class="absolute right-1 mt-0 font-bold bg-blue-300 rounded-full text-black px-3 py-0.5">You</div>
+                            </div>
+                        `
+                    }
+                    else{
+                        html = `
+                            <div data-userid=${user._id} class="user flex gap-4 rounded-full mt-2 border border-blue-300 px-4 py-1.5">
+                                <span class="text-blue-300 material-symbols-outlined">person</span>
+                                <h3>${user.fullname}</h3>
+                            </div>
+                        `
+                    }
+                    document.getElementById("participantsDiv").insertAdjacentHTML("beforeend", html)
+                })
+            })
+        })
+
+        window.addEventListener("beforeunload", ()=>{
+            socket.emit("leftRoom", {
+                userID: currentUser._id,
+                roomID: roomID
+            });
+        })
+        
+        // REAL TIME USER LEAVING
+        socket.on("userLeft", (userID)=>{
+            document.querySelectorAll(".user").forEach(elem =>{
+                console.log(elem.dataset.userid, userID);
+                if(elem.dataset.userid == userID) {
+                    elem.remove();
+                    const number = Number(document.getElementById("noOfPart").innerHTML) - 1;
+                    document.getElementById("noOfPart").innerHTML = number;
+                }
+            })
+        })
+
+        // REAL TIME USER JOINING
+        socket.on("newUser", (user)=>{
+            if(currentUser._id != user._id){
+                let html = `
+                    <div data-userid=${user._id} class="user flex gap-4 rounded-full mt-2 border border-blue-300 px-4 py-1.5">
+                        <span class="text-blue-300 material-symbols-outlined">person</span>
+                        <h3>${user.fullname}</h3>
+                    </div>
+                `
+                document.getElementById("participantsDiv").insertAdjacentHTML("beforeend", html)
+            }
+            const number = Number(document.getElementById("noOfPart").innerHTML) + 1;
+            document.getElementById("noOfPart").innerHTML = number;
+        })        
+
+        // START QUIZ
+        document.getElementById("startQuizBtn").addEventListener("click", ()=>{
+            if(currentUser.fullname == adminName){
+                // LEADERBOARD CREATION AND JOINING
+                fetch(`${DOMAIN}/api/v1/leaderboard/create/${roomName}`).then(res => res.json())
+                .then((data) =>{
+                    console.log(data);
+                    socket.emit("pushObjectInLead", {
+                        leadID: data.data._id,
+                        roomID
+                    });
+                    socket.on("navigateParts", ({ url, topic })=>{
+                        if(currentUser.fullname == adminName) window.location.href = `${url}&admin=true&topic=${topic}&leadID=${data.data._id}`;
+                        else window.location.href = `${url}&admin=false&topic=${topic}&leadID=${data.data._id}`;
+                    })
+                })
+            }
+            else{
+                document.getElementById("idCopied").innerHTML = "Only admin can start !!"
+                document.getElementById("idCopied").classList.remove("hidden");
+                setInterval(() => {
+                    document.getElementById("idCopied").classList.add("hidden");
+                }, 3000);
+            }
+        })
+
+        socket.on("pushUser", (leadID)=>{
+            leadID = leadID;
+            fetch(`${DOMAIN}/api/v1/leaderboard/join/${leadID}`, {
+                method: "POST",
+                headers: {
+                    "Content-type": "application/json"
+                },
+                body: JSON.stringify({
+                    ...currentUser,
+                    points: 0
+                })
+            })
+            .then((res)=> res.json())
+            .then((data)=>{
+                console.log(data);
+                socket.emit("navigate", {
+                    url: `/quiz?roomID=${roomID}`,
+                    roomID,
+                    topic
+                });
+                socket.on("navigateParts", ({ url, topic })=>{
+                    if(currentUser.fullname == adminName) window.location.href = `${url}&admin=true&topic=${topic}&leadID=${leadID}`;
+                    else window.location.href = `${url}&admin=false&topic=${topic}&leadID=${leadID}`;
+                })
+            })
+        })
+
+
+        // COPY ID
+        document.getElementById("copyID").addEventListener("click", ()=>{
+            navigator.clipboard.writeText(document.getElementById("roomID").innerHTML).then(()=>{
+                document.getElementById("idCopied").innerHTML = "ID Copied !!"
+                document.getElementById("idCopied").classList.remove("hidden");
+                setInterval(() => {
+                    document.getElementById("idCopied").classList.add("hidden");
+                }, 3000);
+            })
+        })
+
+    </script>
+
+</body>
+
+</html>

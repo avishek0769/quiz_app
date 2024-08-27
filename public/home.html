@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz</title>
+    <link rel="stylesheet" href="./src/output.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+</head>
+
+<body class="bg-[#121212] font-[Roboto]">
+    <header class="sticky inset-x-0 top-0 z-50 w-full border-b border-white bg-[#121212] px-4">
+        <nav class="mx-auto flex max-w-7xl justify-between items-center py-2">
+            <div class="">
+                <svg width="150" height="60" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Background -->
+                    <rect width="100%" height="100%" fill="#121212" />
+
+                    <!-- Gradient Definition -->
+                    <defs>
+                        <linearGradient id="textGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color: #a66ffe; stop-opacity: 1" />
+                            <stop offset="100%" style="stop-color: #ae7aff; stop-opacity: 1" />
+                        </linearGradient>
+                        <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+                            <feDropShadow dx="2" dy="4" stdDeviation="3" flood-color="#00000099" />
+                        </filter>
+                    </defs>
+
+                    <!-- Text with Gradient Fill -->
+                    <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle"
+                        font-family="Arial, Helvetica, sans-serif" font-size="40" font-weight="bold"
+                        fill="url(#textGradient)" filter="url(#shadow)">
+                        QUIZ
+                    </text>
+                </svg>
+            </div>
+
+            <!-- SIGN UP & LOG IN  -->
+            <div class="mb-8 text-white mt-auto flex flex-wrap gap-4 px-4 sm:mb-0 sm:mt-0 sm:items-center sm:px-0">
+                <button id="logIn"
+                    class="w-full bg-[#383737] px-3 py-2 hover:bg-[#4f4e4e] sm:w-auto sm:bg-transparent">Log in</button>
+                <button id="signUp"
+                    class="mr-1 w-full bg-[#ae7aff] px-3 py-2 text-center font-bold text-black shadow-[5px_5px_0px_0px_#4f4e4e] transition-all duration-150 ease-in-out active:translate-x-[5px] active:translate-y-[5px] active:shadow-[0px_0px_0px_0px_#4f4e4e] sm:w-auto">Sign
+                    up</button>
+            </div>
+        </nav>
+    </header>
+
+    <div class="flex justify-center items-center p-3">
+        <div class="m-auto border border-[#ae7aff] p-3 rounded-lg mt-10">
+            <h1 class="text-[#ae7aff] text-3xl text-center font-bold p-4">Welcome to the Quiz !</h1>
+            <p class="text-xl text-white p-6">To play a quiz competition first you need to Sign up and then join a room
+                created by the admin 😁</p>
+            <div class="flex justify-center gap-5">
+                <button id="joinRoomBtn" class="bg-[#ae7aff] px-4 py-3 text-black rounded-sm ">Join Room</button>
+                <button id="createRoomBtn" class="bg-[#ae7aff] px-4 py-3 text-black rounded-sm ">Create Room</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Overlay div to cover the entire screen -->
+    <div id="createRoomDiv"
+        class="w-[100vw] h-[100vh] bg-[#000000c3] hidden   fixed top-0 left-0 z-50 items-center justify-center">
+        <div class="flex flex-col relative bg-black border border-[#ae7aff] p-5 rounded-lg">
+            <span id="closeCreateRoom" class="absolute right-6 material-symbols-outlined cursor-pointer text-white">
+                close
+            </span>
+            <label for="roomName" class="mb-2 inline-block text-gray-300 text-xl font-bold">Room name</label>
+            <input id="roomName" type="text" placeholder="Enter your Room name"
+                class="mb-4 rounded-lg border bg-transparent px-3 py-2 text-white" />
+
+            <div class="text-gray-300 mb-4 text-xl font-bold">Quiz Topic</div>
+
+            <div class="space-y-2">
+                <div class="flex items-center gap-3">
+                    <input id="meme" name="quizTopic" type="radio" class="w-4 h-4" />
+                    <label for="meme" class="text-gray-300">Trending memes</label>
+                </div>
+                <div class="flex items-center gap-3">
+                    <input id="gk" name="quizTopic" type="radio" class="w-4 h-4" />
+                    <label for="gk" class="text-gray-300">General Knowledge</label>
+                </div>
+            </div>
+
+            <button id="createRoomSubmit" class="bg-[#ae7aff] px-4 py-3 text-black rounded-sm mt-5">Create Room</button>
+        </div>
+    </div>
+
+    <div id="joinRoomDiv"
+        class="w-[100vw] h-[100vh] bg-[#000000c3] hidden   fixed top-0 left-0 z-50 items-center justify-center"
+        id="createRoomDiv">
+        <div class="flex flex-col relative bg-black border border-[#ae7aff] p-5 rounded-lg">
+            <span id="closeJoinRoom" class="absolute right-6 material-symbols-outlined cursor-pointer text-white">
+                close
+            </span>
+            <label for="roomID" class="mb-2 inline-block text-gray-300">Room ID</label>
+            <input id="roomID" type="text" placeholder="Enter the Room ID"
+                class="mb-4 text-white rounded-lg border bg-transparent px-3 py-2" />
+
+            <button id="joinRoomSubmit" disabled class="bg-[#ae7aff] disabled:bg-purple-300 px-4 py-3 text-black rounded-sm ">Join Room</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { DOMAIN } from "./constant.js"
+        
+        let currentUser;
+        fetch(`${DOMAIN}/api/v1/user/getCurrentUser`).then(res => res.json())
+        .then(user =>{
+            if(user){
+                currentUser = user.data
+            }
+        })
+        
+        document.getElementById("signUp").addEventListener("click", () => {
+            window.location.href = "/signup"
+        })
+        document.getElementById("logIn").addEventListener("click", () => {
+            window.location.href = "/login"
+        })
+
+        document.getElementById("createRoomBtn").addEventListener("click", () => {
+            if(currentUser){
+                document.getElementById("createRoomDiv").classList.replace("hidden", "flex");
+            }
+            else{
+                window.location.href = "/signup"
+            }
+        })
+        document.getElementById("joinRoomBtn").addEventListener("click", () => {
+            if (currentUser) {
+                document.getElementById("joinRoomDiv").classList.replace("hidden", "flex");    
+            }
+            else {
+                window.location.href = "/signup"
+            }
+        })
+        document.getElementById("closeCreateRoom").addEventListener("click", () => {
+            document.getElementById("createRoomDiv").classList.replace("flex", "hidden");
+        })
+        document.getElementById("closeJoinRoom").addEventListener("click", () => {
+            document.getElementById("joinRoomDiv").classList.replace("flex", "hidden");
+        })
+        
+        // CREATE ROOM
+        document.getElementById("createRoomSubmit").addEventListener("click", ()=>{
+            fetch(`${DOMAIN}/api/v1/room/create`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    name: document.getElementById("roomName").value,
+                    topic: document.getElementById("meme").checked? "meme" : "gk"
+                })
+            })
+            .then(res => res.json())
+            .then(data =>{
+                window.location.href = `/room?roomID=${data.data._id}&admin=true`;
+            })
+        })
+
+        //JOIN ROOM
+        const roomIDInput = document.getElementById("roomID");
+        roomIDInput.addEventListener("input", (e)=>{
+            if(roomIDInput.value.length >= 24) document.getElementById("joinRoomSubmit").disabled = false;
+            else document.getElementById("joinRoomSubmit").disabled = true;
+        })
+
+        document.getElementById("joinRoomSubmit").addEventListener("click", ()=>{
+            fetch(`${DOMAIN}/api/v1/room/join/${roomIDInput.value}`).then((res)=> res.json())
+            .then((data)=>{
+                window.location.href = `/room?roomID=${data.data._id}&admin=false`;
+            })
+        })
+
+    </script>
+</body>
+
+
+</html>

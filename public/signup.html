@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./src/output.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+        rel="stylesheet">
+
+</head>
+
+<body class="font-[Roboto]">
+    <header class="sticky inset-x-0 top-0 z-50 w-full border-b border-white bg-[#121212] px-4">
+        <nav class="mx-auto flex max-w-7xl justify-between items-center py-2">
+            <div class="">
+                <svg width="150" height="60" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Background -->
+                    <rect width="100%" height="100%" fill="#121212" />
+
+                    <!-- Gradient Definition -->
+                    <defs>
+                        <linearGradient id="textGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color: #a66ffe; stop-opacity: 1" />
+                            <stop offset="100%" style="stop-color: #ae7aff; stop-opacity: 1" />
+                        </linearGradient>
+                        <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+                            <feDropShadow dx="2" dy="4" stdDeviation="3" flood-color="#00000099" />
+                        </filter>
+                    </defs>
+
+                    <!-- Text with Gradient Fill -->
+                    <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle"
+                        font-family="Arial, Helvetica, sans-serif" font-size="40" font-weight="bold"
+                        fill="url(#textGradient)" filter="url(#shadow)">
+                        QUIZ
+                    </text>
+                </svg>
+            </div>
+        </nav>
+    </header>
+
+    <div class="h-screen overflow-y-auto bg-[#121212] text-white">
+        <div id="bufferingDiv"
+            class="hidden flex-col gap-3 items-center absolute z-50 w-screen h-screen justify-center bg-[#000000bd] ">
+            <div id="showMessage" class="text-white text-2xl text-center font-bold"> Please wiat </div>
+            <dotlottie-player class="" src="https://lottie.host/27feff6c-53ae-48c7-9539-9a37724286be/8okSjWIQl7.json"
+                background="transparent" speed="1" style="width: 70px; height: 70px;" loop autoplay></dotlottie-player>
+        </div>
+
+        <div id="popUp" class="w-screen h-14 hidden justify-center text-red-400 text-2xl text-center pt-6"> </div>
+
+        <div class="mx-auto my-8 flex w-full max-w-sm flex-col px-4">
+            <h1 class="font-bold text-3xl text-[#ae7aff] mb-10">Sign up to play the quiz</h1>
+
+            <label for="fullname" class="mb-1 inline-block text-gray-300">Full name</label>
+            <input id="fullname" type="text" placeholder="Enter your fullname" class="mb-4 rounded-lg border bg-transparent px-3 py-2" />
+
+            <label for="username" class="mb-1 inline-block text-gray-300">Username</label>
+            <input id="username" type="text" placeholder="Enter your username" class="mb-4 rounded-lg border bg-transparent px-3 py-2" />
+
+            <label for="password" class="mb-1 inline-block text-gray-300">Password*</label>
+            <input id="password" type="text" placeholder="Enter your password" class="mb-4 rounded-lg border bg-transparent px-3 py-2" />
+
+            <button id="signUpSubmit" class="bg-[#ae7aff] px-4 py-3 text-black mb-5">Sign up</button>
+            <div>Already have an account ? <a href="/login" class="text-[#ae7aff] ">Log in</a></div>
+        </div>
+    </div>
+
+
+    <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script>
+    <script type="module">
+        import { DOMAIN } from "./constant.js"
+
+        document.getElementById("signUpSubmit").addEventListener("click", ()=>{
+            fetch(`${DOMAIN}/api/v1/user/register`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json" // Make sure the Content-Type is set to application/json
+                },
+                body: JSON.stringify({
+                    fullname: document.getElementById("fullname").value,
+                    username: document.getElementById("username").value,
+                    password: document.getElementById("password").value
+                })
+            })
+            .then((res) => res.json())
+            .then((data)=>{
+                console.log(data);
+                fetch(`${DOMAIN}/api/v1/user/login`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json" // Make sure the Content-Type is set to application/json
+                    },
+                    body: JSON.stringify({
+                        username: document.getElementById("username").value,
+                        password: document.getElementById("password").value
+                    })
+                })
+                .then(res => res.json())
+                .then(data =>{
+                    window.location.href = "/home"
+                })
+            })
+        })
+    </script>
+</body>
+
+</html>
