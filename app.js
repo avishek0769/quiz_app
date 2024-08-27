@@ -249,21 +249,20 @@ io.on("connection", (socket) => {
         }
         else{
             quiz = [
-                // Astronomy
                 {
-                    question: "Which planet is known for its prominent ring system?",
-                    options: ["Saturn", "Jupiter", "Uranus", "Neptune"],
+                    question: "What country has the highest life expectancy?",
+                    options: ["Hong Kong", "China", "Japan", "France"],
                     answer: "o1"
                 },
                 {
-                    question: "What is the name of the galaxy that contains our Solar System?",
-                    options: ["Andromeda Galaxy", "Milky Way Galaxy", "Triangulum Galaxy", "Whirlpool Galaxy"],
+                    question: "Which language has the more native speakers?",
+                    options: ["English", "Spanish", "Portuguese", "Russian"],
                     answer: "o2"
                 },
                 {
                     question: "Which planet in our solar system has the highest mountain?",
-                    options: ["Earth", "Mars", "Venus", "Mercury"],
-                    answer: "o2"
+                    options: ["Earth", "Venus", "Mars", "Mercury"],
+                    answer: "o3"
                 },
                 {
                     question: "What is the name of the second-largest moon of Saturn?",
@@ -271,42 +270,38 @@ io.on("connection", (socket) => {
                     answer: "o2"
                 },
                 {
-                    question: "What type of star is the Sun classified as?",
-                    options: ["Red Dwarf", "White Dwarf", "Main Sequence", "Neutron Star"],
-                    answer: "o3"
-                },
-            
-                // Society
-                {
-                    question: "Which country was the first to abolish slavery?",
-                    options: ["United States", "Brazil", "Haiti", "United Kingdom"],
-                    answer: "o3"
-                },
-                {
-                    question: "What is the primary purpose of the United Nations?",
-                    options: ["To promote global trade", "To maintain international peace and security", "To regulate global climate", "To provide international aid"],
+                    question: "Which state-owned company was founded by Adolf Hitler's party in May 1937 and is known as 'The People's Car Company'?",
+                    options: ["Mercedes-Benz", "Volkswagen", "BMW", "Porsche"],
                     answer: "o2"
                 },
                 {
+                    question: "Which country was the first to abolish slavery?",
+                    options: ["Haiti", "Brazil", "United States", "United Kingdom"],
+                    answer: "o1"
+                },
+                {
+                    question: "What is the primary purpose of the United Nations?",
+                    options: ["To promote global trade", "To provide international aid", "To regulate global climate", "To maintain international peace and security"],
+                    answer: "o4"
+                },
+                {
                     question: "Which ancient civilization is known for creating the first known system of writing?",
-                    options: ["Ancient Greeks", "Ancient Egyptians", "Sumerians", "Indus Valley Civilization"],
-                    answer: "o3"
+                    options: ["Sumerians", "Ancient Egyptians", "Ancient Greeks", "Indus Valley Civilization"],
+                    answer: "o1"
                 },
                 {
                     question: "What is the concept of 'civil disobedience' best associated with?",
-                    options: ["Mahatma Gandhi", "Martin Luther King Jr.", "Nelson Mandela", "Abraham Lincoln"],
-                    answer: "o1"
+                    options: ["Martin Luther King Jr.", "Mahatma Gandhi", "Nelson Mandela", "Abraham Lincoln"],
+                    answer: "o2"
                 },
                 {
                     question: "Which historical event led to the establishment of the United Nations?",
                     options: ["World War I", "World War II", "The Cold War", "The Korean War"],
                     answer: "o2"
                 },
-            
-                // Science
                 {
-                    question: "What is the basic unit of life?",
-                    options: ["Atom", "Molecule", "Cell", "Tissue"],
+                    question: "What is a group of pandas called?",
+                    options: ["Pack", "Herd", "Embarrassment", "Clowder"],
                     answer: "o3"
                 },
                 {
@@ -316,18 +311,18 @@ io.on("connection", (socket) => {
                 },
                 {
                     question: "Which gas is most abundant in Earth's atmosphere?",
-                    options: ["Oxygen", "Carbon Dioxide", "Nitrogen", "Argon"],
-                    answer: "o3"
+                    options: ["Oxygen", "Carbon Dioxide", "Argon", "Nitrogen"],
+                    answer: "o4"
                 },
                 {
-                    question: "What is the name of the process by which plants make their food?",
-                    options: ["Photosynthesis", "Respiration", "Fermentation", "Transpiration"],
-                    answer: "o1"
+                    question: "What was the name of the atomic bomb dropped on Hiroshima during World War II?",
+                    options: ["Fat Man", "Little Boy", "Big Boy", "Tall Man"],
+                    answer: "o2"
                 },
                 {
                     question: "What is the pH level of pure water?",
-                    options: ["6", "7", "8", "9"],
-                    answer: "o2"
+                    options: ["7", "8", "9", "10"],
+                    answer: "o1"
                 }
             ]
         }
