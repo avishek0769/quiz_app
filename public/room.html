@@ -16,8 +16,33 @@
 </head>
 
 <body class="bg-[#121212] text-white font-[Roboto]">
-    <div id="idCopied" class="fixed hidden top-20 left-1/2 -translate-x-1/2 p-3 border border-[#a66ffe] rounded-lg z-[100] bg-black text-white font-bold text-lg">
-        Id Copied !
+    <div id="bufferingDiv" class="hidden flex-col gap-3 items-center absolute z-[100] w-screen h-screen justify-center bg-[#000000bd] ">
+        <div id="showMessage" class="text-white text-2xl text-center font-bold"> Please wait </div>
+        <dotlottie-player class="" src="https://lottie.host/27feff6c-53ae-48c7-9539-9a37724286be/8okSjWIQl7.json" background="transparent" speed="1" style="width: 70px; height: 70px;" loop autoplay></dotlottie-player>
+    </div>
+
+    <div id="onlineFriendsSection" class="absolute hidden   z-[200] w-screen h-screen justify-center items-center">
+        <div class="p-2 border-2 border-green-400 bg-black rounded-lg w-[85%]">
+            <div class="flex justify-between px-2">
+                <div class="text-xl font-bold text-green-400">Friends online</div>
+                <span id="closeInvite" class="material-symbols-outlined cursor-pointer">close</span>
+            </div>
+            <div id="onlineFriendsDiv" class="space-y-2 mt-3 max-h-[25rem] overflow-auto">
+                <!-- <div class="relative flex items-center gap-3 rounded-full bg-[#3c3c3ca5] p-1">
+                    <img src="https://res.cloudinary.com/dce0jp2rc/image/upload/v1725633416/quiz_app_avatars/avatar_1725633405132.jpg" class="w-10 h-10 object-cover rounded-full">
+                    <div class="font-bold">Avishek Adhikary</div>
+                    <button class="bg-green-500 absolute right-2 rounded-full px-2 py-0.5">Invite</button>
+                </div> -->
+            </div>
+        </div>
+    </div>
+
+    <div id="alertDiv" class="absolute top-24 flex flex-col justify-center items-center w-screen z-[100] gap-2">
+
+    </div>
+
+    <div id="frndReqDiv" class="overflow-hidden space-y-3 absolute w-screen bottom-10 pl-4 pr-1">
+         
     </div>
 
     <header class="sticky inset-x-0 top-0 z-50 w-full border-b border-white bg-[#121212] px-4">
@@ -53,7 +78,7 @@
         <div class="p-2 sm:w-[55%]">
             <div class="font-bold flex gap-3 text-lg">
                 <span class="text-gray-400">Room Name :</span>
-                <h1 id="roomName">  </h1>
+                <h1 id="roomName"> jsdfbdshbfsdhfbshdbfjsbdfbsdj </h1>
             </div>
             <div class="font-bold flex gap-3 text-lg">
                 <span class="text-gray-400">Quiz Topic :</span>
@@ -65,100 +90,302 @@
                 <span id="copyID" class="material-symbols-outlined cursor-pointer">content_copy</span>
             </div>
     
-            <div class="flex relative items-center gap-4 rounded-full mt-5 border border-green-300 px-4 py-1.5">
-                <span class="text-green-300 material-symbols-outlined">supervisor_account</span>
-                <h3 id="adminName"> </h3>
-                <div class="font-bold bg-green-300 rounded-full absolute right-1 text-black px-2 py-0.5">Room Admin</div>
+            <div class="flex relative items-center gap-2 rounded-full mt-5 border border-green-300 px-2 py-1.5">
+                <div class="w-[3.1rem] flex">
+                    <img id="adminAvatar" width="100%" class="rounded-full object-cover w-10 h-10" />
+                </div>
+                <div>
+                    <h3 id="adminName">dsfsdf </h3>
+                    <h6 id="adminUsername" class="text-sm text-[#ffffff91]">avishe09 </h6>
+                </div>
+                <div class="font-bold bg-green-300 rounded-full absolute right-2 text-black px-3 py-1">Admin</div>
             </div>
             
-            <div class="flex justify-center py-4">
-                <button id="startQuizBtn" class="bg-[#a66ffe] rounded-sm text-black px-5 py-2">Start Quiz</button>
+            <div class="flex justify-center py-4 gap-3">
+                <button id="startQuizBtn" class="hidden bg-[#a66ffe] rounded-md text-black px-5 font-bold py-2">Start Quiz</button>
+                <button id="leaveQuizBtn" class="hidden border  border-red-500 text-red-500 font-bold rounded-md  px-5 py-2">Leave Quiz</button>
+                <button id="disposeQuizBtn" class="hidden border  border-red-500 text-red-500 font-bold rounded-md  px-5 py-2">Dispose Quiz</button>
             </div>
 
             <div class="p-4 border border-[#a66ffe] rounded-lg mt-2">
-                <h1 class="font-bold text-2xl text-center mb-3">Participants</h1>
-                <div class="font-bold flex gap-3 text-xl mb-5">
-                    <span class="text-gray-400">Total :</span>
-                    <h1 id="noOfPart"> </h1>
+                <h1 class="font-bold text-2xl text-center">Participants</h1>
+                <div class="my-4 flex justify-between items-center">
+                    <div class="font-bold flex gap-3 text-xl">
+                        <span class="text-gray-400 ">Total :</span>
+                        <h1 id="noOfPart">34</h1>
+                    </div>
+                    <button id="invitePart" class="flex border-2 border-green-500 font-bold text-green-500 rounded-full justify-center items-center pl-4 pr-2 py-1 gap-1">
+                        <div>Invite</div>
+                        <span class="material-symbols-outlined font-bold">add</span>
+                    </button>
                 </div>
 
                 <div id="participantsDiv">
-                    
-                    <!-- <div class="flex gap-4 rounded-full mt-2 border border-blue-300 px-4 py-1.5">
-                        <span class="text-blue-300 material-symbols-outlined">person</span>
-                        <h3>Avishek Adhikary</h3>
-                    </div>
-                    <div class="flex gap-4 relative rounded-full mt-2 border border-blue-300 px-4 py-1.5">
-                        <span class="text-blue-300 material-symbols-outlined">person</span>
-                        <h3>Sai Suman Sandeeb Das</h3>
-                        <div class="absolute right-1 mt-0 font-bold bg-blue-300 rounded-full text-black px-3 py-0.5">You</div>
-                    </div> -->
                     
                 </div>
             </div>
         </div>
     </div>
-
+    
+    <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script>
     <script type="module">
-        import { DOMAIN, socket } from "./constant.js"
+        import { DOMAIN, socket, alerts } from "./constant.js"
 
         const params = new URLSearchParams(window.location.search);
         const roomID = params.get("roomID");
         const admin = params.get("admin");
-        let adminName;
+        let adminId;
         let roomName;
         let topic;
         let leadID;
-        
+        let sender = {};
         let currentUser;
+        let roomParticipants = [];
+        let intervalCopy = {};
+
+        // REVERSE LOADING COUNTDOWN
+        function reverseLoading (div, loading) {
+            let timeLeft = 7 * 1000;
+            const totalTime = 7 * 1000;
+            const loadingBar = document.getElementById(loading);
+            
+            let interval = setInterval(() => {
+                timeLeft -= 10;
+                const widthPercentage = (timeLeft / totalTime) * 100;
+                loadingBar.style.width = widthPercentage + "%";
+
+                if (timeLeft <= 0) {
+                    clearInterval(interval);
+                    document.getElementById(div).classList.replace("translate-x-0", "translate-x-[100%]");
+                    setTimeout(() => {
+                        document.getElementById(div).remove();
+                    }, 700);
+                    // FRIEND REQUEST IN NOTIFICATION
+                    fetch(`${DOMAIN}/api/v1/notification/addNoti?sender=${sender[div]}&receiver=${currentUser._id}&type=0`).then(res => res.json())
+                    .then(data => console.log(data))
+                }
+            }, 10);
+            intervalCopy[div] = interval;
+        };
+        
+        // EVENTLISTENER FUNCTION FOR THREE DOTS, ADD FRIEND & KICK
+        const threeDotsEventsForEach = ()=>{
+            // THREE DOTS
+            document.querySelectorAll(".three_dots").forEach(threeDot => {
+                threeDot.addEventListener("click", (e)=>{
+                    e.stopPropagation();
+                    document.querySelectorAll(".three_dots_Div").forEach(threeDotDiv => {
+                        !threeDotDiv.classList.contains("hidden") ? threeDotDiv.classList.add("hidden") : null
+                    })
+                    threeDot.parentElement.querySelector(".three_dots_Div").classList.remove("hidden");
+                })
+            })
+            document.addEventListener("click", ()=>{
+                document.querySelectorAll(".three_dots_Div").forEach(threeDotDiv => {
+                    !threeDotDiv.classList.contains("hidden") ? threeDotDiv.classList.add("hidden") : null
+                })
+            })
+
+            // ADD FRIEND
+            document.querySelectorAll(".addFrnd").forEach(btn => {
+                btn.addEventListener("click", ()=>{
+                    btn.disabled = true;
+                    fetch(`${DOMAIN}/api/v1/user/sendFrndReq`, {
+                        method: "POST",
+                        headers: {
+                            "Content-type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            userID: btn.dataset.userid,
+                            currentUser,
+                            roomPart: true
+                        })
+                    })
+                    .then(res => res.json())
+                    .then(data => console.log(data))
+                })
+                setTimeout(() => {
+                    btn.disabled = false;
+                }, 8000);
+            })
+
+            // KICK PARTICIPANT
+            document.querySelectorAll(".td_kick").forEach(btn => {
+                btn.addEventListener("click", ()=>{
+                    fetch(`${DOMAIN}/api/v1/room/kick/${roomID}/${btn.dataset.userid}`).then(res => res.json())
+                    .then(data => {
+                        console.log(data);
+                        btn.parentElement.parentElement.remove();
+                    })
+                })
+            })
+        }
+
+        const threeDotsEventsForOne = (Div, isThreeDots) => {
+            // THREE DOTS
+            if(isThreeDots){
+                Div.querySelector(".three_dots").addEventListener("click", (e) => {
+                    e.stopPropagation();
+                    document.querySelectorAll(".three_dots_Div").forEach(threeDotDiv => {
+                        !threeDotDiv.classList.contains("hidden") ? threeDotDiv.classList.add("hidden") : null;
+                    });
+                    e.currentTarget.parentElement.querySelector(".three_dots_Div").classList.remove("hidden");
+                });
+                // HIDE THREE DOTS DIV ON CLICK OUTSIDE
+                document.addEventListener("click", () => {
+                    document.querySelectorAll(".three_dots_Div").forEach(threeDotDiv => {
+                        !threeDotDiv.classList.contains("hidden") ? threeDotDiv.classList.add("hidden") : null;
+                    });
+                });
+                // KICK PARTICIPANT
+                Div.querySelector(".td_kick").addEventListener("click", (e) => {
+                    fetch(`${DOMAIN}/api/v1/room/kick/${roomID}/${e.currentTarget.dataset.userid}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        e.currentTarget.parentElement.parentElement.remove();
+                    });
+                });
+            }
+
+            // ADD FRIEND
+            Div.querySelector(".addFrnd").addEventListener("click", (e) => {
+                const button = e.currentTarget;
+                e.currentTarget.disabled = true;
+                fetch(`${DOMAIN}/api/v1/user/sendFrndReq`, {
+                    method: "POST",
+                    headers: {
+                        "Content-type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        userID: e.currentTarget.dataset.userid,
+                        currentUser,
+                        roomPart: true
+                    })
+                })
+                .then(res => res.json())
+                .then(data => console.log(data))
+                setTimeout(() => {
+                    button.disabled = false;
+                }, 8000);
+            });
+        };
+
+        // GETTING CURRENT USER AND THE CURRENT ROOM
+        socket.on("connect", ()=>{
+            fetch(`${DOMAIN}/api/v1/user/updateSocketId/${socket.id}`)
+        })
+
         fetch(`${DOMAIN}/api/v1/user/getCurrentUser`).then(res => res.json())
         .then(user =>{
             currentUser = user.data
-
-            // SOCKET, ROOMS & ALL THOSE STUFF
-            socket.emit("joinRoom", {
-                roomID: roomID,
-                user: currentUser,
-                admin: (admin == "true")
-            })
-
             // ROOM ADMIN AND PARTICIPANTS
             fetch(`${DOMAIN}/api/v1/room/getRoom/${roomID}`).then(res => res.json())
             .then(data => {
-                adminName = data.data.admin;
-                document.getElementById("adminName").innerHTML = data.data.admin;
+                let isCurrentUserIncluded = false;
+                console.log(data);
+                roomParticipants.push(data.data.admin._id)
+                adminId = data.data.admin._id;
+                document.getElementById("adminName").innerHTML = data.data.admin.fullname;
+                document.getElementById("adminUsername").innerHTML = data.data.admin.username;
+                document.getElementById("adminAvatar").src = data.data.admin.avatar;
                 document.getElementById("roomName").innerHTML = data.data.name;
                 roomName = data.data.name;
-                document.getElementById("topic").innerHTML = data.data.topic == "meme"? "Trending memes" : "General Knowledge";
+                document.getElementById("topic").innerHTML = data.data.topic;
                 topic = data.data.topic;
                 document.getElementById("roomID").innerHTML = data.data._id;
                 document.getElementById("noOfPart").innerHTML = data.data.participants.length;
 
-                data.data.participants.forEach(user =>{
+                for (const user of data.data.participants){
+                    roomParticipants.push(user._id)
+                    !isCurrentUserIncluded? isCurrentUserIncluded = user._id == currentUser._id : null
                     let html;
-                    if(currentUser._id == user._id){
+                    if(currentUser._id == adminId){
                         html = `
-                            <div data-userid=${user._id} class="user flex gap-4 relative rounded-full mt-2 border border-blue-300 px-4 py-1.5">
-                                <span class="text-blue-300 material-symbols-outlined">person</span>
-                                <h3>${user.fullname}</h3>
-                                <div class="absolute right-1 mt-0 font-bold bg-blue-300 rounded-full text-black px-3 py-0.5">You</div>
+                            <div data-userid=${user._id} class="user items-center flex gap-4 relative rounded-full mt-2 border border-blue-300 px-2 py-1.5">
+                                <div class="w-[2.8rem] flex justify-center items-center">
+                                    <img width="100%" class="rounded-full object-cover w-10 h-10" src=${user.avatar} />
+                                </div>
+                                <div>
+                                    <h3>${user.fullname} </h3>
+                                    <h6 class="text-sm text-[#ffffff91]">${user.username} </h6>
+                                </div>
+                                <span class="three_dots material-symbols-outlined font-bold cursor-pointer absolute right-3">more_vert</span>
+                                <div class="hidden three_dots_Div border border-[#a66ffe] rounded-lg bg-black absolute right-10 ">
+                                    <button data-userid=${user._id} class="${currentUser.friendList.includes(user._id)? "hidden" : ""} addFrnd  flex gap-2 hover:bg-[#ffffff26] px-2 pt-2 pb-1 cursor-pointer">
+                                        <span class="material-symbols-outlined h-5 text-green-500">person_add</span>
+                                        <div>Add friend</div>
+                                    </button>
+                                    <button data-userid=${user._id} class="td_kick flex gap-2 hover:bg-[#ffffff26] px-2 pb-2 pt-1 cursor-pointer">
+                                        <span class="material-symbols-outlined h-5 text-red-500">block</span>
+                                        <div>Kick</div>
+                                    </button>
+                                </div>
+                            </div>
+                        `
+                    }
+                    else if(currentUser._id == user._id){
+                        html = `
+                            <div data-userid=${user._id} class="user items-center flex gap-4 relative rounded-full mt-2 border border-blue-300 px-2 py-1.5">
+                                <div class="w-[2.8rem] flex justify-center items-center">
+                                    <img width="100%" class="rounded-full object-cover w-10 h-10" src=${user.avatar} />
+                                </div>
+                                <div>
+                                    <h3>${user.fullname} </h3>
+                                    <h6 class="text-sm text-[#ffffff91]">${user.username} </h6>
+                                </div>
+                                <div class="absolute right-1 mr-1 font-bold bg-blue-300 rounded-full text-black px-3 py-1">You</div>
                             </div>
                         `
                     }
                     else{
                         html = `
-                            <div data-userid=${user._id} class="user flex gap-4 rounded-full mt-2 border border-blue-300 px-4 py-1.5">
-                                <span class="text-blue-300 material-symbols-outlined">person</span>
-                                <h3>${user.fullname}</h3>
+                            <div data-userid=${user._id} class="user flex gap-4 relative rounded-full mt-2 border border-blue-300 px-2 py-1.5">
+                                <div class="w-[2.8rem] flex justify-center items-center">
+                                    <img width="100%" class="rounded-full object-cover w-10 h-10" src=${user.avatar} />
+                                </div>
+                                <div>
+                                    <h3>${user.fullname} </h3>
+                                    <h6 class="text-sm text-[#ffffff91]">${user.username} </h6>
+                                </div>
+                                <button data-userid=${user._id} class="${currentUser.friendList.includes(user._id)? "hidden" : ""} addFrnd disabled:bg-green-300 w-10 h-10 bg-green-400 flex justify-center items-center absolute right-2 top-1/2 -translate-y-1/2 rounded-full cursor-pointer">
+                                    <span class="material-symbols-outlined font-bold text-black">person_add</span>
+                                </button>
                             </div>
                         `
                     }
                     document.getElementById("participantsDiv").insertAdjacentHTML("beforeend", html)
-                })
+                }
+                adminId == currentUser._id? isCurrentUserIncluded = true : null
+
+                if(isCurrentUserIncluded){
+                    // SOCKET, ROOMS & ALL THOSE STUFF
+                    socket.emit("joinRoom", {
+                        roomID: roomID,
+                        user: currentUser,
+                        admin: (admin == "true")
+                    })
+                }
+                else{
+                    document.getElementsByTagName("body")[0].innerHTML = `<div class="text-center text-[#a66ffe] font-bold text-2xl py-5"> You are no longer a participant of this room ! </div>`
+                }
+            })
+            .then(()=>{
+                threeDotsEventsForEach();
+                // HIDING START BUTTON
+                if(currentUser._id == adminId){
+                    document.getElementById("startQuizBtn").classList.remove("hidden")
+                    document.getElementById("disposeQuizBtn").classList.remove("hidden")
+                }
+                else{
+                    document.getElementById("leaveQuizBtn").classList.remove("hidden")
+                }
+            })
+            .catch(error =>{
+                document.getElementsByTagName("body")[0].innerHTML = `<div class="text-center text-[#a66ffe] font-bold text-2xl py-4">Room doesn't exists ! </div>`
             })
         })
 
-        window.addEventListener("beforeunload", ()=>{
+        window.addEventListener("unload", ()=>{
             socket.emit("leftRoom", {
                 userID: currentUser._id,
                 roomID: roomID
@@ -167,8 +394,9 @@
         
         // REAL TIME USER LEAVING
         socket.on("userLeft", (userID)=>{
+            let index = roomParticipants.indexOf(userID);
+            index != -1? roomParticipants.splice(index, 1) : null
             document.querySelectorAll(".user").forEach(elem =>{
-                console.log(elem.dataset.userid, userID);
                 if(elem.dataset.userid == userID) {
                     elem.remove();
                     const number = Number(document.getElementById("noOfPart").innerHTML) - 1;
@@ -179,81 +407,277 @@
 
         // REAL TIME USER JOINING
         socket.on("newUser", (user)=>{
-            if(currentUser._id != user._id){
-                let html = `
-                    <div data-userid=${user._id} class="user flex gap-4 rounded-full mt-2 border border-blue-300 px-4 py-1.5">
-                        <span class="text-blue-300 material-symbols-outlined">person</span>
+            roomParticipants.push(user._id)
+            let Div;
+            if(currentUser._id == adminId){
+                Div = document.createElement("div")
+                Div.classList.add("user", "items-center", "flex", "gap-4", "relative", "rounded-full", "mt-2", "border", "border-blue-300", "px-2", "py-1.5")
+                Div.dataset.userid = user._id;
+                Div.innerHTML = `
+                    <div class="w-[2.8rem] flex justify-center items-center">
+                        <img width="100%" class="rounded-full object-cover w-10 h-10" src=${user.avatar} />
+                    </div>
+                    <div>
                         <h3>${user.fullname}</h3>
+                        <h6 class="text-sm text-[#ffffff91]">${user.username}</h6>
+                    </div>
+                    <span class="three_dots material-symbols-outlined font-bold cursor-pointer absolute right-3">more_vert</span>
+                    <div class="hidden three_dots_Div border border-[#a66ffe] rounded-lg bg-black absolute right-10 ">
+                        <button data-userid=${user._id} class="${currentUser.friendList.includes(user._id)? "hidden" : ""} addFrnd flex gap-2 hover:bg-[#ffffff26] px-2 pt-2 pb-1 cursor-pointer">
+                            <span class="material-symbols-outlined h-5 text-green-500">person_add</span>
+                            <div>Add friend</div>
+                        </button>
+                        <button class="td_kick flex gap-2 hover:bg-[#ffffff26] px-2 pb-2 pt-1 cursor-pointer">
+                            <span class="material-symbols-outlined h-5 text-red-500">block</span>
+                            <div>Kick</div>
+                        </button>
                     </div>
                 `
-                document.getElementById("participantsDiv").insertAdjacentHTML("beforeend", html)
+                document.getElementById("participantsDiv").insertAdjacentElement("beforeend", Div);
+                threeDotsEventsForOne(Div, true);
+            }
+            else if(currentUser._id != user._id && currentUser._id != adminId){
+                Div = document.createElement("div")
+                Div.classList.add("user", "flex", "gap-4", "relative", "rounded-full", "mt-2", "border", "border-blue-300", "px-2", "py-1.5")
+                Div.dataset.userid = user._id;
+                Div.innerHTML = `
+                    <div class="w-[2.8rem] flex justify-center items-center">
+                            <img width="100%" class="rounded-full object-cover w-10 h-10" src=${user.avatar} />
+                        </div>
+                        <div>
+                            <h3>${user.fullname} </h3>
+                            <h6 class="text-sm text-[#ffffff91]">${user.username} </h6>
+                        </div>
+                        <button data-userid=${user._id} class="${currentUser.friendList.includes(user._id)? "hidden" : ""} addFrnd w-10 h-10 disabled:bg-green-300 bg-green-400 flex justify-center items-center absolute right-2 top-1/2 -translate-y-1/2 rounded-full cursor-pointer">
+                            <span class="material-symbols-outlined font-bold text-black">person_add</span>
+                        </button>
+                `
+                document.getElementById("participantsDiv").insertAdjacentElement("beforeend", Div)
+                threeDotsEventsForOne(Div, false);
             }
             const number = Number(document.getElementById("noOfPart").innerHTML) + 1;
             document.getElementById("noOfPart").innerHTML = number;
-        })        
+        })
 
         // START QUIZ
         document.getElementById("startQuizBtn").addEventListener("click", ()=>{
-            if(currentUser.fullname == adminName){
+            // document.getElementById("bufferingDiv").classList.replace("hidden", "flex");
+            // document.getElementById("showMessage").innerHTML = "Starting quiz...";
+            socket.emit("buffer", roomID)
+
+            if(currentUser._id == adminId){
                 // LEADERBOARD CREATION AND JOINING
                 fetch(`${DOMAIN}/api/v1/leaderboard/create/${roomName}`).then(res => res.json())
                 .then((data) =>{
-                    console.log(data);
-                    socket.emit("pushObjectInLead", {
-                        leadID: data.data._id,
-                        roomID
-                    });
-                    socket.on("navigateParts", ({ url, topic })=>{
-                        if(currentUser.fullname == adminName) window.location.href = `${url}&admin=true&topic=${topic}&leadID=${data.data._id}`;
-                        else window.location.href = `${url}&admin=false&topic=${topic}&leadID=${data.data._id}`;
+                    fetch(`${DOMAIN}/api/v1/leaderboard/join/${data.data._id}`, {
+                        method: "POST",
+                        headers: {
+                            "Content-type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            ...currentUser,
+                            points: 0
+                        })
+                    })
+                    .then(()=>{
+                        console.log(data);
+                        socket.emit("startQuiz", {
+                            leadID: data.data._id,
+                            url: `/quiz?roomID=${roomID}`,
+                            roomID,
+                            topic
+                        });
                     })
                 })
             }
             else{
-                document.getElementById("idCopied").innerHTML = "Only admin can start !!"
-                document.getElementById("idCopied").classList.remove("hidden");
-                setInterval(() => {
-                    document.getElementById("idCopied").classList.add("hidden");
-                }, 3000);
+                alerts("Only admin can start !")
             }
         })
 
-        socket.on("pushUser", (leadID)=>{
-            leadID = leadID;
-            fetch(`${DOMAIN}/api/v1/leaderboard/join/${leadID}`, {
-                method: "POST",
-                headers: {
-                    "Content-type": "application/json"
-                },
-                body: JSON.stringify({
-                    ...currentUser,
-                    points: 0
+        // DISPOSE QUIZ
+        document.getElementById("disposeQuizBtn").addEventListener("click", ()=>{
+            fetch(`${DOMAIN}/api/v1/room/delete/${roomID}`).then(res => res.json).then(data => console.log(data))
+            window.location.href = "/home";
+            socket.emit("disposeCall", roomID)
+        })
+        socket.on("dispose", ()=>{
+            document.getElementById("showMessage").innerHTML = "Disposing the quiz...."
+            document.getElementById("bufferingDiv").classList.replace("hidden", "flex");
+            setTimeout(() => {
+                window.location.href = "/home"
+            }, 2500);
+        })
+
+        // PUSH USER IN THE LEADERBOARD & QUIZ 
+        socket.on("questionsReadyNowJoin", ({leadID, url, topic})=>{
+            if (currentUser._id == adminId){
+                window.location.href = `${url}&admin=true&topic=${topic}&leadID=${leadID}`;
+            }
+            else{
+                fetch(`${DOMAIN}/api/v1/leaderboard/join/${leadID}`, {
+                    method: "POST",
+                    headers: {
+                        "Content-type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        ...currentUser,
+                        points: 0
+                    })
                 })
-            })
-            .then((res)=> res.json())
-            .then((data)=>{
-                console.log(data);
-                socket.emit("navigate", {
-                    url: `/quiz?roomID=${roomID}`,
-                    roomID,
-                    topic
+                .then((res)=> res.json())
+                .then((data)=>{
+                    window.location.href = `${url}&admin=false&topic=${topic}&leadID=${leadID}`;
+                })
+            }
+        })
+
+        // GETTING A FRIEND REQUEST LOGIC
+        let i = 1;
+        socket.on("frndReq", (user) => {
+            sender[`div${i}`] = user._id
+            let Div = document.createElement("div");
+            Div.classList.add("relative", "z-[100]", "py-2", "flex", "p-1", "gap-3", "text-white", "bg-[#2f2f2f]", "border", "border-[#ae7aff]", "transition-transform", "duration-700", "ease-in-out", "transform", "translate-x-[100%]", "rounded-md");
+            Div.id = `div${i}`;
+            Div.innerHTML = `
+                <div class="flex justify-center items-center">
+                        <img class="w-16 h-16 rounded-full object-cover" src="${user.avatar}" />
+                    </div>
+                    <div>
+                        <div class="font-bold text-lg text-[#ae7aff]">Friend Request</div>
+                        <div class="font-bold">${user.fullname}</div>
+                        <div class="text-[#ffffff84]">${user.username}</div>
+                    </div>
+                    <div data-userid=${user._id} class="flex flex-col gap-1 justify-center absolute top-1 right-1">
+                        <button class="accept bg-green-500 rounded-full text-black flex justify-center items-center w-10 h-10">
+                            <span class="material-symbols-outlined h-6">group_add</span>
+                        </button>
+                        <button class="reject bg-red-500 rounded-full text-black flex justify-center items-center w-10 h-10">
+                            <span class="material-symbols-outlined h-6">close</span>
+                        </button>
+                    </div>
+                    <div id="load${i}" class="absolute bottom-0 left-0 h-1 bg-[#ae7aff]" style="width: 100%;"></div>
+            `
+
+            document.getElementById("frndReqDiv").insertAdjacentElement("afterbegin", Div);
+            setTimeout(() => {
+                Div.classList.replace("translate-x-[100%]", "translate-x-0");
+                reverseLoading(`div${i}`, `load${i}`);
+                
+                Div.querySelector(".accept").addEventListener("click", (e)=>{
+                    fetch(`${DOMAIN}/api/v1/user/acceptFrndReq/${e.currentTarget.parentElement.dataset.userid}`).then(res => res.json())
+                    .then(data => {
+                        currentUser = data.data.me;
+                        user.roomPart? roomParticipants.push(e.currentTarget.parentElement.dataset.userid) : null;
+                        alerts("Friend request accepted !")
+                        Div.classList.replace("translate-x-0", "translate-x-[100%]");
+                        clearInterval(intervalCopy[Div.id]);
+                        setTimeout(() => {
+                            Div.remove();
+                        }, 700);
+                        document.querySelectorAll(".user").forEach(elem => {
+                            if(elem.dataset.userid == data.data.frnd._id){
+                                elem.querySelector(".addFrnd").remove();
+                            }
+                        })
+                    })
+                })
+                Div.querySelector(".reject").addEventListener("click", (e) => {
+                    Div.classList.replace("translate-x-0", "translate-x-[100%]");
+                    clearInterval(intervalCopy[Div.id]);
+                    setTimeout(() => {
+                        Div.remove();
+                    }, 700);
                 });
-                socket.on("navigateParts", ({ url, topic })=>{
-                    if(currentUser.fullname == adminName) window.location.href = `${url}&admin=true&topic=${topic}&leadID=${leadID}`;
-                    else window.location.href = `${url}&admin=false&topic=${topic}&leadID=${leadID}`;
-                })
+                i++;
+            }, 50);
+        });
+
+        // PERSON 2 ACCEPTED MY FRIEND REQUEST
+        socket.on("frndReqAccepted", ({frndName, frndID})=>{
+            alerts(`${frndName} accepted your friend request !`)
+            document.querySelectorAll(".user").forEach(elem => {
+                if(elem.dataset.userid == frndID){
+                    elem.querySelector(".addFrnd").remove();
+                }
             })
         })
 
+        // LEAVE ROOM LOGIC
+        document.getElementById("leaveQuizBtn").addEventListener("click", ()=>{
+            document.getElementById("bufferingDiv").classList.replace("hidden", "flex");
+            document.getElementById("showMessage").innerHTML = "Leaving room..."
+            fetch(`${DOMAIN}/api/v1/room/leave/${roomID}`).then(res => res.json())
+            .then(data => {
+                document.getElementById("bufferingDiv").classList.replace("flex", "hidden");
+                window.location.href = "/home"
+            })
+        })
+
+        // ADMIN KICKED ME
+        socket.on("urKicked", ({userID, fullname})=>{
+            if(currentUser._id == userID){
+                document.getElementsByTagName("body")[0].innerHTML = `<div class="text-center text-[#a66ffe] font-bold text-2xl py-5"> You are Kicked out of the room ! </div>`
+                setTimeout(() => {
+                    window.location.href = "/home"
+                }, 2500);
+            }
+            else{
+                alerts(`${fullname} has been kicked !`)
+            }
+        })
+
+        // INVITE FRIENDS LOGIC
+        document.getElementById("invitePart").addEventListener("click", ()=>{
+            document.getElementById("onlineFriendsSection").classList.replace("hidden", "flex")
+            fetch(`${DOMAIN}/api/v1/user/onlineFriends`).then(res => res.json())
+            .then((data) => {
+                document.getElementById("onlineFriendsDiv").innerHTML = "";
+                data.data.forEach(frnd => {
+                    let div = document.createElement("div");
+                    div.dataset.frndid = frnd._id;
+                    div.classList.add("relative", "flex", "items-center", "gap-3", "rounded-full", "bg-[#3c3c3ca5]", "p-1")
+                    div.innerHTML = `
+                        <img src=${frnd.avatar} class="w-10 h-10 object-cover rounded-full">
+                        <div class="font-bold">${frnd.fullname}</div>
+                        ${!roomParticipants.includes(frnd._id)?
+                            `<button class="bg-green-500 inviteBtn disabled:bg-green-300 absolute right-2 text-black rounded-full px-2 py-0.5">Invite</button>` : 
+                            `<button class="bg-blue-500 absolute right-2 text-black rounded-full px-2 py-0.5">Joined</button>`
+                        }
+                    `
+                    document.getElementById("onlineFriendsDiv").insertAdjacentElement("beforeend", div)
+                })
+                // EVENT DELEGATION
+                document.getElementById("onlineFriendsDiv").addEventListener("click", (e) => {
+                    if (e.target && e.target.classList.contains("inviteBtn")) {
+                        e.target.disabled = true;
+                        let theBtn = e.target;
+                        setTimeout(() => {
+                            theBtn.disabled = false;
+                        }, 8000);
+                        
+                        const friendID = theBtn.closest("div").dataset.frndid;
+                        const friend = data.data.find(frnd => frnd._id == friendID);
+
+                        if(friend) socket.emit("inviteEmit", { ...friend, roomID });
+                    }
+                });
+            })
+        })
+        document.getElementById("closeInvite").addEventListener("click", ()=>{
+            document.getElementById("onlineFriendsSection").classList.replace("flex", "hidden")
+        })
+
+        // BUFFER IN START QUIZ
+        socket.on("bufferEveryone", ()=>{
+            document.getElementById("bufferingDiv").classList.replace("hidden", "flex");
+            document.getElementById("showMessage").innerHTML = "Starting quiz...";
+        })
 
         // COPY ID
         document.getElementById("copyID").addEventListener("click", ()=>{
             navigator.clipboard.writeText(document.getElementById("roomID").innerHTML).then(()=>{
-                document.getElementById("idCopied").innerHTML = "ID Copied !!"
-                document.getElementById("idCopied").classList.remove("hidden");
-                setInterval(() => {
-                    document.getElementById("idCopied").classList.add("hidden");
-                }, 3000);
+                alerts("ID copied !")
             })
         })
 

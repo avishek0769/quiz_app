@@ -49,7 +49,9 @@
                 background="transparent" speed="1" style="width: 70px; height: 70px;" loop autoplay></dotlottie-player>
         </div>
 
-        <div id="popUp" class="w-screen h-14 hidden justify-center text-red-400 text-2xl text-center pt-6"> </div>
+        <div id="alertDiv" class="absolute top-24 flex flex-col justify-center items-center w-screen z-[100] gap-2">
+        
+        </div>
 
         <div class="mx-auto my-8 flex w-full max-w-sm flex-col px-4">
             <h1 class="font-bold text-3xl text-[#ae7aff] mb-10">Sign up to play the quiz</h1>
@@ -71,38 +73,55 @@
 
     <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script>
     <script type="module">
-        import { DOMAIN } from "./constant.js"
+        import { DOMAIN, alerts } from "./constant.js"
 
         document.getElementById("signUpSubmit").addEventListener("click", ()=>{
-            fetch(`${DOMAIN}/api/v1/user/register`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json" // Make sure the Content-Type is set to application/json
-                },
-                body: JSON.stringify({
-                    fullname: document.getElementById("fullname").value,
-                    username: document.getElementById("username").value,
-                    password: document.getElementById("password").value
-                })
-            })
-            .then((res) => res.json())
-            .then((data)=>{
-                console.log(data);
-                fetch(`${DOMAIN}/api/v1/user/login`, {
+            document.getElementById("signUpSubmit").disabled = true;
+            let fullname = document.getElementById("fullname").value.trim()
+            let username = document.getElementById("username").value.trim()
+            let password = document.getElementById("password").value.trim()
+            
+            if (username != "" && password != "" && fullname != "") {
+                fetch(`${DOMAIN}/api/v1/user/register`, {
                     method: "POST",
                     headers: {
-                        "Content-Type": "application/json" // Make sure the Content-Type is set to application/json
+                        "Content-Type": "application/json" 
                     },
                     body: JSON.stringify({
-                        username: document.getElementById("username").value,
-                        password: document.getElementById("password").value
+                        fullname, username, password
                     })
                 })
-                .then(res => res.json())
-                .then(data =>{
-                    window.location.href = "/home"
+                .then((res) => {
+                    if(res.status > 399){
+                        alerts("Username already taken 😔")
+                        document.getElementById("signUpSubmit").disabled = false;
+                        return undefined;
+                    }
+                    return res.json()
                 })
-            })
+                .then((data)=>{
+                    console.log(data);
+                    if (data) {
+                        fetch(`${DOMAIN}/api/v1/user/login`, {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify({
+                                username, password 
+                            })
+                        })
+                        .then(res => res.json())
+                        .then(data =>{
+                            window.location.href = "/home"
+                        })
+                    }
+                })
+            }
+            else {
+                alerts("All the fields are required !")
+                document.getElementById("signUpSubmit").disabled = false;
+            }
         })
     </script>
 </body>

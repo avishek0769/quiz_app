@@ -15,8 +15,8 @@ const roomSchema = new mongoose.Schema({
         ref: "User"
     }],
     admin: {
-        type: String,
-        required: true
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
     }
 })
 

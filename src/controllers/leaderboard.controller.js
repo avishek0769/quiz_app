@@ -1,4 +1,5 @@
 import { Leaderboard } from "../model/leaderboard.model.js";
+import { User } from "../model/user.model.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
@@ -29,6 +30,12 @@ const updatePoints = asyncHandler(async (req, res) => {
 
         participant.points += points;
         await leaderboard.save();
+
+        await User.findByIdAndUpdate(
+            id,
+            { $inc: {totalPoints: points} },
+            { new: true }
+        )
 
         res.status(200).json(new ApiResponse(200, {message: true}, "Points updated successfully"));
     }

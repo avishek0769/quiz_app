@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz</title>
+    <link rel="stylesheet" href="src/output.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+</head>
+
+<body class="bg-[#121212] font-[Roboto] text-white">
+    <div id="removeFrndDiv" class="hidden absolute z-50 w-screen h-screen justify-center items-center bg-[#00000096]">
+        <div class=" w-[18rem]  sm:w-auto bg-black border border-[#ae7aff] px-6 py-5 z-50 rounded-lg ">
+            <div class="text-white font-medium text-lg pb-5">Are you sure you want to remove your friend ?</div>
+            <div class="space-x-6">
+                <button id="yesRemove" class="rounded-full px-5 py-1 bg-red-500 hover:bg-red-400 font-semibold">Yes</button>
+                <button id="noRemove" class="rounded-full bg-[#ffffff9a] hover:bg-[#ffffffab] px-5 py-1">No</button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="alertDiv" class="absolute top-24 flex flex-col justify-center items-center w-screen z-[100] gap-2">
+        
+    </div>
+
+    <div id="bufferingDiv" class="hidden flex-col gap-3 items-center absolute z-[100] w-screen h-screen justify-center bg-[#000000bd] ">
+        <div id="showMessage" class="text-white text-2xl text-center font-bold"> Please wait.... </div>
+        <dotlottie-player class="" src="https://lottie.host/27feff6c-53ae-48c7-9539-9a37724286be/8okSjWIQl7.json" background="transparent" speed="1" style="width: 70px; height: 70px;" loop autoplay></dotlottie-player>
+    </div>
+
+    <div id="frndReqDiv" class="overflow-hidden absolute w-screen bottom-10 ">
+         
+    </div>
+
+    <form id="imageForm">
+        <input id="avatarInput" name="avatar" class="hidden" type="file">
+    </form>
+    
+    <header class="sticky inset-x-0 top-0 z-50 w-full border-b border-white bg-[#121212] px-1">
+        <nav class="mx-auto flex max-w-7xl justify-between items-center py-2">
+            <div class="">
+                <svg width="100" height="40" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Background -->
+                    <rect width="100%" height="100%" fill="#121212" />
+            
+                    <!-- Gradient Definition -->
+                    <defs>
+                        <linearGradient id="textGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color: #a66ffe; stop-opacity: 1" />
+                            <stop offset="100%" style="stop-color: #ae7aff; stop-opacity: 1" />
+                        </linearGradient>
+                        <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+                            <feDropShadow dx="2" dy="4" stdDeviation="3" flood-color="#00000099" />
+                        </filter>
+                    </defs>
+            
+                    <!-- Text with Gradient Fill -->
+                    <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle"
+                        font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="bold"
+                        fill="url(#textGradient)" filter="url(#shadow)">
+                        QUIZ
+                    </text>
+                </svg>
+            </div>
+            
+            <!-- SIGN UP & LOG IN  -->
+            <div class="mb-3 text-white mt-auto flex flex-wrap gap-4 px-4 sm:mb-0 sm:mt-0 sm:items-center sm:px-0">
+                <button id="logOut"
+                    class="w-full bg-[#383737] px-3 py-2 hover:bg-[#4f4e4e] sm:w-auto sm:bg-transparent">Log
+                    out</button>
+            </div>
+        </nav>
+    </header>
+
+    <section class="sm:px-36 "> 
+        <div class="flex border border-t-0 border-l-0 border-r-0">
+            <div class="p-1 flex items-center">
+                <div class="h-fit relative">
+                    <img id="avatar" class="rounded-full object-cover w-32 h-32" >
+                    <span id="editAvatar" class="material-symbols-outlined  absolute -bottom-1 right-0 bg-[#a66ffe] cursor-pointer text-black rounded-full p-1">edit</span>
+                    <span id="saveAvatar" class=" hidden absolute -bottom-1 right-0 bg-green-400 cursor-pointer text-black rounded-full p-1">save</span>
+                </div>
+            </div>
+            <div class="text-md space-y-2 px-1 py-2 shadow-lg rounded-lg text-white">
+                <div id="fullname" class="text-lg font-semibold">  </div>
+                <div class="flex items-center gap-2 text-gray-300">
+                    <div class="font-medium">Username:</div>
+                    <div id="username" class="bg-gray-800 px-2 py-1 rounded-md text-sm"> </div>
+                </div>
+                <div class="flex items-center gap-1 text-gray-300">
+                    <span class="font-medium">Likes:</span>
+                    <span id="likes" class="text-green-400"> </span>
+                </div>
+                <div class="flex items-center gap-1 text-gray-300">
+                    <span class="font-medium">Total points:</span>
+                    <span id="totalPoints" class="text-yellow-400"> </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="px-5 pt-3 font-bold text-2xl text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-green-500">
+            Friend List</div>
+
+        <div id="friendListDiv" class="p-3 space-y-3">
+           
+        </div>
+    </section>
+
+    <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script>
+    <script type="module">
+        import { DOMAIN, socket, alerts } from "./constant.js"
+
+        let ids = [];
+        let frndToRemove;
+        let divToRemove;
+        let sender = {};
+        let intervalCopy = {};
+
+        // REVERSE LOADING COUNTDOWN
+        function reverseLoading (div, loading, frndReq) {
+            let timeLeft = 7 * 1000;
+            const totalTime = 7 * 1000;
+            const loadingBar = document.getElementById(loading);
+            
+            let interval = setInterval(() => {
+                timeLeft -= 10;
+                const widthPercentage = (timeLeft / totalTime) * 100;
+                loadingBar.style.width = widthPercentage + "%";
+
+                if (timeLeft <= 0) {
+                    clearInterval(interval);
+                    document.getElementById(div).classList.replace("translate-x-0", "translate-x-[100%]");
+                    setTimeout(() => {
+                        document.getElementById(div).remove();
+                    }, 700);
+                    // FRIEND REQUEST IN NOTIFICATION
+                    if(frndReq){
+                        fetch(`${DOMAIN}/api/v1/notification/addNoti?sender=${sender[div]}&receiver=${currentUser._id}&type=0`).then(res => {
+                            if(res.status < 300) document.getElementById("redDot").classList.remove("hidden");
+                        })
+                    }
+                }
+            }, 10);
+            intervalCopy[div] = interval;
+        };
+        
+        let currentUser;
+        fetch(`${DOMAIN}/api/v1/user/getFriendList`).then(res => res.json())
+        .then(user =>{
+            if(user){
+                console.log(user.data);
+                currentUser = user.data
+                fullname.innerHTML = currentUser.fullname;
+                username.innerHTML = currentUser.username;
+                likes.innerHTML = currentUser.likes;
+                totalPoints.innerHTML = currentUser.totalPoints;
+                avatar.src = currentUser.avatar;
+                // UPDATE SOCKET ID IN DB
+                fetch(`${DOMAIN}/api/v1/user/updateSocketId/${socket.id}`).then(res => res.json())
+                .then(data => {
+                    console.log(data);
+                })
+                // FRIENDS IN THE LIST
+                currentUser.friendList.forEach(frnd => {
+                    ids.push(frnd._id);
+                    let html = `
+                        <div class="relative h-14 flex gap-4 p-1 px-1.5 bg-[#ffffff24] rounded-full overflow-hidden">
+                            <div data-userid=${frnd._id} class="onOffStatus w-[3.1rem] flex relative">
+                                <img width="100%" src=${frnd.avatar} class="rounded-full object-cover">
+                            </div>
+                            <div>
+                                <div class="text-[1.1rem]">${frnd.fullname}</div>
+                                <span class="frndID text-[#ffffff9f] text-[0.9rem]">${frnd.username} </span>
+                                <span class="copyIDFrnd material-symbols-outlined cursor-pointer ml-1 text-[#ffffff9f]" style="font-size: 1rem;">content_copy</span>
+                            </div>
+                            <div class="cursor-pointer absolute right-5 h-[82%] flex justify-center items-center">
+                                <button data-userid=${frnd._id} class="removeFrndBtn"><span class="material-symbols-outlined text-red-500">group_remove</span></button>
+                            </div>
+                        </div>
+                    `
+                    document.getElementById("friendListDiv").insertAdjacentHTML("beforeend", html);
+                });
+
+                document.querySelectorAll(".copyIDFrnd").forEach(elem => {
+                    elem.addEventListener("click", ()=>{
+                        navigator.clipboard.writeText(elem.parentElement.querySelector(".frndID").innerHTML).then(()=>{
+                            alerts("ID copied !")
+                        })
+                    })
+                })
+            }
+            return ids
+        })
+        // ONLINE - OFFLINE STATUS
+        .then((ids)=>{
+            fetch(`${DOMAIN}/api/v1/user/onOffStatusPoll`, {
+                method: "POST",
+                headers:{
+                    "Content-type": "application/json"
+                },
+                body: JSON.stringify({ ids })
+            })
+            .then(res => res.json())
+            .then(data => {
+                document.querySelectorAll(".onOffStatus").forEach(elem => {
+                    if(data.data[elem.dataset.userid]){
+                        let html  = `<div class="absolute rounded-full bottom-0 right-0 p-2 bg-green-500"></div>`;
+                        elem.insertAdjacentHTML("beforeend", html);
+                    }
+                    else{
+                        let html = `<div class="absolute rounded-full bottom-0 right-0 p-2 bg-red-500"></div>`;
+                        elem.insertAdjacentHTML("beforeend", html);
+                    }
+                })
+            })
+        })
+        .then(()=>{
+            // REMOVE FRIEND
+            document.querySelectorAll(".removeFrndBtn").forEach(btn => {
+                btn.addEventListener("click", ()=>{
+                    frndToRemove = btn.dataset.userid;
+                    divToRemove = btn.parentElement.parentElement;
+                    document.getElementById("removeFrndDiv").classList.replace("hidden", "flex");
+                })
+            })
+            document.getElementById("noRemove").addEventListener("click", ()=>{
+                document.getElementById("removeFrndDiv").classList.replace("flex", "hidden");
+            })
+            document.getElementById("yesRemove").addEventListener("click", ()=>{
+                document.getElementById("removeFrndDiv").classList.replace("flex", "hidden");
+                fetch(`${DOMAIN}/api/v1/user/removeFriend/${frndToRemove}`).then(res => res.json())
+                .then((data) => divToRemove.remove())
+            })
+        })
+
+        document.getElementById("username").addEventListener("click", ()=>{
+            navigator.clipboard.writeText(document.getElementById("username").innerHTML).then(()=>{
+                alerts("ID copied !")
+            })
+        })
+
+        // EDIT & SAVE AVATAR
+        document.getElementById("editAvatar").addEventListener("click", ()=>{
+            document.getElementById("avatarInput").click()
+        })
+        document.getElementById("avatarInput").addEventListener("input", function() {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    document.getElementById("avatar").setAttribute("src", event.target.result);
+                    document.getElementById("saveAvatar").classList.replace("hidden", "material-symbols-outlined");
+                    document.getElementById("editAvatar").classList.replace("material-symbols-outlined", "hidden");
+                    alerts("Now, Save it !")
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        document.getElementById("saveAvatar").addEventListener("click", ()=>{
+            document.getElementById("bufferingDiv").classList.replace("hidden", "flex");
+            const formData = new FormData(document.getElementById("imageForm"));
+
+            fetch(`${DOMAIN}/api/v1/user/avatar`, {
+                method: "POST",
+                body: formData
+            })
+            .then(res => res.json())
+            .then((data)=>{
+                console.log(data);
+                document.getElementById("bufferingDiv").classList.replace("flex", "hidden");
+                document.getElementById("saveAvatar").classList.replace("material-symbols-outlined", "hidden");
+                document.getElementById("editAvatar").classList.replace( "hidden", "material-symbols-outlined");
+            })
+        })
+
+        // Logout
+        document.getElementById("logOut").addEventListener("click", ()=>{
+            document.getElementById("bufferingDiv").classList.replace("hidden", "flex");
+            fetch(`${DOMAIN}/api/v1/user/logout`).then(res => res.json())
+            .then((data)=>{
+                document.getElementById("bufferingDiv").classList.replace("flex", "hidden");
+                window.location.href = "/home"
+            })
+        })
+
+        // FRIEND REQUEST LOGIC
+        let i = 1;
+        socket.on("frndReq", (user) => {
+            sender[`div${i}`] = user._id
+            let Div = document.createElement("div");
+            Div.classList.add("relative", "z-[100]", "py-2", "flex", "p-1", "gap-3", "text-white", "bg-[#2f2f2f]", "border", "border-[#ae7aff]", "transition-transform", "duration-700", "ease-in-out", "transform", "translate-x-[100%]", "rounded-md");
+            Div.id = `div${i}`;
+            Div.innerHTML = `
+                <div class="flex justify-center items-center">
+                        <img class="w-16 h-16 rounded-full object-cover" src="${user.avatar}" />
+                    </div>
+                    <div>
+                        <div class="font-bold text-lg text-[#ae7aff]">Friend Request</div>
+                        <div class="font-bold">${user.fullname}</div>
+                        <div class="text-[#ffffff84]">${user.username}</div>
+                    </div>
+                    <div data-userid=${user._id} class="flex flex-col gap-1 justify-center absolute top-1 right-1">
+                        <button class="accept bg-green-500 rounded-full text-black flex justify-center items-center w-10 h-10">
+                            <span class="material-symbols-outlined h-6">group_add</span>
+                        </button>
+                        <button class="reject bg-red-500 rounded-full text-black flex justify-center items-center w-10 h-10">
+                            <span class="material-symbols-outlined h-6">close</span>
+                        </button>
+                    </div>
+                    <div id="load${i}" class="absolute bottom-0 left-0 h-1 bg-[#ae7aff]" style="width: 100%;"></div>
+            `
+
+            document.getElementById("frndReqDiv").insertAdjacentElement("afterbegin", Div);
+            setTimeout(() => {
+                Div.classList.replace("translate-x-[100%]", "translate-x-0");
+                reverseLoading(`div${i}`, `load${i}`, true);
+                
+                Div.querySelector(".accept").addEventListener("click", (e)=>{
+                    fetch(`${DOMAIN}/api/v1/user/acceptFrndReq/${e.currentTarget.parentElement.dataset.userid}`).then(res => res.json())
+                    .then(data => {
+                        currentUser = data.data.me;
+                        alerts("Friend request accepted !")
+                        Div.classList.replace("translate-x-0", "translate-x-[100%]");
+                        clearInterval(intervalCopy[Div.id]);
+                        setTimeout(() => {
+                            Div.remove();
+                        }, 700);
+                    })
+                })
+                Div.querySelector(".reject").addEventListener("click", (e) => {
+                    Div.classList.replace("translate-x-0", "translate-x-[100%]");
+                    clearInterval(intervalCopy[Div.id]);
+                    setTimeout(() => {
+                        Div.remove();
+                    }, 700);
+                });
+                i++;
+            }, 50);
+        });
+        
+        // ONLINE - OFFLINE STATUS (POLLING)
+        setInterval(() => {
+            fetch(`${DOMAIN}/api/v1/user/onOffStatusPoll`, {
+                method: "POST",
+                headers:{
+                    "Content-type": "application/json"
+                },
+                body: JSON.stringify({ ids })
+            })
+            .then(res => res.json())
+            .then(data => {
+                document.querySelectorAll(".onOffStatus").forEach(elem => {
+                    if(data.data[elem.dataset.userid]){
+                        let html  = `<div class="absolute rounded-full bottom-0 right-0 p-2 bg-green-500"></div>`;
+                        elem.insertAdjacentHTML("beforeend", html);
+                    }
+                    else{
+                        let html  = `<div class="absolute rounded-full bottom-0 right-0 p-2 bg-red-500"></div>`;
+                        elem.insertAdjacentHTML("beforeend", html);
+                    }
+                })
+            })
+        }, 5000);
+
+        // GETTING INVITATION FROM FRIEND
+        let j = 1;
+        socket.on("invitation", ({fullname, username, avatar, _id, roomID})=>{
+            let Div = document.createElement("div");
+            Div.classList.add("relative", "z-[100]", "py-2", "flex", "p-1", "gap-3", "text-white", "bg-[#2f2f2f]", "border", "border-green-500", "transition-transform", "duration-700", "ease-in-out", "transform", "translate-x-[100%]", "rounded-md");
+            Div.id = `div${i}`;
+            Div.innerHTML = `
+                <div class="flex justify-center items-center">
+                        <img class="w-16 h-16 rounded-full object-cover" src="${avatar}" />
+                    </div>
+                    <div>
+                        <div class="font-bold text-lg text-green-500">Room joining invitation</div>
+                        <div class="font-bold">${fullname}</div>
+                        <div class="text-[#ffffff84]">${username}</div>
+                    </div>
+                    <div data-userid=${_id} class="flex flex-col gap-1 justify-center absolute top-1 right-1">
+                        <button class="accept bg-green-500 rounded-full text-black flex justify-center items-center w-10 h-10">
+                            <span class="material-symbols-outlined h-6">group_add</span>
+                        </button>
+                        <button class="reject bg-red-500 rounded-full text-black flex justify-center items-center w-10 h-10">
+                            <span class="material-symbols-outlined h-6">close</span>
+                        </button>
+                    </div>
+                    <div id="load${i}" class="absolute bottom-0 left-0 h-1 bg-green-500" style="width: 100%;"></div>
+            `
+
+            document.getElementById("frndReqDiv").insertAdjacentElement("afterbegin", Div);
+            setTimeout(() => {
+                Div.classList.replace("translate-x-[100%]", "translate-x-0");
+                reverseLoading(`div${i}`, `load${i}`, false);
+                
+                Div.querySelector(".accept").addEventListener("click", (e)=>{
+                    document.getElementById("bufferingDiv").classList.replace("hidden", "flex")
+                    document.getElementById("showMessage").innerHTML = "Joining you to a room..."
+                    clearInterval(intervalCopy[Div.id]);
+                    fetch(`${DOMAIN}/api/v1/room/join/${roomID}`).then(res => res.json())
+                    .then(data => {
+                        window.location.href = `/room?roomID=${data.data._id}&admin=false`;
+                    })
+                })
+
+                Div.querySelector(".reject").addEventListener("click", (e) => {
+                    Div.classList.replace("translate-x-0", "translate-x-[100%]");
+                    clearInterval(intervalCopy[Div.id]);
+                    setTimeout(() => {
+                        Div.remove();
+                    }, 700);
+                });
+                i++;
+            }, 50);
+        })
+
+    </script>
+
+</body>
+
+</html>

@@ -24,360 +24,141 @@ const errorHandler = (err, req, res, next) => {
 const app = express();
 const server = http.createServer(app)
 const io = new Server(server);
-let currentQuestionIndex = 0;
-let timeLeft = 30;
+app.locals.io = io;
+let currentQuestionIndex = {};
+let timeLeft = {};
 const quizTimers = {};
-
-let quiz;
+let quiz = {};
+const topics = {
+    gk: 9,
+    cs: 18,
+    maths: 19,
+    sports: 21,
+    geo: 22,
+    anime: 31
+}
 
 io.on("connection", (socket) => {
     socket.on("joinRoom", (data) => {
-        socket.join(data.roomID);
         if (!data.admin) {
             io.to(data.roomID).emit("newUser", data.user)
         }
+        socket.join(data.roomID);
     })
     socket.on("leftRoom", ({ roomID, userID }) => {
         io.to(roomID).emit("userLeft", userID);
     })
-    socket.on("navigate", ({ url, roomID, topic }) => {
-        io.to(roomID).emit("navigateParts", { url, topic });
-    })
+    
     socket.on("joinQuiz", ({roomID, topic}) => {
-        if(topic == "meme"){
-            quiz = [
-                {
-                    question: "No 1 dummy Question of meme",
-                    options: ["Option 1", "Option 2", "Option 3", "Option 4"],
-                    answer: "o2"
-                },
-                {
-                    question: "No 2 dummy Question of meme",
-                    options: ["Option 1", "Option 2", "Option 3", "Option 4"],
-                    answer: "o2"
-                },
-                {
-                    question: "No 3 dummy Question of meme",
-                    options: ["Option 1", "Option 2", "Option 3", "Option 4"],
-                    answer: "o2"
-                },
-                {
-                    question: "No 4 dummy Question of meme",
-                    options: ["Option 1", "Option 2", "Option 3", "Option 4"],
-                    answer: "o2"
-                },
-                {
-                    question: "No 5 dummy Question of meme",
-                    options: ["Option 1", "Option 2", "Option 3", "Option 4"],
-                    answer: "o2"
-                },
-                {
-                    question: "No 6 dummy Question of meme",
-                    options: ["Option 1", "Option 2", "Option 3", "Option 4"],
-                    answer: "o2"
-                },
-                {
-                    question: "No 7 dummy Question of meme",
-                    options: ["Option 1", "Option 2", "Option 3", "Option 4"],
-                    answer: "o2"
-                },
-                {
-                    question: "No 8 dummy Question of meme",
-                    options: ["Option 1", "Option 2", "Option 3", "Option 4"],
-                    answer: "o2"
-                },
-                {
-                    question: "No 9 dummy Question of meme",
-                    options: ["Option 1", "Option 2", "Option 3", "Option 4"],
-                    answer: "o2"
-                },
-                {
-                    question: "No 10 dummy Question of meme",
-                    options: ["Option 1", "Option 2", "Option 3", "Option 4"],
-                    answer: "o2"
-                }
-            ]
+        socket.join(roomID);        
+        try {
+            socket.emit("currentQuestion", {
+                question: quiz[roomID][currentQuestionIndex[roomID]].question,
+                options: quiz[roomID][currentQuestionIndex[roomID]].options,
+                answer: quiz[roomID][currentQuestionIndex[roomID]].answer,
+                qNo: currentQuestionIndex[roomID] + 1,
+                timeLeft: timeLeft[roomID],
+            });
+        } catch (error) {
+            io.to(roomID).emit("quizFinishedError");
         }
-        else{
-            quiz = [
-                {
-                    question: "What country has the highest life expectancy?",
-                    options: ["Hong Kong", "China", "Japan", "France"],
-                    answer: "o1"
-                },
-                {
-                    question: "Which language has the more native speakers?",
-                    options: ["English", "Spanish", "Portuguese", "Russian"],
-                    answer: "o2"
-                },
-                {
-                    question: "Which planet in our solar system has the highest mountain?",
-                    options: ["Earth", "Venus", "Mars", "Mercury"],
-                    answer: "o3"
-                },
-                {
-                    question: "What is the name of the second-largest moon of Saturn?",
-                    options: ["Titan", "Rhea", "Iapetus", "Enceladus"],
-                    answer: "o2"
-                },
-                {
-                    question: "Which state-owned company was founded by Adolf Hitler's party in May 1937 and is known as 'The People's Car Company'?",
-                    options: ["Mercedes-Benz", "Volkswagen", "BMW", "Porsche"],
-                    answer: "o2"
-                },
-                {
-                    question: "Which country was the first to abolish slavery?",
-                    options: ["Haiti", "Brazil", "United States", "United Kingdom"],
-                    answer: "o1"
-                },
-                {
-                    question: "What is the primary purpose of the United Nations?",
-                    options: ["To promote global trade", "To provide international aid", "To regulate global climate", "To maintain international peace and security"],
-                    answer: "o4"
-                },
-                {
-                    question: "Which ancient civilization is known for creating the first known system of writing?",
-                    options: ["Sumerians", "Ancient Egyptians", "Ancient Greeks", "Indus Valley Civilization"],
-                    answer: "o1"
-                },
-                {
-                    question: "What is the concept of 'civil disobedience' best associated with?",
-                    options: ["Martin Luther King Jr.", "Mahatma Gandhi", "Nelson Mandela", "Abraham Lincoln"],
-                    answer: "o2"
-                },
-                {
-                    question: "Which historical event led to the establishment of the United Nations?",
-                    options: ["World War I", "World War II", "The Cold War", "The Korean War"],
-                    answer: "o2"
-                },
-                {
-                    question: "What is a group of pandas called?",
-                    options: ["Pack", "Herd", "Embarrassment", "Clowder"],
-                    answer: "o3"
-                },
-                {
-                    question: "What type of bond involves the sharing of electron pairs between atoms?",
-                    options: ["Ionic Bond", "Covalent Bond", "Hydrogen Bond", "Metallic Bond"],
-                    answer: "o2"
-                },
-                {
-                    question: "Which gas is most abundant in Earth's atmosphere?",
-                    options: ["Oxygen", "Carbon Dioxide", "Argon", "Nitrogen"],
-                    answer: "o4"
-                },
-                {
-                    question: "What was the name of the atomic bomb dropped on Hiroshima during World War II?",
-                    options: ["Fat Man", "Little Boy", "Big Boy", "Tall Man"],
-                    answer: "o2"
-                },
-                {
-                    question: "What is the pH level of pure water?",
-                    options: ["7", "8", "9", "10"],
-                    answer: "o1"
-                }
-            ]
-        }
-
-        socket.join(roomID);
-        socket.emit("currentQuestion", {
-            question: quiz[currentQuestionIndex].question,
-            options: quiz[currentQuestionIndex].options,
-            answer: quiz[currentQuestionIndex].answer,
-            qNo: currentQuestionIndex + 1,
-            timeLeft: timeLeft,
-        });
     })
-    socket.on("startQuiz", ({roomID, topic}) => {
-        if(topic == "meme"){
-            quiz = [
-                {
-                    question: "No 1 dummy Question of meme",
-                    options: ["Option 1", "Option 2", "Option 3", "Option 4"],
-                    answer: "o2"
-                },
-                {
-                    question: "No 2 dummy Question of meme",
-                    options: ["Option 1", "Option 2", "Option 3", "Option 4"],
-                    answer: "o2"
-                },
-                {
-                    question: "No 3 dummy Question of meme",
-                    options: ["Option 1", "Option 2", "Option 3", "Option 4"],
-                    answer: "o2"
-                },
-                {
-                    question: "No 4 dummy Question of meme",
-                    options: ["Option 1", "Option 2", "Option 3", "Option 4"],
-                    answer: "o2"
-                },
-                {
-                    question: "No 5 dummy Question of meme",
-                    options: ["Option 1", "Option 2", "Option 3", "Option 4"],
-                    answer: "o2"
-                },
-                {
-                    question: "No 6 dummy Question of meme",
-                    options: ["Option 1", "Option 2", "Option 3", "Option 4"],
-                    answer: "o2"
-                },
-                {
-                    question: "No 7 dummy Question of meme",
-                    options: ["Option 1", "Option 2", "Option 3", "Option 4"],
-                    answer: "o2"
-                },
-                {
-                    question: "No 8 dummy Question of meme",
-                    options: ["Option 1", "Option 2", "Option 3", "Option 4"],
-                    answer: "o2"
-                },
-                {
-                    question: "No 9 dummy Question of meme",
-                    options: ["Option 1", "Option 2", "Option 3", "Option 4"],
-                    answer: "o2"
-                },
-                {
-                    question: "No 10 dummy Question of meme",
-                    options: ["Option 1", "Option 2", "Option 3", "Option 4"],
-                    answer: "o2"
-                }
-            ]
-        }
-        else{
-            quiz = [
-                {
-                    question: "What country has the highest life expectancy?",
-                    options: ["Hong Kong", "China", "Japan", "France"],
-                    answer: "o1"
-                },
-                {
-                    question: "Which language has the more native speakers?",
-                    options: ["English", "Spanish", "Portuguese", "Russian"],
-                    answer: "o2"
-                },
-                {
-                    question: "Which planet in our solar system has the highest mountain?",
-                    options: ["Earth", "Venus", "Mars", "Mercury"],
-                    answer: "o3"
-                },
-                {
-                    question: "What is the name of the second-largest moon of Saturn?",
-                    options: ["Titan", "Rhea", "Iapetus", "Enceladus"],
-                    answer: "o2"
-                },
-                {
-                    question: "Which state-owned company was founded by Adolf Hitler's party in May 1937 and is known as 'The People's Car Company'?",
-                    options: ["Mercedes-Benz", "Volkswagen", "BMW", "Porsche"],
-                    answer: "o2"
-                },
-                {
-                    question: "Which country was the first to abolish slavery?",
-                    options: ["Haiti", "Brazil", "United States", "United Kingdom"],
-                    answer: "o1"
-                },
-                {
-                    question: "What is the primary purpose of the United Nations?",
-                    options: ["To promote global trade", "To provide international aid", "To regulate global climate", "To maintain international peace and security"],
-                    answer: "o4"
-                },
-                {
-                    question: "Which ancient civilization is known for creating the first known system of writing?",
-                    options: ["Sumerians", "Ancient Egyptians", "Ancient Greeks", "Indus Valley Civilization"],
-                    answer: "o1"
-                },
-                {
-                    question: "What is the concept of 'civil disobedience' best associated with?",
-                    options: ["Martin Luther King Jr.", "Mahatma Gandhi", "Nelson Mandela", "Abraham Lincoln"],
-                    answer: "o2"
-                },
-                {
-                    question: "Which historical event led to the establishment of the United Nations?",
-                    options: ["World War I", "World War II", "The Cold War", "The Korean War"],
-                    answer: "o2"
-                },
-                {
-                    question: "What is a group of pandas called?",
-                    options: ["Pack", "Herd", "Embarrassment", "Clowder"],
-                    answer: "o3"
-                },
-                {
-                    question: "What type of bond involves the sharing of electron pairs between atoms?",
-                    options: ["Ionic Bond", "Covalent Bond", "Hydrogen Bond", "Metallic Bond"],
-                    answer: "o2"
-                },
-                {
-                    question: "Which gas is most abundant in Earth's atmosphere?",
-                    options: ["Oxygen", "Carbon Dioxide", "Argon", "Nitrogen"],
-                    answer: "o4"
-                },
-                {
-                    question: "What was the name of the atomic bomb dropped on Hiroshima during World War II?",
-                    options: ["Fat Man", "Little Boy", "Big Boy", "Tall Man"],
-                    answer: "o2"
-                },
-                {
-                    question: "What is the pH level of pure water?",
-                    options: ["7", "8", "9", "10"],
-                    answer: "o1"
-                }
-            ]
-        }
-
+    socket.on("startQuiz", ({leadID, url, roomID, topic}) => {
         if (!quizTimers[roomID]) {
-            quizTimers[roomID] = setInterval(() => {
-                io.to(roomID).emit("countDown", timeLeft);
-                timeLeft--;
-
-                if (timeLeft < 0) {
-                    timeLeft = 30;
-                    currentQuestionIndex++;
-
-                    if (currentQuestionIndex >= quiz.length) {
-                        clearInterval(quizTimers[roomID]);
-                        io.to(roomID).emit("quizEnd");
-                        currentQuestionIndex = 0;
-                        delete quizTimers[roomID];
-                        // NAVIGATE TO LEADERBOARD
-                        io.to(roomID).emit("navigateToLead");
-                    }
-                    else {
-                        io.to(roomID).emit("newQuestion", {
-                            question: quiz[currentQuestionIndex].question,
-                            options: quiz[currentQuestionIndex].options,
-                            answer: quiz[currentQuestionIndex].answer,
-                            qNo: currentQuestionIndex + 1
-                        });
-                    }
-                }
-            }, 1000);
+            //  FETCHING THE QUESTIONS
+            try {
+                timeLeft[roomID] = 30;
+                currentQuestionIndex[roomID] = 0;
+                fetch(`https://opentdb.com/api.php?amount=15&category=${topics[topic]}&difficulty=easy&type=multiple`).then(res => res.json())
+                .then(data => {
+                    let originalData = data
+                    quiz[roomID] = originalData.results.map((item, index) => {
+                        const options = [...item.incorrect_answers];
+                        const correctIndex = Math.floor(Math.random() * (options.length + 1));
+                        options.splice(correctIndex, 0, item.correct_answer);
+                        
+                        return {
+                            question: item.question,
+                            options: options,
+                            answer: `o${correctIndex + 1}`
+                        };
+                    });
+                    io.to(roomID).emit("questionsReadyNowJoin", {leadID, url, topic });
+                })
+                //  COUNTDOWN AND END COUNTDOWN
+                setTimeout(() => {
+                    quizTimers[roomID] = setInterval(() => {
+                        io.to(roomID).emit("countDown", timeLeft[roomID]);
+                        timeLeft[roomID]--;
+                        
+                        if (timeLeft[roomID] < 0) {
+                            timeLeft[roomID] = 30;
+                            currentQuestionIndex[roomID]++;
+        
+                            if (currentQuestionIndex[roomID] >= quiz[roomID].length) {
+                                clearInterval(quizTimers[roomID]);
+                                io.to(roomID).emit("quizEnd");
+                                delete currentQuestionIndex[roomID];
+                                delete quizTimers[roomID];
+                                delete timeLeft[roomID];
+                                delete quiz[roomID];
+                                
+                                io.to(roomID).emit("navigateToLead"); // NAVIGATE TO LEADERBOARD
+                            }
+                            else {
+                                io.to(roomID).emit("newQuestion", {
+                                    question: quiz[roomID][currentQuestionIndex[roomID]].question,
+                                    options: quiz[roomID][currentQuestionIndex[roomID]].options,
+                                    answer: quiz[roomID][currentQuestionIndex[roomID]].answer,
+                                    qNo: currentQuestionIndex[roomID] + 1
+                                });
+                            }
+                        }
+                    }, 1000);
+                }, 3000);
+            }
+            catch (error) {
+                io.to(roomID).emit("quizFinishedError");
+            }
         }
         else {
             socket.emit("currentQuestion", {
-                question: quiz[currentQuestionIndex].question,
-                options: quiz[currentQuestionIndex].options,
-                answer: quiz[currentQuestionIndex].answer,
-                qNo: currentQuestionIndex + 1,
-                timeLeft: timeLeft,
+                question: quiz[roomID][currentQuestionIndex[roomID]].question,
+                options: quiz[roomID][currentQuestionIndex[roomID]].options,
+                answer: quiz[roomID][currentQuestionIndex[roomID]].answer,
+                qNo: currentQuestionIndex[roomID] + 1,
+                timeLeft: timeLeft[roomID],
             });
         }
     });
 
+    socket.on("disposeCall", (roomID)=>{
+        socket.to(roomID).emit("dispose")
+    })
+
     socket.on("nextQuestion", (roomID)=>{
-        currentQuestionIndex++;
-        timeLeft = 30;
-        if(currentQuestionIndex >= quiz.length){
+        currentQuestionIndex[roomID]++;
+        timeLeft[roomID] = 30;
+        if(currentQuestionIndex[roomID] >= quiz[roomID].length){
             clearInterval(quizTimers[roomID]);
-            currentQuestionIndex = 0;
+            delete currentQuestionIndex[roomID];
             delete quizTimers[roomID];
+            delete timeLeft[roomID];
+            delete quiz[roomID];
             io.to(roomID).emit("navigateToLead");
         }
         else{
             io.to(roomID).emit("newQuestion", {
-                question: quiz[currentQuestionIndex].question,
-                options: quiz[currentQuestionIndex].options,
-                answer: quiz[currentQuestionIndex].answer,
-                qNo: currentQuestionIndex + 1
+                question: quiz[roomID][currentQuestionIndex[roomID]].question,
+                options: quiz[roomID][currentQuestionIndex[roomID]].options,
+                answer: quiz[roomID][currentQuestionIndex[roomID]].answer,
+                qNo: currentQuestionIndex[roomID] + 1
             });
         }
+    })
+
+    socket.on("buffer", (roomID)=>{
+        io.to(roomID).emit("bufferEveryone")
     })
 
     socket.on("pushObjectInLead", ({ roomID, leadID})=>{
@@ -386,6 +167,16 @@ io.on("connection", (socket) => {
     socket.on("firstAnswer", ({ roomID, fullname })=>{
         io.to(roomID).emit("firstUserToAns", fullname)
     })
+
+    // FRIEND REQUESTS LOGIC
+    socket.on("sendFrndReq", (data)=>{
+        socket.to(data.socketID).emit("frndReq", data.currentUser);
+    })
+    
+    socket.on("inviteEmit", (data)=>{
+        socket.to(data.socketId).emit("invitation", data);
+    })
+
 })
 
 // Some important configurations for every requests`
@@ -397,16 +188,13 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true, limit: "16kb" }))
 app.use(cookieParser())
 app.use(express.static("./public"));
-app.use(errorHandler)
 
 // Files serving
 app.get("/:slug", (req, res) => {
-    if(req.params.slug == "health"){
-        res.status(200).json({message: "Everything is good 😁"})
-    }
-    else{
-        res.sendFile(`${req.params.slug}.html`, { root: `${__dirname}/public/` })
-    }
+    res.sendFile(`${req.params.slug}.html`, { root: `${__dirname}/public/` })
+})
+app.get("/health", (req, res) => {
+    res.status(200).json({message: "Everything is good 😁"})
 })
 
 // Routes
@@ -418,6 +206,11 @@ app.use("/api/v1/room", roomRouter);
 
 import leaderboardRouter from "./src/routes/leaderboard.routes.js";
 app.use("/api/v1/leaderboard", leaderboardRouter)
+
+import notiRouter from "./src/routes/notification.routes.js";
+app.use("/api/v1/notification", notiRouter)
+
+app.use(errorHandler)
 
 // Server running and DB connection
 mongoose.connect(process.env.MONGODB_CONNECTION_STRING).then(db => {

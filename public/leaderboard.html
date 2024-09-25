@@ -43,71 +43,35 @@
         </nav>
     </header>
 
+    <div id="bufferingDiv" class="hidden flex-col gap-3 items-center absolute z-[100] w-screen h-screen justify-center bg-[#000000bd] ">
+        <div id="showMessage" class="text-white text-2xl text-center font-bold"> Please wait... </div>
+        <dotlottie-player class="" src="https://lottie.host/27feff6c-53ae-48c7-9539-9a37724286be/8okSjWIQl7.json" background="transparent" speed="1" style="width: 70px; height: 70px;" loop autoplay></dotlottie-player>
+    </div>
+
     <h1 class=" text-5xl text-center py-3 font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 drop-shadow-lg">
         Leaderboard
     </h1>
 
+    <div class="flex justify-center py-4 gap-3">
+        <button id="backRoom" class=" bg-[#a66ffe] rounded-md text-black px-5 font-bold py-2">Return back to room</button>
+        <button id="leaveRoom" class="  border  border-red-500 text-red-500 font-bold rounded-md  px-5 py-2">Leave room</button>
+    </div>
+
     <div class="flex justify-center ">
 
         <div id="participantsDiv" class=" border-[#a66ffe] w-full sm:w-1/2 p-2 m-2 rounded-md ">
-            <!-- <div class="flex relative items-center gap-2 rounded-full mt-2 border border-yellow-400 bg-gradient-to-r from-yellow-200 to-yellow-400 px-2 py-2.5 shadow-lg overflow-x-auto">
+            <div class="flex relative items-center gap-2 rounded-full mt-2 border border-yellow-400 bg-gradient-to-r from-yellow-200 to-yellow-400 px-2 py-2.5 shadow-lg overflow-x-auto">
                 <div class="flex items-center justify-center w-7 h-7 rounded-full bg-yellow-500 text-white text-md font-bold">
                     1
                 </div>
                 <h3 class="text-md font-semibold text-black">Sai Suman Sandeeb Das  </h3>
-                <div class="bg-yellow-600 absolute right-1.5 text-white rounded-full px-3 py-1.5 font-semibold text-sm shadow-md">
-                    150 pts
+                <div class="bg-yellow-600 absolute right-[1.9rem] text-white rounded-full px-3 py-1.5 font-semibold text-sm shadow-md">
+                    150
+                </div>
+                <div class="absolute right-1.5 flex justify-center items-center">
+                    <span class="material-symbols-outlined text-[#a66ffe]" style="font-size: 1.2rem;">thumb_up</span>
                 </div>
             </div>
-            <div class="flex relative items-center gap-2 rounded-full mt-2 border border-gray-300 bg-gradient-to-r from-gray-200 to-gray-400 px-2 py-2.5 shadow-lg overflow-x-auto">
-                <div class="flex items-center justify-center w-7 h-7 rounded-full bg-gray-500 text-white text-md font-bold">
-                    2
-                </div>
-                <h3 class="text-md font-semibold text-black">Sai Suman Sandeeb Das </h3>
-                <div class="bg-gray-600 absolute right-1.5 text-white rounded-full px-3 py-1.5 font-semibold text-sm shadow-md">
-                    150 pts
-                </div>
-            </div>
-            <div class="flex relative items-center gap-2 rounded-full mt-2 border border-orange-300 bg-gradient-to-r from-orange-200 to-orange-400 px-2 py-2.5 shadow-lg overflow-x-auto">
-                <div class="flex items-center justify-center w-7 h-7 rounded-full bg-orange-500 text-white text-md font-bold">
-                    3
-                </div>
-                <h3 class="text-md font-semibold text-black">Sai Suman Sandeeb Das </h3>
-                <div class="bg-orange-600 absolute right-1.5 text-white rounded-full px-3 py-1.5 font-semibold text-sm shadow-md">
-                    150 pts
-                </div>
-            </div>
-            <div class="flex relative items-center gap-2 rounded-full mt-2 border bg-[#5353ff27] border-blue-300  px-2 py-2.5 shadow-lg overflow-x-auto">
-                <div class="flex items-center justify-center w-7 h-7 rounded-full bg-blue-500 text-white text-md font-bold">
-                    4
-                </div>
-                <h3 class="text-md font-semibold text-white">Sai Suman Sandeeb Das </h3>
-                <div class="bg-blue-600 absolute right-1.5 text-white rounded-full px-3 py-1.5 font-semibold text-sm shadow-md">
-                    150 pts
-                </div>
-            </div>
-            <div class="flex relative items-center gap-2 rounded-full mt-2 border bg-[#5353ff27] border-blue-300  px-2 py-2.5 shadow-lg overflow-x-auto">
-                <div class="flex items-center justify-center w-7 h-7 rounded-full bg-blue-500 text-white text-md font-bold">
-                    4
-                </div>
-                <h3 class="text-md font-semibold text-white">Sai Suman Sandeeb Das </h3>
-                <div class="bg-blue-600 absolute right-1.5 text-white rounded-full px-3 py-1.5 font-semibold text-sm shadow-md">
-                    150 pts
-                </div>
-            </div>
-            <div class="flex relative items-center gap-2 rounded-full mt-2 border bg-gradient-to-r from-blue-100 to-blue-300 border-blue-300  px-2 py-2.5 shadow-lg overflow-x-auto">
-                <div class="flex items-center justify-center w-7 h-7 rounded-full bg-blue-300 text-blue-700 text-md font-bold">
-                    5
-                </div>
-                <h3 class="text-md font-semibold text-black">Sai Suman Sandeeb Das </h3>
-                <div class="bg-blue-600 absolute right-1.5 text-white rounded-full px-3 py-1.5 font-semibold text-sm shadow-md">
-                    150 pts
-                </div>
-            </div> -->
-            
-           
-            
-            
         </div>
 
     </div>
@@ -119,16 +83,14 @@
         const leadID = params.get("leadID");
         const roomID = params.get("roomID");
         const userID = params.get("userID");
+        const adminID = params.get("adminID");
         const participantsDiv = document.getElementById("participantsDiv")
-
-        fetch(`${DOMAIN}/api/v1/room/delete/${roomID}`)
 
         fetch(`${DOMAIN}/api/v1/leaderboard/get/${leadID}`)
         .then(res => res.json())
         .then((data) => {
             const sortedParticipants = data.data.participants.sort((a, b) => b.points - a.points);
             sortedParticipants.forEach((participant, index) => {
-                console.log(participant.id, participant.fullname, participant.points);
                 if(index == 0){
                     let html = `
                         <div class="flex relative items-center gap-2 rounded-full mt-2 border border-yellow-400 bg-gradient-to-r from-yellow-200 to-yellow-400 px-2 py-2.5 shadow-lg overflow-x-auto">
@@ -136,9 +98,12 @@
                                 1
                             </div>
                             <h3 class="text-md font-semibold text-black">${participant.fullname}</h3>
-                            <div class="bg-yellow-600 absolute right-1.5 text-white rounded-full px-3 py-1.5 font-semibold text-sm shadow-md">
-                                ${participant.points + " pts"}
+                            <div class="bg-yellow-600 absolute right-[1.9rem] text-white rounded-full px-3 py-1.5 font-semibold text-sm shadow-md">
+                                ${participant.points}
                             </div>
+                            <button data-userid=${participant.id} data-liked="false" class="likeBtn absolute right-1.5 flex justify-center items-center">
+                                <span class="material-symbols-outlined " style="font-size: 1.2rem;">thumb_up</span>
+                            </button>
                         </div>
                     `
                     participantsDiv.insertAdjacentHTML("beforeend", html);
@@ -150,9 +115,12 @@
                                 2
                             </div>
                             <h3 class="text-md font-semibold text-black">${participant.fullname} </h3>
-                            <div class="bg-gray-600 absolute right-1.5 text-white rounded-full px-3 py-1.5 font-semibold text-sm shadow-md">
-                                ${participant.points + " pts"}
+                            <div class="bg-gray-600 absolute right-[1.9rem] text-white rounded-full px-3 py-1.5 font-semibold text-sm shadow-md">
+                                ${participant.points}
                             </div>
+                            <button data-userid=${participant.id} data-liked="false" class="likeBtn absolute right-1.5 flex justify-center items-center">
+                                <span class="material-symbols-outlined " style="font-size: 1.2rem;">thumb_up</span>
+                            </button>
                         </div>
                     `
                     participantsDiv.insertAdjacentHTML("beforeend", html);
@@ -164,9 +132,12 @@
                                 3
                             </div>
                             <h3 class="text-md font-semibold text-black">${participant.fullname} </h3>
-                            <div class="bg-orange-600 absolute right-1.5 text-white rounded-full px-3 py-1.5 font-semibold  text-sm shadow-md">
-                                ${participant.points + " pts"}
+                            <div class="bg-orange-600 absolute right-[1.9rem] text-white rounded-full px-3 py-1.5 font-semibold  text-sm shadow-md">
+                                ${participant.points}
                             </div>
+                            <button data-userid=${participant.id} data-liked="false" class="likeBtn absolute right-1.5 flex justify-center items-center">
+                                <span class="material-symbols-outlined " style="font-size: 1.2rem;">thumb_up</span>
+                            </button>
                         </div>
                     `
                     participantsDiv.insertAdjacentHTML("beforeend", html);
@@ -178,19 +149,76 @@
                                 ${index+1}
                             </div>
                             <h3 class="text-md font-semibold ${participant.id == userID? "text-blue-700" : "text-white"}"> ${participant.fullname} </h3>
-                            <div class="bg-blue-600 absolute right-1.5 text-white rounded-full px-3 py-1.5 font-semibold text-sm shadow-md">
-                                ${participant.points + " pts"}
+                            <div class="bg-blue-600 absolute right-[1.9rem] text-white rounded-full px-3 py-1.5 font-semibold text-sm shadow-md">
+                                ${participant.points}
                             </div>
+                            <button data-userid=${participant.id} data-liked="false" class="likeBtn absolute right-1.5 flex justify-center items-center">
+                                <span class="material-symbols-outlined " style="font-size: 1.2rem;">thumb_up</span>
+                            </button>
                         </div>
                     `
                     participantsDiv.insertAdjacentHTML("beforeend", html);
                 }
             });
         })
+        .then(()=>{
+            document.querySelectorAll(".likeBtn").forEach(btn => {
+                btn.addEventListener("click", (e)=>{
+                    e.currentTarget.disabled = true
+                    let likeButtton = e.currentTarget
+                    setTimeout(() => {
+                        likeButtton.disabled = false
+                    }, 1500);
+
+                    if(e.currentTarget.dataset.liked == "false"){
+                        e.currentTarget.dataset.liked = "true";
+                        e.currentTarget.children[0].classList.add("text-[#a66ffe]")
+                        fetch(`${DOMAIN}/api/v1/user/updateLike/${e.currentTarget.dataset.userid}`, {
+                            method: "POST",
+                            headers:{
+                                "Content-type": "application/json"
+                            },
+                            body: JSON.stringify({
+                                like: 1
+                            })
+                        })
+                        .then(res => res.json())
+                        .then(data => console.log(data))
+                    }
+                    else{
+                        e.currentTarget.dataset.liked = "false";
+                        e.currentTarget.children[0].classList.remove("text-[#a66ffe]")
+                        fetch(`${DOMAIN}/api/v1/user/updateLike/${e.currentTarget.dataset.userid}`, {
+                            method: "POST",
+                            headers:{
+                                "Content-type": "application/json"
+                            },
+                            body: JSON.stringify({
+                                like: -1
+                            })
+                        })
+                        .then(res => res.json())
+                        .then(data => console.log(data))
+                    }
+                })
+            })
+        })
         .catch(err => {
             console.error('Error fetching leaderboard:', err);
         });
 
+        // RETURN BACK LOGIC
+        document.getElementById("backRoom").addEventListener("click", ()=>{
+            if(userID == adminID) window.location.href = `/room?roomID=${roomID}&admin=true`
+            else window.location.href = `/room?roomID=${roomID}&admin=false`
+        })
+        document.getElementById("leaveRoom").addEventListener("click", ()=>{
+            document.getElementById("bufferingDiv").classList.replace("hidden", "flex");
+            fetch(`${DOMAIN}/api/v1/room/leave/${roomID}`).then(res => res.json())
+            .then(data => {
+                window.location.href = "/home"
+            })
+        })
 
     </script>
 </body>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html class="overflow-hidden" lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -13,14 +13,27 @@
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 </head>
 
-<body class="bg-[#121212] font-[Roboto]">
-    <header class="sticky inset-x-0 top-0 z-50 w-full border-b border-white bg-[#121212] px-4">
+<body class="bg-[#121212] font-[Roboto] overflow-hidden">
+    <div id="bufferingDiv" class="hidden flex-col gap-3 items-center absolute z-[100] w-screen h-screen justify-center bg-[#000000bd] ">
+        <div id="showMessage" class="text-white text-2xl text-center font-bold"> Please wait </div>
+        <dotlottie-player class="" src="https://lottie.host/27feff6c-53ae-48c7-9539-9a37724286be/8okSjWIQl7.json" background="transparent" speed="1" style="width: 70px; height: 70px;" loop autoplay></dotlottie-player>
+    </div>
+
+    <div id="alertDiv" class="absolute top-24 flex flex-col justify-center items-center w-screen z-[100] gap-2">
+        
+    </div>
+
+    <div id="frndReqDiv" class="overflow-hidden space-y-3 absolute w-screen bottom-10 pl-4 pr-1">
+         
+    </div>
+
+    <header class="sticky inset-x-0 top-0 z-50 w-full border-b border-white bg-[#121212] px-1">
         <nav class="mx-auto flex max-w-7xl justify-between items-center py-2">
             <div class="">
-                <svg width="150" height="60" xmlns="http://www.w3.org/2000/svg">
+                <svg width="100" height="40" xmlns="http://www.w3.org/2000/svg">
                     <!-- Background -->
                     <rect width="100%" height="100%" fill="#121212" />
-
+            
                     <!-- Gradient Definition -->
                     <defs>
                         <linearGradient id="textGradient" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -31,10 +44,10 @@
                             <feDropShadow dx="2" dy="4" stdDeviation="3" flood-color="#00000099" />
                         </filter>
                     </defs>
-
+            
                     <!-- Text with Gradient Fill -->
                     <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle"
-                        font-family="Arial, Helvetica, sans-serif" font-size="40" font-weight="bold"
+                        font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="bold"
                         fill="url(#textGradient)" filter="url(#shadow)">
                         QUIZ
                     </text>
@@ -42,21 +55,26 @@
             </div>
 
             <!-- SIGN UP & LOG IN  -->
-            <div class="mb-8 text-white mt-auto flex flex-wrap gap-4 px-4 sm:mb-0 sm:mt-0 sm:items-center sm:px-0">
-                <button id="logIn"
-                    class="w-full bg-[#383737] px-3 py-2 hover:bg-[#4f4e4e] sm:w-auto sm:bg-transparent">Log in</button>
-                <button id="signUp"
-                    class="mr-1 w-full bg-[#ae7aff] px-3 py-2 text-center font-bold text-black shadow-[5px_5px_0px_0px_#4f4e4e] transition-all duration-150 ease-in-out active:translate-x-[5px] active:translate-y-[5px] active:shadow-[0px_0px_0px_0px_#4f4e4e] sm:w-auto">Sign
-                    up</button>
+            <div class="mb-1 text-white mt-auto justify-end flex flex-wrap gap-6 px-4 sm:mb-0 sm:mt-0 sm:items-center sm:px-0">
+                <button id="logIn" class="w-full bg-[#383737] px-3 py-2 hover:bg-[#4f4e4e] sm:w-auto sm:bg-transparent">Log in</button>
+                <button id="signUp" class="mr-1 w-full bg-[#ae7aff] px-3 py-2 text-center font-bold text-black shadow-[5px_5px_0px_0px_#4f4e4e] transition-all duration-150 ease-in-out active:translate-x-[5px] active:translate-y-[5px] active:shadow-[0px_0px_0px_0px_#4f4e4e] sm:w-auto">Sign up</button>
+                <div id="notiDiv" class="hidden justify-center items-center relative">
+                    <div id="redDot" class="hidden rounded-full bg-[red] p-[0.32rem] absolute top-[1.1rem] sm:top-[0.1rem] right-[0.25rem]"></div>
+                    <span id="notificationBell" class="material-symbols-outlined p-0 h-7 cursor-pointer" style="font-size: 30px;">notifications</span>
+                </div>
+                <div id="searchBtnDiv" class="hidden justify-center items-center ">
+                   <span id="searchBtn" class="material-symbols-outlined p-0 h-7 cursor-pointer" style="font-size: 30px;">search</span>
+                </div>
+                <img id="userAcc" width="40" class="rounded-full object-cover w-16 h-16 border hidden" />
             </div>
         </nav>
-    </header>
+    </header>    
 
     <div class="flex justify-center items-center p-3">
         <div class="m-auto border border-[#ae7aff] p-3 rounded-lg mt-10">
             <h1 class="text-[#ae7aff] text-3xl text-center font-bold p-4">Welcome to the Quiz !</h1>
             <p class="text-xl text-white p-6">To play a quiz competition first you need to Sign up and then join a room
-                created by the admin 😁</p>
+                created by the admin 😁 or you can create your own room 😎</p>
             <div class="flex justify-center gap-5">
                 <button id="joinRoomBtn" class="bg-[#ae7aff] px-4 py-3 text-black rounded-sm ">Join Room</button>
                 <button id="createRoomBtn" class="bg-[#ae7aff] px-4 py-3 text-black rounded-sm ">Create Room</button>
@@ -66,7 +84,7 @@
 
     <!-- Overlay div to cover the entire screen -->
     <div id="createRoomDiv"
-        class="w-[100vw] h-[100vh] bg-[#000000c3] hidden   fixed top-0 left-0 z-50 items-center justify-center">
+        class="w-[100vw] h-[100vh] bg-[#000000c3] hidden fixed top-0 left-0 z-50 items-center justify-center">
         <div class="flex flex-col relative bg-black border border-[#ae7aff] p-5 rounded-lg">
             <span id="closeCreateRoom" class="absolute right-6 material-symbols-outlined cursor-pointer text-white">
                 close
@@ -79,12 +97,28 @@
 
             <div class="space-y-2">
                 <div class="flex items-center gap-3">
-                    <input id="meme" name="quizTopic" type="radio" class="w-4 h-4" />
-                    <label for="meme" class="text-gray-300">Trending memes</label>
+                    <input id="gk" name="quizTopic" type="radio" class="topics w-4 h-4" />
+                    <label for="gk" class="text-gray-300">General Knowledge</label>
                 </div>
                 <div class="flex items-center gap-3">
-                    <input id="gk" name="quizTopic" type="radio" class="w-4 h-4" />
-                    <label for="gk" class="text-gray-300">General Knowledge</label>
+                    <input id="cs" name="quizTopic" type="radio" class="topics w-4 h-4" />
+                    <label for="cs" class="text-gray-300">Computer Science</label>
+                </div>
+                <div class="flex items-center gap-3">
+                    <input id="maths" name="quizTopic" type="radio" class="topics w-4 h-4" />
+                    <label for="maths" class="text-gray-300">Mathematics</label>
+                </div>
+                <div class="flex items-center gap-3">
+                    <input id="sports" name="quizTopic" type="radio" class="topics w-4 h-4" />
+                    <label for="sports" class="text-gray-300">Sports</label>
+                </div>
+                <div class="flex items-center gap-3">
+                    <input id="geo" name="quizTopic" type="radio" class="topics w-4 h-4" />
+                    <label for="geo" class="text-gray-300">Geography</label>
+                </div>
+                <div class="flex items-center gap-3">
+                    <input id="anime" name="quizTopic" type="radio" class="topics w-4 h-4" />
+                    <label for="anime" class="text-gray-300">Anime / Manga</label>
                 </div>
             </div>
 
@@ -100,23 +134,131 @@
                 close
             </span>
             <label for="roomID" class="mb-2 inline-block text-gray-300">Room ID</label>
-            <input id="roomID" type="text" placeholder="Enter the Room ID"
-                class="mb-4 text-white rounded-lg border bg-transparent px-3 py-2" />
+            <input id="roomID" type="text" placeholder="Enter the Room ID" class="mb-4 text-white rounded-lg border bg-transparent px-3 py-2" />
 
             <button id="joinRoomSubmit" disabled class="bg-[#ae7aff] disabled:bg-purple-300 px-4 py-3 text-black rounded-sm ">Join Room</button>
         </div>
     </div>
 
+    <div id="searchDiv" class="h-[90vh] hidden overflow-y-auto text-white w-[94vw] rounded-lg bg-black border border-[#ae7aff] absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 z-50 px-4 py-2">
+        <span id="crossSearch" class="cursor-pointer material-symbols-outlined absolute right-3 top-3">close</span>
+        <div class="text-center font-bold text-[#ae7aff] text-2xl">Search friends</div>
+        <input id="searchInput" type="text" class="rounded-lg outline-none bg-[#ffffff17] mx-auto border border-white px-3 py-1.5 w-full mt-4" placeholder="Search by username or fullname">
+
+        <div id="searchResults" class=" mt-5 space-y-2">
+            
+        </div>
+    </div>
+
+    <div id="notificationDiv" class="h-[90vh] hidden overflow-y-auto text-white w-[94vw] rounded-lg bg-black border border-[#ae7aff] absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 z-50 px-4 py-2">
+        <span id="crossNoti" class="cursor-pointer material-symbols-outlined absolute right-3 top-3">close</span>
+        <div class="text-center font-bold text-[#ae7aff] text-2xl">Notifications</div>
+        <div id="notiResults" class="mt-5 space-y-2">
+            
+            <!-- <div class="bg-[#252525] rounded-lg p-2 flex">
+                <div class="flex justify-center items-center w-[20%]">
+                    <img src="https://res.cloudinary.com/dce0jp2rc/image/upload/v1725814503/quiz_app_avatars/avatar_1725814492460.jpg" class="object-cover rounded-full w-12 h-12">
+                </div>
+                <div class="w-[65%] flex items-center pl-2">
+                    <div>
+                        <div class="font-bold">Avishek Adhikary</div>
+                        <div class="text-[#ffffff8d]">Sent you a friend request</div>                        
+                    </div>
+                </div>
+                <div class="w-[15%] flex flex-col gap-1">
+                    <button class="w-10 h-10 flex items-center justify-center border border-green-500 text-green-500 rounded-full">
+                        <span class="cursor-pointer material-symbols-outlined">group_add</span>
+                    </button>
+                    <button class="w-10 h-10 flex items-center justify-center border border-red-500 text-red-500 rounded-full">
+                        <span class="cursor-pointer material-symbols-outlined">close</span>
+                    </button>
+                </div>
+            </div> -->
+
+            <!-- <div class="bg-[#252525] rounded-lg p-2 flex">
+                <div class="flex justify-center items-center w-[20%]">
+                    <img src="https://res.cloudinary.com/dce0jp2rc/image/upload/v1725814503/quiz_app_avatars/avatar_1725814492460.jpg" class="object-cover rounded-full w-12 h-12">
+                </div>
+                <div class="w-[65%] flex items-center pl-2">
+                    <div>
+                        <div class="font-bold">Avishek Adhikary</div>
+                        <div class="text-[#ffffff8d]">Inviting you to join their room</div>                        
+                    </div>
+                </div>
+                <div class="w-[15%] flex flex-col gap-1">
+                    <button class="w-10 h-10 flex items-center justify-center border border-green-500 text-green-500 rounded-full">
+                        <span class="cursor-pointer material-symbols-outlined">check</span>
+                    </button>
+                    <button class="w-10 h-10 flex items-center justify-center border border-red-500 text-red-500 rounded-full">
+                        <span class="cursor-pointer material-symbols-outlined">close</span>
+                    </button>
+                </div>
+            </div> -->
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script>
     <script type="module">
-        import { DOMAIN } from "./constant.js"
-        
+        import { DOMAIN, socket, alerts} from "./constant.js"
         let currentUser;
-        fetch(`${DOMAIN}/api/v1/user/getCurrentUser`).then(res => res.json())
-        .then(user =>{
-            if(user){
-                currentUser = user.data
-            }
-        })
+        let sender = {};
+        let intervalCopy = {};
+
+        // REVERSE LOADING COUNTDOWN
+        function reverseLoading (div, loading, frndReq) {
+            let timeLeft = 7 * 1000;
+            const totalTime = 7 * 1000;
+            const loadingBar = document.getElementById(loading);
+            
+            let interval = setInterval(() => {
+                timeLeft -= 10;
+                const widthPercentage = (timeLeft / totalTime) * 100;
+                loadingBar.style.width = widthPercentage + "%";
+
+                if (timeLeft <= 0) {
+                    clearInterval(interval);
+                    document.getElementById(div).classList.replace("translate-x-0", "translate-x-[100%]");
+                    setTimeout(() => {
+                        document.getElementById(div).remove();
+                    }, 700);
+                    // FRIEND REQUEST IN NOTIFICATION
+                    if(frndReq){
+                        fetch(`${DOMAIN}/api/v1/notification/addNoti?sender=${sender[div]}&receiver=${currentUser._id}&type=0`).then(res => {
+                            if(res.status < 300) document.getElementById("redDot").classList.remove("hidden");
+                        })
+                    }
+                }
+            }, 10);
+            intervalCopy[div] = interval;
+        };
+
+        socket.on('connect', () => {
+            fetch(`${DOMAIN}/api/v1/user/getCurrentUser`).then(res => res.json())
+            .then(user =>{
+                if(user){
+                    currentUser = user.data;
+                    userAcc.src = currentUser.avatar;
+                    searchBtnDiv.classList.replace("hidden", "flex")
+                    notiDiv.classList.replace("hidden", "flex")
+                    userAcc.classList.remove("hidden")
+                    logIn.classList.add("hidden");
+                    signUp.classList.add("hidden");
+                    if(currentUser.notification) document.getElementById("redDot").classList.remove("hidden");
+                    console.log(currentUser);
+                    fetch(`${DOMAIN}/api/v1/user/updateSocketId/${socket.id}`)
+                }
+            })
+            .catch(error => {
+                fetch(`${DOMAIN}/api/v1/user/refreshAccessToken`).then(res => {
+                    if(res.status > 399) return undefined;
+                    return res.json()
+                })
+                .then(data => {
+                    console.log(data)
+                    if(data) window.location.reload();
+                })
+            })
+        });
         
         document.getElementById("signUp").addEventListener("click", () => {
             window.location.href = "/signup"
@@ -126,20 +268,12 @@
         })
 
         document.getElementById("createRoomBtn").addEventListener("click", () => {
-            if(currentUser){
-                document.getElementById("createRoomDiv").classList.replace("hidden", "flex");
-            }
-            else{
-                window.location.href = "/signup"
-            }
+            if(currentUser) document.getElementById("createRoomDiv").classList.replace("hidden", "flex");
+            else window.location.href = "/signup";
         })
         document.getElementById("joinRoomBtn").addEventListener("click", () => {
-            if (currentUser) {
-                document.getElementById("joinRoomDiv").classList.replace("hidden", "flex");    
-            }
-            else {
-                window.location.href = "/signup"
-            }
+            if (currentUser) document.getElementById("joinRoomDiv").classList.replace("hidden", "flex");
+            else window.location.href = "/signup";
         })
         document.getElementById("closeCreateRoom").addEventListener("click", () => {
             document.getElementById("createRoomDiv").classList.replace("flex", "hidden");
@@ -150,20 +284,28 @@
         
         // CREATE ROOM
         document.getElementById("createRoomSubmit").addEventListener("click", ()=>{
-            fetch(`${DOMAIN}/api/v1/room/create`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    name: document.getElementById("roomName").value,
-                    topic: document.getElementById("meme").checked? "meme" : "gk"
+            const topicChoosed = Array.from(document.querySelectorAll(".topics")).filter(inp => inp.checked);
+            const roomName = document.getElementById("roomName").value;
+
+            if(roomName != "" && topicChoosed.length == 1){
+                fetch(`${DOMAIN}/api/v1/room/create`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        name: document.getElementById("roomName").value,
+                        topic: topicChoosed[0].id
+                    })
                 })
-            })
-            .then(res => res.json())
-            .then(data =>{
-                window.location.href = `/room?roomID=${data.data._id}&admin=true`;
-            })
+                .then(res => res.json())
+                .then(data =>{
+                    window.location.href = `/room?roomID=${data.data._id}&admin=true`;
+                })
+            }
+            else{
+                alerts("Room name & topic, both are compulsory !"); 
+            }
         })
 
         //JOIN ROOM
@@ -174,13 +316,286 @@
         })
 
         document.getElementById("joinRoomSubmit").addEventListener("click", ()=>{
-            fetch(`${DOMAIN}/api/v1/room/join/${roomIDInput.value}`).then((res)=> res.json())
+            fetch(`${DOMAIN}/api/v1/room/join/${roomIDInput.value.trim()}`).then((res)=> {
+                console.log(res.status);
+                if(res.status > 399) {
+                    alerts("Room not found, id is wrong !");
+                    return undefined;
+                }
+                return res.json()
+            })
             .then((data)=>{
-                window.location.href = `/room?roomID=${data.data._id}&admin=false`;
+                if(data) window.location.href = `/room?roomID=${data.data._id}&admin=false`;
             })
         })
 
+        // USER ACCOUNT
+        document.getElementById("userAcc").addEventListener("click", ()=>{
+            window.location.href = "/myAccount";
+        })
+
+        document.getElementById("crossSearch").addEventListener("click", ()=>{
+            document.getElementById("searchDiv").classList.add("hidden")
+            document.getElementById("searchInput").value = ""
+            document.getElementById("searchResults").innerHTML = "";
+        })
+        document.getElementById("searchBtn").addEventListener("click", ()=>{
+            document.getElementById("searchDiv").classList.remove("hidden");
+        })
+
+        // SEARCH FRIEND LOGIC
+        let a = -1;
+        document.getElementById("searchInput").addEventListener("input", (e)=>{
+            document.getElementById("searchResults").innerHTML = `
+                <div id="bufferingDivSearch" class="flex flex-col gap-3 items-center absolute z-[100] w-[90%] justify-center bg-[#000000bd] ">
+                    <dotlottie-player class="" src="https://lottie.host/27feff6c-53ae-48c7-9539-9a37724286be/8okSjWIQl7.json" background="transparent" speed="1" style="width: 50px; height: 50px;" loop autoplay></dotlottie-player>
+                </div>
+            `
+            let searchValue = e.currentTarget.value
+            clearTimeout(a);
+            a = setTimeout(() => {
+                if(searchValue != ""){
+                    fetch(`${DOMAIN}/api/v1/user/search?search=${searchValue}`).then(res => res.json())
+                    .then((data)=>{
+                        let mergedUsers = [...data.data.usersByFullname, ...data.data.usersByUsername]
+                        .filter((user, index, array) =>
+                            index === array.findIndex(obj => (
+                                obj._id === user._id
+                            )
+                        ))
+                        document.getElementById("searchResults").innerHTML = "";
+                        if(mergedUsers.length == 0) document.getElementById("searchResults").innerHTML = "Not found !!";
+                        mergedUsers.forEach(elem => {
+                            let html = `
+                                <div class=" h-14 flex p-1 px-1.5 bg-[#ffffff24] rounded-full overflow-hidden">
+                                    <div class="w-[3.1rem] flex">
+                                        <img width="100%" class="rounded-full object-cover" src=${elem.avatar} />
+                                    </div>
+                                    <div class="w-fit flex flex-col justify-center ml-2">
+                                        <div>${elem.fullname}</div>
+                                        <span class="frndID text-[#ffffff9f] text-[0.9rem]">${elem.username}</span>
+                                    </div>
+                                    <div data-socketid=${elem.socketId} data-userid=${elem._id} class="${currentUser.friendList.includes(elem._id)? "hidden" : ""} ml-auto flex items-center">
+                                        <button class="addFriend p-1.5 material-symbols-outlined rounded-full text-black disabled:bg-green-200 bg-green-400">
+                                            <span>person_add</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            `
+                            if(currentUser._id != elem._id) document.getElementById("searchResults").insertAdjacentHTML("beforeend", html);
+                            else document.getElementById("searchResults").innerHTML = "Not found !!"
+                        })
+                    })
+                    .then(()=>{
+                        // SENDING A FRIEND REQUEST LOGIC
+                        document.querySelectorAll(".addFriend").forEach(btn =>{
+                            btn.addEventListener("click", (e)=>{
+                                btn.disabled = true;
+                                let socketID = e.currentTarget.parentElement.dataset.socketid;
+                                let userID = e.currentTarget.parentElement.dataset.userid;
+                                // Web Scokets with HTTP
+                                fetch(`${DOMAIN}/api/v1/user/sendFrndReq`, {
+                                    method: "POST",
+                                    headers:{
+                                        "Content-type": "application/json"
+                                    },
+                                    body: JSON.stringify({
+                                        userID,
+                                        currentUser,
+                                        roomPart: false
+                                    })
+                                })
+                                setTimeout(() => {
+                                    btn.disabled = false;
+                                }, 7000);
+                            })
+                        })
+                    })
+                }
+                else{
+                    document.getElementById("searchResults").innerHTML = "";
+                }
+            }, 700);
+        })
+
+        // PERSON 2 ACCEPTED MY FRIEND REQUEST
+        socket.on("frndReqAccepted", ({frndName, frndID})=>{
+            alerts(`${frndName} accepted your friend request !`)
+        })
+
+        // GETTING A FRIEND REQUEST LOGIC
+        let i = 1;
+        socket.on("frndReq", (user) => {
+            sender[`div${i}`] = user._id
+            let Div = document.createElement("div");
+            Div.classList.add("relative", "z-[100]", "py-2", "flex", "p-1", "gap-3", "text-white", "bg-[#2f2f2f]", "border", "border-[#ae7aff]", "transition-transform", "duration-700", "ease-in-out", "transform", "translate-x-[100%]", "rounded-md");
+            Div.id = `div${i}`;
+            Div.innerHTML = `
+                <div class="flex justify-center items-center">
+                        <img class="w-16 h-16 rounded-full object-cover" src="${user.avatar}" />
+                    </div>
+                    <div>
+                        <div class="font-bold text-lg text-[#ae7aff]">Friend Request</div>
+                        <div class="font-bold">${user.fullname}</div>
+                        <div class="text-[#ffffff84]">${user.username}</div>
+                    </div>
+                    <div data-userid=${user._id} class="flex flex-col gap-1 justify-center absolute top-1 right-1">
+                        <button class="accept bg-green-500 rounded-full text-black flex justify-center items-center w-10 h-10">
+                            <span class="material-symbols-outlined h-6">group_add</span>
+                        </button>
+                        <button class="reject bg-red-500 rounded-full text-black flex justify-center items-center w-10 h-10">
+                            <span class="material-symbols-outlined h-6">close</span>
+                        </button>
+                    </div>
+                    <div id="load${i}" class="absolute bottom-0 left-0 h-1 bg-[#ae7aff]" style="width: 100%;"></div>
+            `
+
+            document.getElementById("frndReqDiv").insertAdjacentElement("afterbegin", Div);
+            setTimeout(() => {
+                Div.classList.replace("translate-x-[100%]", "translate-x-0");
+                reverseLoading(`div${i}`, `load${i}`, true);
+                
+                Div.querySelector(".accept").addEventListener("click", (e)=>{
+                    fetch(`${DOMAIN}/api/v1/user/acceptFrndReq/${e.currentTarget.parentElement.dataset.userid}`).then(res => res.json())
+                    .then(data => {
+                        currentUser = data.data.me;
+                        alerts("Friend request accepted !")
+                        Div.classList.replace("translate-x-0", "translate-x-[100%]");
+                        clearInterval(intervalCopy[Div.id]);
+                        setTimeout(() => {
+                            Div.remove();
+                        }, 700);
+                    })
+                })
+                Div.querySelector(".reject").addEventListener("click", (e) => {
+                    Div.classList.replace("translate-x-0", "translate-x-[100%]");
+                    clearInterval(intervalCopy[Div.id]);
+                    setTimeout(() => {
+                        Div.remove();
+                    }, 700);
+                });
+                i++;
+            }, 50);
+        });
+
+        // NOTIFICATION OF FRIEND REQUEST
+        document.getElementById("crossNoti").addEventListener("click", ()=>{
+            document.getElementById("notificationDiv").classList.add("hidden")
+        })
+        document.getElementById("notificationBell").addEventListener("click", ()=>{
+            document.getElementById("notificationDiv").classList.remove("hidden")
+        })
+
+        document.getElementById("notificationBell").addEventListener("click", ()=>{
+            document.getElementById("redDot").classList.add("hidden");
+            document.getElementById("notiResults").innerHTML = `
+                <div id="bufferingDiv1" class="hidden items-center absolute z-[100] w-[95%] justify-center bg-[#000000bd] ">
+                    <dotlottie-player class="" src="https://lottie.host/27feff6c-53ae-48c7-9539-9a37724286be/8okSjWIQl7.json" background="transparent" speed="1" style="width: 50px; height: 50px;" loop autoplay></dotlottie-player>
+                </div>
+            `
+            fetch(`${DOMAIN}/api/v1/notification/getNoti`).then(res => res.json())
+            .then(data => {
+                document.getElementById("notiResults").innerHTML = ""
+                if(data.data.length == 0) document.getElementById("notiResults").innerHTML = "No Notifications"
+                data.data.forEach(elem => {
+                    let html = `
+                    <div class="bg-[#252525] rounded-lg p-2 flex">
+                        <div class="flex justify-center items-center w-[20%]">
+                            <img src=${elem.sender.avatar} class="object-cover rounded-full w-12 h-12">
+                        </div>
+                        <div class="w-[65%] flex items-center pl-2">
+                            <div>
+                                <div class="font-bold">${elem.sender.fullname}</div>
+                                <div class="text-[#ffffff8d]">${elem.type == 0? "Sent you a friend request" : "Inviting you to join their room"}</div>                        
+                            </div>
+                        </div>
+                        <div data-notiid=${elem._id} data-userid=${elem.sender._id} class="w-[15%] flex flex-col gap-1">
+                            <button class=" ${elem.type == 0? "acceptFrndReq" : "acceptJoining"} w-10 h-10 flex items-center justify-center border border-green-500 text-green-500 rounded-full">
+                                <span class="cursor-pointer material-symbols-outlined">${elem.type == 0? "group_add" : "check"}</span>
+                            </button>
+                            <button class="cancel w-10 h-10 flex items-center justify-center border border-red-500 text-red-500 rounded-full">
+                                <span class="cursor-pointer material-symbols-outlined">close</span>
+                            </button>
+                        </div>
+                    </div>
+                    `
+                    document.getElementById("notiResults").insertAdjacentHTML("beforeend", html);
+                })
+            })
+            .then(()=>{
+                document.querySelectorAll(".acceptFrndReq").forEach(elem => {
+                    elem.addEventListener("click", ()=>{
+                        fetch(`${DOMAIN}/api/v1/user/acceptFrndReq/${elem.parentElement.dataset.userid}`).then(res => res.json())
+                        .then(data => {
+                            alerts("Friend request accepted !")
+                            fetch(`${DOMAIN}/api/v1/notification/removeNoti/${elem.parentElement.dataset.notiid}`)
+                            elem.parentElement.parentElement.remove();
+                        })
+                    })
+                })
+                document.querySelectorAll(".cancel").forEach(elem => {
+                    elem.addEventListener("click", ()=>{
+                        elem.parentElement.parentElement.remove();
+                        fetch(`${DOMAIN}/api/v1/notification/removeNoti/${elem.parentElement.dataset.notiid}`)
+                    })
+                })
+            })
+        })
+
+        // GETTING INVITATION FROM FRIEND
+        let j = 1;
+        socket.on("invitation", ({fullname, username, avatar, _id, roomID})=>{
+            let Div = document.createElement("div");
+            Div.classList.add("relative", "z-[100]", "py-2", "flex", "p-1", "gap-3", "text-white", "bg-[#2f2f2f]", "border", "border-green-500", "transition-transform", "duration-700", "ease-in-out", "transform", "translate-x-[100%]", "rounded-md");
+            Div.id = `div${i}`;
+            Div.innerHTML = `
+                <div class="flex justify-center items-center">
+                        <img class="w-16 h-16 rounded-full object-cover" src="${avatar}" />
+                    </div>
+                    <div>
+                        <div class="font-bold text-lg text-green-500">Room joining invitation</div>
+                        <div class="font-bold">${fullname}</div>
+                        <div class="text-[#ffffff84]">${username}</div>
+                    </div>
+                    <div data-userid=${_id} class="flex flex-col gap-1 justify-center absolute top-1 right-1">
+                        <button class="accept bg-green-500 rounded-full text-black flex justify-center items-center w-10 h-10">
+                            <span class="material-symbols-outlined h-6">group_add</span>
+                        </button>
+                        <button class="reject bg-red-500 rounded-full text-black flex justify-center items-center w-10 h-10">
+                            <span class="material-symbols-outlined h-6">close</span>
+                        </button>
+                    </div>
+                    <div id="load${i}" class="absolute bottom-0 left-0 h-1 bg-green-500" style="width: 100%;"></div>
+            `
+
+            document.getElementById("frndReqDiv").insertAdjacentElement("afterbegin", Div);
+            setTimeout(() => {
+                Div.classList.replace("translate-x-[100%]", "translate-x-0");
+                reverseLoading(`div${i}`, `load${i}`, false);
+                
+                Div.querySelector(".accept").addEventListener("click", (e)=>{
+                    document.getElementById("bufferingDiv").classList.replace("hidden", "flex")
+                    document.getElementById("showMessage").innerHTML = "Joining you to a room..."
+                    clearInterval(intervalCopy[Div.id]);
+                    fetch(`${DOMAIN}/api/v1/room/join/${roomID}`).then(res => res.json())
+                    .then(data => {
+                        window.location.href = `/room?roomID=${data.data._id}&admin=false`;
+                    })
+                })
+
+                Div.querySelector(".reject").addEventListener("click", (e) => {
+                    Div.classList.replace("translate-x-0", "translate-x-[100%]");
+                    clearInterval(intervalCopy[Div.id]);
+                    setTimeout(() => {
+                        Div.remove();
+                    }, 700);
+                });
+                i++;
+            }, 50);
+        })
+        
     </script>
+    
 </body>
 
 

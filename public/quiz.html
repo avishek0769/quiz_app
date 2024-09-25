@@ -49,21 +49,17 @@
     </header>
 
     <div>
-        <div class="py-3 text-2xl font-bold flex justify-center">
-
-        </div>
         <div class="py-4 px-6 flex justify-center">
             <span id="firstAnswerDiv" class="text-lg font-bold hidden"><a id="firstAnswerUser" class="text-green-400 font-bold">Sai Suman Sandeeb Das</a>
                 gave the correct answer first !</span>
         </div>
     </div>
 
-    <div class="flex justify-center p-4">
-
+    <div class="flex justify-center p-4 absolute top-[10rem] left-1/2 -translate-x-1/2">
         <div class="border border-[#ae7aff] rounded-md p-4">
             <div class="mb-4">
-                <span id="noOfQ" class="font-bold text-xl"> </span>
-                <span id="question" class="font-bold text-xl"> </span>
+                <span id="noOfQ" class="font-bold text-xl text-[#ae7aff]"> </span>
+                <span id="question" class="font-bold text-lg"> </span>
             </div>
 
             <div id="optionsDiv">
@@ -95,16 +91,11 @@
         // WILL ALWAYS BE IN THE ROOM
         socket.emit("joinQuiz", { roomID, topic });
 
-        if (admin == "true") {
-            socket.emit("startQuiz", { roomID, topic });
-        }
-
         socket.on("countDown", (timer) => {
             document.getElementById("countDown").innerHTML = timer;
         })
 
         if(localStorage.getItem("firstAnswer")){
-            localStorage.getItem("firstAnswer");
             document.getElementById("firstAnswerUser").innerHTML = localStorage.getItem("firstAnswer");
             document.getElementById("firstAnswerDiv").classList.remove("hidden");
         }
@@ -116,7 +107,7 @@
             document.getElementById("question").innerHTML = question;
             options.forEach((option, index) => {
                 let html = `
-                    <button id=${"o" + (++index)} ${admin=="true"? "disabled" : ""} class="optionButton w-full border-2 hover:border-[#ae7aff] px-4 py-2 mt-2 rounded-md text-left "> ${option} </button>
+                    <button id=${"o" + (++index)} class="optionButton w-full border-2 hover:border-[#ae7aff] px-4 py-2 mt-2 rounded-md text-left "> ${option} </button>
                 `
                 document.getElementById("optionsDiv").insertAdjacentHTML("beforeend", html);
             });
@@ -213,7 +204,7 @@
             document.getElementById("question").innerHTML = question;
             options.forEach((option, index) => {
                 let html = `
-                    <button id=${"o" + (++index)} ${admin=="true"? "disabled" : ""} class="optionButton w-full border-2 hover:border-[#ae7aff] px-4 py-2 mt-2 rounded-md text-left "> ${option} </button>
+                    <button id=${"o" + (++index)} class="optionButton w-full border-2 hover:border-[#ae7aff] px-4 py-2 mt-2 rounded-md text-left "> ${option} </button>
                 `
                 document.getElementById("optionsDiv").insertAdjacentHTML("beforeend", html);
             });
@@ -285,13 +276,12 @@
                             .then(data => {
                                 console.log(data);
                             })
+                            document.querySelectorAll(".optionButton").forEach(btn => {
+                                if (btn.id === correctAnswer) {
+                                    btn.classList.add("bg-green-500");
+                                }
+                            });
                         }
-
-                        document.querySelectorAll(".optionButton").forEach(btn => {
-                            if (btn.id === correctAnswer) {
-                                btn.classList.add("bg-green-500");
-                            }
-                        });
                     });
                 }
             });
@@ -319,8 +309,15 @@
             }
         })
 
+        // QUIZ HAS ENDED ERROR
+        socket.on("quizFinishedError", ()=>{
+            document.getElementsByTagName("body")[0].innerHTML = `<div class="text-center text-[#a66ffe] font-bold text-2xl py-4">Quiz has ended</div>`
+        })
+
         // END OF QUIZ ---> LEADERBOARD
         socket.on("navigateToLead", ()=>{
+            localStorage.removeItem("firstAnswer")
+            localStorage.removeItem("answer")
             window.location.href = `/leaderboard?leadID=${leadID}&userID=${currentUser._id}&roomID=${roomID}`;
         })
 
