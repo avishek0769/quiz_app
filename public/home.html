@@ -83,8 +83,7 @@
     </div>
 
     <!-- Overlay div to cover the entire screen -->
-    <div id="createRoomDiv"
-        class="w-[100vw] h-[100vh] bg-[#000000c3] hidden fixed top-0 left-0 z-50 items-center justify-center">
+    <div id="createRoomDiv" class="w-[100vw] h-[100vh] bg-[#000000c3] hidden fixed top-0 left-0 z-50 items-center justify-center">
         <div class="flex flex-col relative bg-black border border-[#ae7aff] p-5 rounded-lg">
             <span id="closeCreateRoom" class="absolute right-6 material-symbols-outlined cursor-pointer text-white">
                 close
@@ -145,7 +144,7 @@
         <div class="text-center font-bold text-[#ae7aff] text-2xl">Search friends</div>
         <input id="searchInput" type="text" class="rounded-lg outline-none bg-[#ffffff17] mx-auto border border-white px-3 py-1.5 w-full mt-4" placeholder="Search by username or fullname">
 
-        <div id="searchResults" class=" mt-5 space-y-2">
+        <div id="searchResults" class="mt-5 space-y-2">
             
         </div>
     </div>
@@ -245,7 +244,8 @@
                     signUp.classList.add("hidden");
                     if(currentUser.notification) document.getElementById("redDot").classList.remove("hidden");
                     console.log(currentUser);
-                    fetch(`${DOMAIN}/api/v1/user/updateSocketId/${socket.id}`)
+                    fetch(`${DOMAIN}/api/v1/user/updateSocketId/${socket.id}`).then(res => res.json())
+                    .then(data => currentUser.socketId = data.data.socketId)
                 }
             })
             .catch(error => {
@@ -375,15 +375,14 @@
                                         <div>${elem.fullname}</div>
                                         <span class="frndID text-[#ffffff9f] text-[0.9rem]">${elem.username}</span>
                                     </div>
-                                    <div data-socketid=${elem.socketId} data-userid=${elem._id} class="${currentUser.friendList.includes(elem._id)? "hidden" : ""} ml-auto flex items-center">
+                                    <div data-socketid=${elem.socketId} data-userid=${elem._id} class="${currentUser.friendList.includes(elem._id)? "hidden" : ""} ${currentUser._id == elem._id? "hidden" : ""} ml-auto flex items-center">
                                         <button class="addFriend p-1.5 material-symbols-outlined rounded-full text-black disabled:bg-green-200 bg-green-400">
-                                            <span>person_add</span>
+                                            <span class="material-symbols-outlined">person_add</span>
                                         </button>
                                     </div>
                                 </div>
                             `
-                            if(currentUser._id != elem._id) document.getElementById("searchResults").insertAdjacentHTML("beforeend", html);
-                            else document.getElementById("searchResults").innerHTML = "Not found !!"
+                            document.getElementById("searchResults").insertAdjacentHTML("beforeend", html);
                         })
                     })
                     .then(()=>{
@@ -545,6 +544,7 @@
         // GETTING INVITATION FROM FRIEND
         let j = 1;
         socket.on("invitation", ({fullname, username, avatar, _id, roomID})=>{
+            console.log(fullname, username, avatar, _id, roomID);
             let Div = document.createElement("div");
             Div.classList.add("relative", "z-[100]", "py-2", "flex", "p-1", "gap-3", "text-white", "bg-[#2f2f2f]", "border", "border-green-500", "transition-transform", "duration-700", "ease-in-out", "transform", "translate-x-[100%]", "rounded-md");
             Div.id = `div${i}`;

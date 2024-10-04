@@ -162,9 +162,8 @@
                 avatar.src = currentUser.avatar;
                 // UPDATE SOCKET ID IN DB
                 fetch(`${DOMAIN}/api/v1/user/updateSocketId/${socket.id}`).then(res => res.json())
-                .then(data => {
-                    console.log(data);
-                })
+                .then(data => currentUser.socketId = data.data.socketId)
+                
                 // FRIENDS IN THE LIST
                 currentUser.friendList.forEach(frnd => {
                     ids.push(frnd._id);

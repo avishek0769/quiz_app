@@ -142,6 +142,22 @@
         let currentUser;
         let roomParticipants = [];
         let intervalCopy = {};
+        let onlineFriendData;
+
+        const handleInviteClick = (e, data) => {
+            if (e.target && e.target.classList.contains("inviteBtn")) {
+                e.target.disabled = true;
+                let theBtn = e.target;
+                setTimeout(() => {
+                    theBtn.disabled = false;
+                }, 8000);
+
+                const { fullname, username, avatar, _id } = currentUser;
+                const friendID = e.target.closest("div").dataset.frndid;
+                const friend = onlineFriendData.find(frnd => frnd._id == friendID);
+                socket.emit("inviteEmit", { fullname, username, avatar, _id, socketId: friend.socketId, roomID });
+            }
+        };
 
         // REVERSE LOADING COUNTDOWN
         function reverseLoading (div, loading) {
@@ -272,7 +288,8 @@
 
         // GETTING CURRENT USER AND THE CURRENT ROOM
         socket.on("connect", ()=>{
-            fetch(`${DOMAIN}/api/v1/user/updateSocketId/${socket.id}`)
+            fetch(`${DOMAIN}/api/v1/user/updateSocketId/${socket.id}`).then(res => res.json())
+            .then(data => currentUser.socketId = data.data.socketId)
         })
 
         fetch(`${DOMAIN}/api/v1/user/getCurrentUser`).then(res => res.json())
@@ -628,11 +645,13 @@
         })
 
         // INVITE FRIENDS LOGIC
+        const onlineFriendsDiv = document.getElementById("onlineFriendsDiv");
+
         document.getElementById("invitePart").addEventListener("click", ()=>{
             document.getElementById("onlineFriendsSection").classList.replace("hidden", "flex")
             fetch(`${DOMAIN}/api/v1/user/onlineFriends`).then(res => res.json())
             .then((data) => {
-                document.getElementById("onlineFriendsDiv").innerHTML = "";
+                onlineFriendsDiv.innerHTML = "";
                 data.data.forEach(frnd => {
                     let div = document.createElement("div");
                     div.dataset.frndid = frnd._id;
@@ -645,23 +664,12 @@
                             `<button class="bg-blue-500 absolute right-2 text-black rounded-full px-2 py-0.5">Joined</button>`
                         }
                     `
-                    document.getElementById("onlineFriendsDiv").insertAdjacentElement("beforeend", div)
+                    onlineFriendsDiv.insertAdjacentElement("beforeend", div)
                 })
                 // EVENT DELEGATION
-                document.getElementById("onlineFriendsDiv").addEventListener("click", (e) => {
-                    if (e.target && e.target.classList.contains("inviteBtn")) {
-                        e.target.disabled = true;
-                        let theBtn = e.target;
-                        setTimeout(() => {
-                            theBtn.disabled = false;
-                        }, 8000);
-                        
-                        const friendID = theBtn.closest("div").dataset.frndid;
-                        const friend = data.data.find(frnd => frnd._id == friendID);
-
-                        if(friend) socket.emit("inviteEmit", { ...friend, roomID });
-                    }
-                });
+                onlineFriendData = data.data;
+                onlineFriendsDiv.removeEventListener("click", handleInviteClick);
+                onlineFriendsDiv.addEventListener("click", handleInviteClick);
             })
         })
         document.getElementById("closeInvite").addEventListener("click", ()=>{

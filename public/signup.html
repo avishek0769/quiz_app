@@ -96,7 +96,8 @@
                         alerts("Username already taken 😔")
                         document.getElementById("signUpSubmit").disabled = false;
                         return undefined;
-                    }
+                    }.env
+                    
                     return res.json()
                 })
                 .then((data)=>{
