@@ -78,7 +78,7 @@
         <div class="p-2 sm:w-[55%]">
             <div class="font-bold flex gap-3 text-lg">
                 <span class="text-gray-400">Room Name :</span>
-                <h1 id="roomName"> jsdfbdshbfsdhfbshdbfjsbdfbsdj </h1>
+                <h1 id="roomName"> </h1>
             </div>
             <div class="font-bold flex gap-3 text-lg">
                 <span class="text-gray-400">Quiz Topic :</span>
@@ -95,9 +95,9 @@
                     <img id="adminAvatar" width="100%" class="rounded-full object-cover w-10 h-10" />
                 </div>
                 <div>
-                    <h3 id="adminName">dsfsdf </h3>
-                    <h6 id="adminUsername" class="text-sm text-[#ffffff91]">avishe09 </h6>
-                </div>
+                    <h3 id="adminName">  </h3>
+                    <h6 id="adminUsername" class="text-sm text-[#ffffff91]"> </h6>
+                </div> 
                 <div class="font-bold bg-green-300 rounded-full absolute right-2 text-black px-3 py-1">Admin</div>
             </div>
             
@@ -112,7 +112,7 @@
                 <div class="my-4 flex justify-between items-center">
                     <div class="font-bold flex gap-3 text-xl">
                         <span class="text-gray-400 ">Total :</span>
-                        <h1 id="noOfPart">34</h1>
+                        <h1 id="noOfPart"></h1>
                     </div>
                     <button id="invitePart" class="flex border-2 border-green-500 font-bold text-green-500 rounded-full justify-center items-center pl-4 pr-2 py-1 gap-1">
                         <div>Invite</div>
@@ -143,6 +143,7 @@
         let roomParticipants = [];
         let intervalCopy = {};
         let onlineFriendData;
+        let totalParti;
 
         const handleInviteClick = (e, data) => {
             if (e.target && e.target.classList.contains("inviteBtn")) {
@@ -155,7 +156,16 @@
                 const { fullname, username, avatar, _id } = currentUser;
                 const friendID = e.target.closest("div").dataset.frndid;
                 const friend = onlineFriendData.find(frnd => frnd._id == friendID);
-                socket.emit("inviteEmit", { fullname, username, avatar, _id, socketId: friend.socketId, roomID });
+                // socket.emit("inviteEmit", );
+                fetch(`${DOMAIN}/api/v1/room/roomInvitation`, {
+                    method: "POST",
+                    headers: {
+                        "Content-type": "application/json"
+                    },
+                    body: JSON.stringify({ fullname, username, avatar, _id, roomID, friendID })
+                })
+                .then(res => res.json())
+                .then(data => console.log(data))
             }
         };
 
@@ -230,7 +240,7 @@
                 btn.addEventListener("click", ()=>{
                     fetch(`${DOMAIN}/api/v1/room/kick/${roomID}/${btn.dataset.userid}`).then(res => res.json())
                     .then(data => {
-                        console.log(data);
+                        totalParti--
                         btn.parentElement.parentElement.remove();
                     })
                 })
@@ -258,6 +268,7 @@
                     fetch(`${DOMAIN}/api/v1/room/kick/${roomID}/${e.currentTarget.dataset.userid}`)
                     .then(res => res.json())
                     .then(data => {
+                        totalParti--
                         e.currentTarget.parentElement.parentElement.remove();
                     });
                 });
@@ -298,8 +309,8 @@
             // ROOM ADMIN AND PARTICIPANTS
             fetch(`${DOMAIN}/api/v1/room/getRoom/${roomID}`).then(res => res.json())
             .then(data => {
-                let isCurrentUserIncluded = false;
                 console.log(data);
+                let isCurrentUserIncluded = false;
                 roomParticipants.push(data.data.admin._id)
                 adminId = data.data.admin._id;
                 document.getElementById("adminName").innerHTML = data.data.admin.fullname;
@@ -372,6 +383,8 @@
                     }
                     document.getElementById("participantsDiv").insertAdjacentHTML("beforeend", html)
                 }
+                totalParti = roomParticipants.length
+                console.log(totalParti);
                 adminId == currentUser._id? isCurrentUserIncluded = true : null
 
                 if(isCurrentUserIncluded){
@@ -398,6 +411,7 @@
                 }
             })
             .catch(error =>{
+                console.log(error);
                 document.getElementsByTagName("body")[0].innerHTML = `<div class="text-center text-[#a66ffe] font-bold text-2xl py-4">Room doesn't exists ! </div>`
             })
         })
@@ -411,6 +425,8 @@
         
         // REAL TIME USER LEAVING
         socket.on("userLeft", (userID)=>{
+            totalParti--;
+            console.log(totalParti);
             let index = roomParticipants.indexOf(userID);
             index != -1? roomParticipants.splice(index, 1) : null
             document.querySelectorAll(".user").forEach(elem =>{
@@ -425,6 +441,8 @@
         // REAL TIME USER JOINING
         socket.on("newUser", (user)=>{
             roomParticipants.push(user._id)
+            totalParti++;
+            console.log(totalParti);
             let Div;
             if(currentUser._id == adminId){
                 Div = document.createElement("div")
@@ -478,8 +496,6 @@
 
         // START QUIZ
         document.getElementById("startQuizBtn").addEventListener("click", ()=>{
-            // document.getElementById("bufferingDiv").classList.replace("hidden", "flex");
-            // document.getElementById("showMessage").innerHTML = "Starting quiz...";
             socket.emit("buffer", roomID)
 
             if(currentUser._id == adminId){
@@ -497,12 +513,12 @@
                         })
                     })
                     .then(()=>{
-                        console.log(data);
                         socket.emit("startQuiz", {
                             leadID: data.data._id,
                             url: `/quiz?roomID=${roomID}`,
                             roomID,
-                            topic
+                            topic,
+                            totalParticipants: Number(totalParti)
                         });
                     })
                 })
@@ -527,9 +543,9 @@
         })
 
         // PUSH USER IN THE LEADERBOARD & QUIZ 
-        socket.on("questionsReadyNowJoin", ({leadID, url, topic})=>{
+        socket.on("questionsReadyNowJoin", ({leadID, url, topic, totalParticipants})=>{
             if (currentUser._id == adminId){
-                window.location.href = `${url}&admin=true&topic=${topic}&leadID=${leadID}`;
+                window.location.href = `${url}&admin=true&topic=${topic}&leadID=${leadID}&totalParti=${totalParticipants}`;
             }
             else{
                 fetch(`${DOMAIN}/api/v1/leaderboard/join/${leadID}`, {
@@ -544,7 +560,7 @@
                 })
                 .then((res)=> res.json())
                 .then((data)=>{
-                    window.location.href = `${url}&admin=false&topic=${topic}&leadID=${leadID}`;
+                    window.location.href = `${url}&admin=false&topic=${topic}&leadID=${leadID}&totalParti=${totalParticipants}`;
                 })
             }
         })
@@ -558,22 +574,22 @@
             Div.id = `div${i}`;
             Div.innerHTML = `
                 <div class="flex justify-center items-center">
-                        <img class="w-16 h-16 rounded-full object-cover" src="${user.avatar}" />
-                    </div>
-                    <div>
-                        <div class="font-bold text-lg text-[#ae7aff]">Friend Request</div>
-                        <div class="font-bold">${user.fullname}</div>
-                        <div class="text-[#ffffff84]">${user.username}</div>
-                    </div>
-                    <div data-userid=${user._id} class="flex flex-col gap-1 justify-center absolute top-1 right-1">
-                        <button class="accept bg-green-500 rounded-full text-black flex justify-center items-center w-10 h-10">
-                            <span class="material-symbols-outlined h-6">group_add</span>
-                        </button>
-                        <button class="reject bg-red-500 rounded-full text-black flex justify-center items-center w-10 h-10">
-                            <span class="material-symbols-outlined h-6">close</span>
-                        </button>
-                    </div>
-                    <div id="load${i}" class="absolute bottom-0 left-0 h-1 bg-[#ae7aff]" style="width: 100%;"></div>
+                    <img class="w-16 h-16 rounded-full object-cover" src="${user.avatar}" />
+                </div>
+                <div>
+                    <div class="font-bold text-lg text-[#ae7aff]">Friend Request</div>
+                    <div class="font-bold">${user.fullname}</div>
+                    <div class="text-[#ffffff84]">${user.username}</div>
+                </div>
+                <div data-userid=${user._id} class="flex flex-col gap-1 justify-center absolute top-1 right-1">
+                    <button class="accept bg-green-500 rounded-full text-black flex justify-center items-center w-10 h-10">
+                        <span class="material-symbols-outlined h-6">group_add</span>
+                    </button>
+                    <button class="reject bg-red-500 rounded-full text-black flex justify-center items-center w-10 h-10">
+                        <span class="material-symbols-outlined h-6">close</span>
+                    </button>
+                </div>
+                <div id="load${i}" class="absolute bottom-0 left-0 h-1 bg-[#ae7aff]" style="width: 100%;"></div>
             `
 
             document.getElementById("frndReqDiv").insertAdjacentElement("afterbegin", Div);
@@ -582,10 +598,11 @@
                 reverseLoading(`div${i}`, `load${i}`);
                 
                 Div.querySelector(".accept").addEventListener("click", (e)=>{
-                    fetch(`${DOMAIN}/api/v1/user/acceptFrndReq/${e.currentTarget.parentElement.dataset.userid}`).then(res => res.json())
+                    const parentElem = e.currentTarget.parentElement
+                    fetch(`${DOMAIN}/api/v1/user/acceptFrndReq/${parentElem.dataset.userid}`).then(res => res.json())
                     .then(data => {
                         currentUser = data.data.me;
-                        user.roomPart? roomParticipants.push(e.currentTarget.parentElement.dataset.userid) : null;
+                        user.roomPart? roomParticipants.push(parentElem.dataset.userid) : null;
                         alerts("Friend request accepted !")
                         Div.classList.replace("translate-x-0", "translate-x-[100%]");
                         clearInterval(intervalCopy[Div.id]);
@@ -688,6 +705,9 @@
                 alerts("ID copied !")
             })
         })
+
+        localStorage.removeItem("firstAnswer")
+        localStorage.removeItem("answer")
 
     </script>
 

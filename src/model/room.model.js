@@ -6,6 +6,10 @@ const roomSchema = new mongoose.Schema({
         type : String,
         required: true
     },
+    currentQuestionAnsweredBy: {
+        type: Number,
+        default: 0
+    },
     topic: {
         type : String,
         required: true

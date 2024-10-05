@@ -78,8 +78,10 @@
         const admin = params.get("admin");
         const topic = params.get("topic");
         const leadID = params.get("leadID");
+        const totalParti = params.get("totalParti");
         const answerLS = localStorage.getItem("answer");
         let currentUser;
+        console.log(totalParti);
 
         fetch(`${DOMAIN}/api/v1/user/getCurrentUser`).then(res => res.json())
         .then(user =>{
@@ -151,7 +153,7 @@
                             socket.emit("firstAnswer", { roomID, fullname: currentUser.fullname })
                         }
                         // CORRECT ANSWER LOGIC
-                        fetch(`${DOMAIN}/api/v1/leaderboard/updatePoints/${leadID}`, {
+                        fetch(`${DOMAIN}/api/v1/leaderboard/updatePoints/${leadID}/${roomID}?totalParti=${totalParti}`, {
                             method: "POST",
                             headers: {
                                 "Content-type": "application/json"
@@ -163,7 +165,11 @@
                         })
                         .then(res => res.json())
                         .then(data => {
-                            console.log(data);
+                            if(data.data.moveOn && points > 4){
+                                setTimeout(() => {
+                                    socket.emit("nextQuestion", roomID)
+                                }, 1500);
+                            }
                         })
                     }
                     else {
@@ -175,7 +181,7 @@
                         });
                         console.log(points);
                         // WRONG ANSWER LOGIC
-                        fetch(`${DOMAIN}/api/v1/leaderboard/updatePoints/${leadID}`, {
+                        fetch(`${DOMAIN}/api/v1/leaderboard/updatePoints/${leadID}/${roomID}?totalParti=${totalParti}`, {
                             method: "POST",
                             headers: {
                                 "Content-type": "application/json"
@@ -188,6 +194,11 @@
                         .then(res => res.json())
                         .then(data => {
                             console.log(data);
+                            if(data.data.moveOn && points > 4){
+                                setTimeout(() => {
+                                    socket.emit("nextQuestion", roomID)
+                                }, 1500);
+                            }
                         })
                     }
                 });
@@ -243,7 +254,7 @@
                                 socket.emit("firstAnswer", { roomID, fullname: currentUser.fullname })
                             }
                             // CORRECT ANSWER LOGIC
-                            fetch(`${DOMAIN}/api/v1/leaderboard/updatePoints/${leadID}`, {
+                            fetch(`${DOMAIN}/api/v1/leaderboard/updatePoints/${leadID}/${roomID}?totalParti=${totalParti}`, {
                                 method: "POST",
                                 headers: {
                                     "Content-type": "application/json"
@@ -256,13 +267,18 @@
                             .then(res => res.json())
                             .then(data => {
                                 console.log(data);
+                                if(data.data.moveOn && points > 4){
+                                    setTimeout(() => {
+                                        socket.emit("nextQuestion", roomID)
+                                    }, 1500);
+                                }
                             })
                         }
                         else {
                             e.currentTarget.classList.add("bg-red-500");
                             console.log(-5);
                             // WRONG ANSWER LOGIC
-                            fetch(`${DOMAIN}/api/v1/leaderboard/updatePoints/${leadID}`, {
+                            fetch(`${DOMAIN}/api/v1/leaderboard/updatePoints/${leadID}/${roomID}?totalParti=${totalParti}`, {
                                 method: "POST",
                                 headers: {
                                     "Content-type": "application/json"
@@ -275,6 +291,11 @@
                             .then(res => res.json())
                             .then(data => {
                                 console.log(data);
+                                if(data.data.moveOn && points > 4){
+                                    setTimeout(() => {
+                                        socket.emit("nextQuestion", roomID)
+                                    }, 1500);
+                                }
                             })
                             document.querySelectorAll(".optionButton").forEach(btn => {
                                 if (btn.id === correctAnswer) {

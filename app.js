@@ -63,7 +63,7 @@ io.on("connection", (socket) => {
             io.to(roomID).emit("quizFinishedError");
         }
     })
-    socket.on("startQuiz", ({leadID, url, roomID, topic}) => {
+    socket.on("startQuiz", ({leadID, url, roomID, topic, totalParticipants}) => {
         if (!quizTimers[roomID]) {
             //  FETCHING THE QUESTIONS
             try {
@@ -83,7 +83,7 @@ io.on("connection", (socket) => {
                             answer: `o${correctIndex + 1}`
                         };
                     });
-                    io.to(roomID).emit("questionsReadyNowJoin", {leadID, url, topic });
+                    io.to(roomID).emit("questionsReadyNowJoin", {leadID, url, topic, totalParticipants });
                 })
                 //  COUNTDOWN AND END COUNTDOWN
                 setTimeout(() => {
@@ -172,11 +172,6 @@ io.on("connection", (socket) => {
     socket.on("sendFrndReq", (data)=>{
         socket.to(data.socketID).emit("frndReq", data.currentUser);
     })
-    
-    socket.on("inviteEmit", (data)=>{
-        socket.to(data.socketId).emit("invitation", data);
-    })
-
 })
 
 // Some important configurations for every requests`

@@ -1,4 +1,5 @@
 import { Leaderboard } from "../model/leaderboard.model.js";
+import { Room } from "../model/room.model.js";
 import { User } from "../model/user.model.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
@@ -14,7 +15,8 @@ const createLeaderboard = asyncHandler(async (req, res) => {
 })
 
 const updatePoints = asyncHandler(async (req, res) => {
-    const { leadID } = req.params;
+    const { leadID, roomID } = req.params;
+    const { totalParti } = req.query;
     const { id, points } = req.body;
 
     try {
@@ -36,11 +38,21 @@ const updatePoints = asyncHandler(async (req, res) => {
             { $inc: {totalPoints: points} },
             { new: true }
         )
-
-        res.status(200).json(new ApiResponse(200, {message: true}, "Points updated successfully"));
+        const room = await Room.findByIdAndUpdate(
+            roomID,
+            { $inc: {currentQuestionAnsweredBy: 1} },
+            { new: true }
+        )
+        if(room.currentQuestionAnsweredBy == Number(totalParti)){
+            room.currentQuestionAnsweredBy = 0;
+            room.save();
+            res.status(200).json(new ApiResponse(200, {moveOn: true, currentQ: room.currentQuestionAnsweredBy, totalParti}, "Points updated successfully"));
+        }
+        else res.status(200).json(new ApiResponse(200, {moveOn: false, currentQ: room.currentQuestionAnsweredBy, totalParti}, "Points updated successfully"));
     }
     catch (error) {
-        throw new ApiError(501, error.message);
+        // throw new ApiError(501, error.message);
+        console.log(error);
     }
 });
 

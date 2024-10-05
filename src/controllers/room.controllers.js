@@ -106,11 +106,20 @@ const deleteRoom = asyncHandler(async (req, res) => {
     res.status(200).json(new ApiResponse(200, room, "Room deleted Successfully !!"));
 })
 
+const roomInvitation = asyncHandler(async (req, res) => {
+    const { fullname, username, avatar, _id, friendID, roomID } = req.body;
+    const frnd = await User.findById(friendID)
+
+    req.app.locals.io.to(frnd.socketId).emit("invitation", {fullname, username, avatar, _id, roomID});
+    res.status(200).json(new ApiResponse(200, {}, "Invitation sent"))
+})
+
 export {
     createRoom,
     joinRoom,
     leaveRoom,
     getRoom,
     deleteRoom,
-    kickRoom
+    kickRoom,
+    roomInvitation
 }

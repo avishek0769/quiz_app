@@ -300,6 +300,7 @@
                 })
                 .then(res => res.json())
                 .then(data =>{
+                    console.log(data);
                     window.location.href = `/room?roomID=${data.data._id}&admin=true`;
                 })
             }
@@ -544,7 +545,6 @@
         // GETTING INVITATION FROM FRIEND
         let j = 1;
         socket.on("invitation", ({fullname, username, avatar, _id, roomID})=>{
-            console.log(fullname, username, avatar, _id, roomID);
             let Div = document.createElement("div");
             Div.classList.add("relative", "z-[100]", "py-2", "flex", "p-1", "gap-3", "text-white", "bg-[#2f2f2f]", "border", "border-green-500", "transition-transform", "duration-700", "ease-in-out", "transform", "translate-x-[100%]", "rounded-md");
             Div.id = `div${i}`;
@@ -594,6 +594,8 @@
             }, 50);
         })
         
+        localStorage.removeItem("firstAnswer")
+        localStorage.removeItem("answer")
     </script>
     
 </body>
