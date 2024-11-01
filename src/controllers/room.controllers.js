@@ -46,6 +46,7 @@ const kickRoom = asyncHandler(async (req, res) => {
     )
     const user = await User.findById(userID);
     req.app.locals.io.to(roomID).emit("urKicked", {userID: user._id, fullname: user.fullname})
+    req.app.locals.io.to(roomID).emit("userLeft", userID)
     res.status(200).json(new ApiResponse(200, room, "User kicked from the room Successfully"));
 })
 

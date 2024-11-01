@@ -56,8 +56,8 @@
 
             <!-- SIGN UP & LOG IN  -->
             <div class="mb-1 text-white mt-auto justify-end flex flex-wrap gap-6 px-4 sm:mb-0 sm:mt-0 sm:items-center sm:px-0">
-                <button id="logIn" class="w-full bg-[#383737] px-3 py-2 hover:bg-[#4f4e4e] sm:w-auto sm:bg-transparent">Log in</button>
-                <button id="signUp" class="mr-1 w-full bg-[#ae7aff] px-3 py-2 text-center font-bold text-black shadow-[5px_5px_0px_0px_#4f4e4e] transition-all duration-150 ease-in-out active:translate-x-[5px] active:translate-y-[5px] active:shadow-[0px_0px_0px_0px_#4f4e4e] sm:w-auto">Sign up</button>
+                <button id="logIn" class="hidden w-full bg-[#383737] px-3 py-2 hover:bg-[#4f4e4e] sm:w-auto sm:bg-transparent">Log in</button>
+                <button id="signUp" class="hidden mr-1 w-full bg-[#ae7aff] px-3 py-2 text-center font-bold text-black shadow-[5px_5px_0px_0px_#4f4e4e] transition-all duration-150 ease-in-out active:translate-x-[5px] active:translate-y-[5px] active:shadow-[0px_0px_0px_0px_#4f4e4e] sm:w-auto">Sign up</button>
                 <div id="notiDiv" class="hidden justify-center items-center relative">
                     <div id="redDot" class="hidden rounded-full bg-[red] p-[0.32rem] absolute top-[1.1rem] sm:top-[0.1rem] right-[0.25rem]"></div>
                     <span id="notificationBell" class="material-symbols-outlined p-0 h-7 cursor-pointer" style="font-size: 30px;">notifications</span>
@@ -247,6 +247,10 @@
                     fetch(`${DOMAIN}/api/v1/user/updateSocketId/${socket.id}`).then(res => res.json())
                     .then(data => currentUser.socketId = data.data.socketId)
                 }
+                else{
+                    logIn.classList.remove("hidden")
+                    signUp.classList.remove("hidden")
+                }
             })
             .catch(error => {
                 fetch(`${DOMAIN}/api/v1/user/refreshAccessToken`).then(res => {
@@ -254,8 +258,11 @@
                     return res.json()
                 })
                 .then(data => {
-                    console.log(data)
                     if(data) window.location.reload();
+                    else{
+                        logIn.classList.remove("hidden")
+                        signUp.classList.remove("hidden")
+                    }
                 })
             })
         });
@@ -456,15 +463,16 @@
                 reverseLoading(`div${i}`, `load${i}`, true);
                 
                 Div.querySelector(".accept").addEventListener("click", (e)=>{
+                    e.currentTarget.disabled = true;
+                    alerts("Friend request accepted !")
+                    Div.classList.replace("translate-x-0", "translate-x-[100%]");
+                    clearInterval(intervalCopy[Div.id]);
+                    setTimeout(() => {
+                        Div.remove();
+                    }, 700);
                     fetch(`${DOMAIN}/api/v1/user/acceptFrndReq/${e.currentTarget.parentElement.dataset.userid}`).then(res => res.json())
                     .then(data => {
                         currentUser = data.data.me;
-                        alerts("Friend request accepted !")
-                        Div.classList.replace("translate-x-0", "translate-x-[100%]");
-                        clearInterval(intervalCopy[Div.id]);
-                        setTimeout(() => {
-                            Div.remove();
-                        }, 700);
                     })
                 })
                 Div.querySelector(".reject").addEventListener("click", (e) => {

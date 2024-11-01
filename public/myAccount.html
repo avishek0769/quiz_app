@@ -320,15 +320,15 @@
                 reverseLoading(`div${i}`, `load${i}`, true);
                 
                 Div.querySelector(".accept").addEventListener("click", (e)=>{
+                    alerts("Friend request accepted !")
+                    Div.classList.replace("translate-x-0", "translate-x-[100%]");
+                    clearInterval(intervalCopy[Div.id]);
+                    setTimeout(() => {
+                        Div.remove();
+                    }, 700);
                     fetch(`${DOMAIN}/api/v1/user/acceptFrndReq/${e.currentTarget.parentElement.dataset.userid}`).then(res => res.json())
                     .then(data => {
                         currentUser = data.data.me;
-                        alerts("Friend request accepted !")
-                        Div.classList.replace("translate-x-0", "translate-x-[100%]");
-                        clearInterval(intervalCopy[Div.id]);
-                        setTimeout(() => {
-                            Div.remove();
-                        }, 700);
                     })
                 })
                 Div.querySelector(".reject").addEventListener("click", (e) => {

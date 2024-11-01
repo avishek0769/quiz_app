@@ -114,7 +114,7 @@
                         <span class="text-gray-400 ">Total :</span>
                         <h1 id="noOfPart"></h1>
                     </div>
-                    <button id="invitePart" class="flex border-2 border-green-500 font-bold text-green-500 rounded-full justify-center items-center pl-4 pr-2 py-1 gap-1">
+                    <button id="invitePart" class="flex border-2 border-green-500 bg-[#c3ffcc] font-bold text-green-500 rounded-full justify-center items-center pl-4 pr-2 py-1 gap-1">
                         <div>Invite</div>
                         <span class="material-symbols-outlined font-bold">add</span>
                     </button>
@@ -143,7 +143,6 @@
         let roomParticipants = [];
         let intervalCopy = {};
         let onlineFriendData;
-        let totalParti;
 
         const handleInviteClick = (e, data) => {
             if (e.target && e.target.classList.contains("inviteBtn")) {
@@ -156,7 +155,6 @@
                 const { fullname, username, avatar, _id } = currentUser;
                 const friendID = e.target.closest("div").dataset.frndid;
                 const friend = onlineFriendData.find(frnd => frnd._id == friendID);
-                // socket.emit("inviteEmit", );
                 fetch(`${DOMAIN}/api/v1/room/roomInvitation`, {
                     method: "POST",
                     headers: {
@@ -238,10 +236,10 @@
             // KICK PARTICIPANT
             document.querySelectorAll(".td_kick").forEach(btn => {
                 btn.addEventListener("click", ()=>{
-                    fetch(`${DOMAIN}/api/v1/room/kick/${roomID}/${btn.dataset.userid}`).then(res => res.json())
-                    .then(data => {
-                        totalParti--
-                        btn.parentElement.parentElement.remove();
+                    let userIdToRemove = btn.dataset.userid
+                    fetch(`${DOMAIN}/api/v1/room/kick/${roomID}/${userIdToRemove}`).then(()=>{
+                        let index = roomParticipants.indexOf(userIdToRemove);
+                        index != -1? roomParticipants.splice(index, 1) : null
                     })
                 })
             })
@@ -265,12 +263,11 @@
                 });
                 // KICK PARTICIPANT
                 Div.querySelector(".td_kick").addEventListener("click", (e) => {
-                    fetch(`${DOMAIN}/api/v1/room/kick/${roomID}/${e.currentTarget.dataset.userid}`)
-                    .then(res => res.json())
-                    .then(data => {
-                        totalParti--
-                        e.currentTarget.parentElement.parentElement.remove();
-                    });
+                    let userIdToRemove = e.currentTarget.dataset.userid;
+                    fetch(`${DOMAIN}/api/v1/room/kick/${roomID}/${userIdToRemove}`).then(_ => {
+                        let index = roomParticipants.indexOf(userIdToRemove);
+                        index != -1? roomParticipants.splice(index, 1) : null
+                    })
                 });
             }
 
@@ -321,7 +318,7 @@
                 document.getElementById("topic").innerHTML = data.data.topic;
                 topic = data.data.topic;
                 document.getElementById("roomID").innerHTML = data.data._id;
-                document.getElementById("noOfPart").innerHTML = data.data.participants.length;
+                document.getElementById("noOfPart").innerHTML = data.data.participants.length + 1;
 
                 for (const user of data.data.participants){
                     roomParticipants.push(user._id)
@@ -383,8 +380,6 @@
                     }
                     document.getElementById("participantsDiv").insertAdjacentHTML("beforeend", html)
                 }
-                totalParti = roomParticipants.length
-                console.log(totalParti);
                 adminId == currentUser._id? isCurrentUserIncluded = true : null
 
                 if(isCurrentUserIncluded){
@@ -425,15 +420,12 @@
         
         // REAL TIME USER LEAVING
         socket.on("userLeft", (userID)=>{
-            totalParti--;
-            console.log(totalParti);
             let index = roomParticipants.indexOf(userID);
             index != -1? roomParticipants.splice(index, 1) : null
             document.querySelectorAll(".user").forEach(elem =>{
                 if(elem.dataset.userid == userID) {
                     elem.remove();
-                    const number = Number(document.getElementById("noOfPart").innerHTML) - 1;
-                    document.getElementById("noOfPart").innerHTML = number;
+                    document.getElementById("noOfPart").innerHTML = roomParticipants.length;
                 }
             })
         })
@@ -441,8 +433,6 @@
         // REAL TIME USER JOINING
         socket.on("newUser", (user)=>{
             roomParticipants.push(user._id)
-            totalParti++;
-            console.log(totalParti);
             let Div;
             if(currentUser._id == adminId){
                 Div = document.createElement("div")
@@ -462,36 +452,35 @@
                             <span class="material-symbols-outlined h-5 text-green-500">person_add</span>
                             <div>Add friend</div>
                         </button>
-                        <button class="td_kick flex gap-2 hover:bg-[#ffffff26] px-2 pb-2 pt-1 cursor-pointer">
+                        <button data-userid=${user._id} class="td_kick flex gap-2 hover:bg-[#ffffff26] px-2 pb-2 pt-1 cursor-pointer">
                             <span class="material-symbols-outlined h-5 text-red-500">block</span>
                             <div>Kick</div>
                         </button>
                     </div>
                 `
-                document.getElementById("participantsDiv").insertAdjacentElement("beforeend", Div);
                 threeDotsEventsForOne(Div, true);
+                document.getElementById("participantsDiv").insertAdjacentElement("beforeend", Div);
             }
-            else if(currentUser._id != user._id && currentUser._id != adminId){
+            else if(currentUser._id != user._id && currentUser._id != adminId && adminId != user._id){
                 Div = document.createElement("div")
                 Div.classList.add("user", "flex", "gap-4", "relative", "rounded-full", "mt-2", "border", "border-blue-300", "px-2", "py-1.5")
                 Div.dataset.userid = user._id;
                 Div.innerHTML = `
                     <div class="w-[2.8rem] flex justify-center items-center">
-                            <img width="100%" class="rounded-full object-cover w-10 h-10" src=${user.avatar} />
-                        </div>
-                        <div>
-                            <h3>${user.fullname} </h3>
-                            <h6 class="text-sm text-[#ffffff91]">${user.username} </h6>
-                        </div>
-                        <button data-userid=${user._id} class="${currentUser.friendList.includes(user._id)? "hidden" : ""} addFrnd w-10 h-10 disabled:bg-green-300 bg-green-400 flex justify-center items-center absolute right-2 top-1/2 -translate-y-1/2 rounded-full cursor-pointer">
-                            <span class="material-symbols-outlined font-bold text-black">person_add</span>
-                        </button>
+                        <img width="100%" class="rounded-full object-cover w-10 h-10" src=${user.avatar} />
+                    </div>
+                    <div>
+                        <h3>${user.fullname} </h3>
+                        <h6 class="text-sm text-[#ffffff91]">${user.username} </h6>
+                    </div>
+                    <button data-userid=${user._id} class="${currentUser.friendList.includes(user._id)? "hidden" : ""} addFrnd w-10 h-10 disabled:bg-green-300 bg-green-400 flex justify-center items-center absolute right-2 top-1/2 -translate-y-1/2 rounded-full cursor-pointer">
+                        <span class="material-symbols-outlined font-bold text-black">person_add</span>
+                    </button>
                 `
-                document.getElementById("participantsDiv").insertAdjacentElement("beforeend", Div)
                 threeDotsEventsForOne(Div, false);
+                document.getElementById("participantsDiv").insertAdjacentElement("beforeend", Div)
             }
-            const number = Number(document.getElementById("noOfPart").innerHTML) + 1;
-            document.getElementById("noOfPart").innerHTML = number;
+            document.getElementById("noOfPart").innerHTML = roomParticipants.length;
         })
 
         // START QUIZ
@@ -518,7 +507,7 @@
                             url: `/quiz?roomID=${roomID}`,
                             roomID,
                             topic,
-                            totalParticipants: Number(totalParti)
+                            totalParticipants: roomParticipants.length
                         });
                     })
                 })

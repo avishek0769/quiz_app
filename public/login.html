@@ -41,13 +41,11 @@
         </nav>
     </header>
 
+    <div id="bufferingDiv" class="hidden flex-col gap-3 items-center absolute z-50 w-screen h-screen justify-center bg-[#000000bd] ">
+        <div id="showMessage" class="text-white text-2xl text-center font-bold"> Please wait... </div>
+        <dotlottie-player class="" src="https://lottie.host/27feff6c-53ae-48c7-9539-9a37724286be/8okSjWIQl7.json" background="transparent" speed="1" style="width: 70px; height: 70px;" loop autoplay></dotlottie-player>
+    </div>
     <div class="h-screen overflow-y-auto bg-[#121212] text-white">
-        <div id="bufferingDiv"
-            class="hidden flex-col gap-3 items-center absolute z-50 w-screen h-screen justify-center bg-[#000000bd] ">
-            <div id="showMessage" class="text-white text-2xl text-center font-bold"> Please wiat </div>
-            <dotlottie-player class="" src="https://lottie.host/27feff6c-53ae-48c7-9539-9a37724286be/8okSjWIQl7.json"
-                background="transparent" speed="1" style="width: 70px; height: 70px;" loop autoplay></dotlottie-player>
-        </div>
 
         <div id="alertDiv" class="absolute top-24 flex flex-col justify-center items-center w-screen z-[100] gap-2">
         
@@ -77,8 +75,9 @@
             document.getElementById("logInSubmit").disabled = true;
             let username = document.getElementById("username").value.trim()
             let password = document.getElementById("password").value.trim()
-
+            
             if (username != "" && password != "") {
+                document.getElementById("bufferingDiv").classList.replace("hidden", "flex");
                 fetch(`${DOMAIN}/api/v1/user/login`, {
                     method: "POST",
                     headers: {
@@ -91,6 +90,7 @@
                 .then(res => {
                     document.getElementById("logInSubmit").disabled = false;
                     if(res.status > 399){
+                        document.getElementById("bufferingDiv").classList.replace("flex", "hidden");
                         alerts("User credentials are wrong !")
                         return undefined
                     }
