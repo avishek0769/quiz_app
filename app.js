@@ -38,6 +38,28 @@ const topics = {
     anime: 31
 }
 
+const fetchQuestions = async (topic, roomID, leadID, url, totalParticipants) => {
+    try {
+        const data = await fetch(`https://opentdb.com/api.php?amount=15&category=${topics[topic]}&difficulty=easy&type=multiple`).then(res => res.json())
+        
+        quiz[roomID] = data.results.map((item, index) => {
+            const options = [...item.incorrect_answers];
+            const correctIndex = Math.floor(Math.random() * (options.length + 1));
+            options.splice(correctIndex, 0, item.correct_answer);
+            
+            return {
+                question: item.question,
+                options: options,
+                answer: `o${correctIndex + 1}`
+            };
+        });
+        io.to(roomID).emit("questionsReadyNowJoin", {leadID, url, topic, totalParticipants });
+    }
+    catch (error) {
+        throw new Error("Error fetching questions");
+    }
+}
+
 io.on("connection", (socket) => {
     socket.on("joinRoom", (data) => {
         if (!data.admin) {
@@ -50,7 +72,7 @@ io.on("connection", (socket) => {
     })
     
     socket.on("joinQuiz", ({roomID, topic}) => {
-        socket.join(roomID);        
+        socket.join(roomID);
         try {
             socket.emit("currentQuestion", {
                 question: quiz[roomID][currentQuestionIndex[roomID]].question,
@@ -60,31 +82,30 @@ io.on("connection", (socket) => {
                 timeLeft: timeLeft[roomID],
             });
         } catch (error) {
+            console.log(error)
             io.to(roomID).emit("quizFinishedError");
         }
     })
-    socket.on("startQuiz", ({leadID, url, roomID, topic, totalParticipants}) => {
+    socket.on("startQuiz", async ({leadID, url, roomID, topic}) => {
         if (!quizTimers[roomID]) {
+            let totalParticipants = await Room.findByIdAndUpdate(
+                roomID,
+                { $set: { currentQuestionAnsweredBy: 0 } },
+            ).then(room => room.participants.length + 1);
+
             //  FETCHING THE QUESTIONS
             try {
                 timeLeft[roomID] = 30;
                 currentQuestionIndex[roomID] = 0;
-                fetch(`https://opentdb.com/api.php?amount=15&category=${topics[topic]}&difficulty=easy&type=multiple`).then(res => res.json())
-                .then(data => {
-                    let originalData = data
-                    quiz[roomID] = originalData.results.map((item, index) => {
-                        const options = [...item.incorrect_answers];
-                        const correctIndex = Math.floor(Math.random() * (options.length + 1));
-                        options.splice(correctIndex, 0, item.correct_answer);
-                        
-                        return {
-                            question: item.question,
-                            options: options,
-                            answer: `o${correctIndex + 1}`
-                        };
+
+                fetchQuestions(topic, roomID, leadID, url, totalParticipants)
+                .catch(err => {
+                    fetchQuestions(topic, roomID, leadID, url, totalParticipants).catch(error => {
+                        console.log(error)
+                        io.to(roomID).emit("quizFinishedError");
                     });
-                    io.to(roomID).emit("questionsReadyNowJoin", {leadID, url, topic, totalParticipants });
-                })
+                });
+                
                 //  COUNTDOWN AND END COUNTDOWN
                 setTimeout(() => {
                     quizTimers[roomID] = setInterval(() => {
@@ -106,18 +127,22 @@ io.on("connection", (socket) => {
                                 io.to(roomID).emit("navigateToLead"); // NAVIGATE TO LEADERBOARD
                             }
                             else {
-                                io.to(roomID).emit("newQuestion", {
-                                    question: quiz[roomID][currentQuestionIndex[roomID]].question,
-                                    options: quiz[roomID][currentQuestionIndex[roomID]].options,
-                                    answer: quiz[roomID][currentQuestionIndex[roomID]].answer,
-                                    qNo: currentQuestionIndex[roomID] + 1
-                                });
+                                Room.findByIdAndUpdate(roomID, { $set: { currentQuestionAnsweredBy: 0 } })
+                                .then(() => {
+                                    io.to(roomID).emit("newQuestion", {
+                                        question: quiz[roomID][currentQuestionIndex[roomID]].question,
+                                        options: quiz[roomID][currentQuestionIndex[roomID]].options,
+                                        answer: quiz[roomID][currentQuestionIndex[roomID]].answer,
+                                        qNo: currentQuestionIndex[roomID] + 1
+                                    });
+                                })
                             }
                         }
                     }, 1000);
                 }, 3000);
             }
             catch (error) {
+                console.log(error)
                 io.to(roomID).emit("quizFinishedError");
             }
         }
@@ -136,7 +161,11 @@ io.on("connection", (socket) => {
         socket.to(roomID).emit("dispose")
     })
 
-    socket.on("nextQuestion", (roomID)=>{
+    socket.on("nextQuestion", async (roomID)=>{
+        await Room.findByIdAndUpdate(
+            roomID,
+            { $set: { currentQuestionAnsweredBy: 0 } },
+        )
         currentQuestionIndex[roomID]++;
         timeLeft[roomID] = 30;
         if(currentQuestionIndex[roomID] >= quiz[roomID].length){
@@ -203,6 +232,7 @@ import leaderboardRouter from "./src/routes/leaderboard.routes.js";
 app.use("/api/v1/leaderboard", leaderboardRouter)
 
 import notiRouter from "./src/routes/notification.routes.js";
+import { Room } from "./src/model/room.model.js";
 app.use("/api/v1/notification", notiRouter)
 
 app.use(errorHandler)

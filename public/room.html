@@ -695,6 +695,12 @@
             })
         })
 
+        socket.on("quizFinishedError", ()=>{
+            document.getElementsByTagName("body")[0].innerHTML = `
+                <div class="text-center text-[#a66ffe] font-bold text-2xl py-5"> An error occurred while starting the quiz. Please try again later. </div>
+            `
+        })
+
         localStorage.removeItem("firstAnswer")
         localStorage.removeItem("answer")
 

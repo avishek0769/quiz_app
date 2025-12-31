@@ -1,6 +1,6 @@
 import { io } from "https://cdn.socket.io/4.7.5/socket.io.esm.min.js";
 
-const DOMAIN = "http://192.168.1.37:3000";
+const DOMAIN = "https://9vkj509k-3000.inc1.devtunnels.ms";
 const socket = io();
 
 const alerts = (message)=>{

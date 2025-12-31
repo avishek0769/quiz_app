@@ -16,9 +16,8 @@ const createLeaderboard = asyncHandler(async (req, res) => {
 
 const updatePoints = asyncHandler(async (req, res) => {
     const { leadID, roomID } = req.params;
-    const { totalParti } = req.query;
     const { id, points } = req.body;
-
+    
     try {
         const leaderboard = await Leaderboard.findById(leadID);
         if (!leaderboard) {
@@ -43,7 +42,10 @@ const updatePoints = asyncHandler(async (req, res) => {
             { $inc: {currentQuestionAnsweredBy: 1} },
             { new: true }
         )
-        if(room.currentQuestionAnsweredBy == Number(totalParti)){
+        const totalParti = room.participants.length + 1;
+        console.log(room.currentQuestionAnsweredBy, totalParti, "\n");
+        
+        if(room.currentQuestionAnsweredBy == totalParti){
             room.currentQuestionAnsweredBy = 0;
             room.save();
             res.status(200).json(new ApiResponse(200, {moveOn: true, currentQ: room.currentQuestionAnsweredBy, totalParti}, "Points updated successfully"));

@@ -81,7 +81,6 @@
         const totalParti = params.get("totalParti");
         const answerLS = localStorage.getItem("answer");
         let currentUser;
-        console.log(totalParti);
 
         fetch(`${DOMAIN}/api/v1/user/getCurrentUser`).then(res => res.json())
         .then(user =>{
@@ -165,6 +164,7 @@
                         })
                         .then(res => res.json())
                         .then(data => {
+                            console.log("Move on --> ", data.data.moveOn);
                             if(data.data.moveOn && points > 4){
                                 setTimeout(() => {
                                     socket.emit("nextQuestion", roomID)
@@ -179,7 +179,7 @@
                                 button.classList.add("bg-green-500");
                             }
                         });
-                        console.log(points);
+                        
                         // WRONG ANSWER LOGIC
                         fetch(`${DOMAIN}/api/v1/leaderboard/updatePoints/${leadID}/${roomID}?totalParti=${totalParti}`, {
                             method: "POST",
@@ -193,7 +193,7 @@
                         })
                         .then(res => res.json())
                         .then(data => {
-                            console.log(data);
+                            console.log("Move on --> ", data.data.moveOn);
                             if(data.data.moveOn && points > 4){
                                 setTimeout(() => {
                                     socket.emit("nextQuestion", roomID)
@@ -266,7 +266,7 @@
                             })
                             .then(res => res.json())
                             .then(data => {
-                                console.log(data);
+                                console.log("Move on --> ", data.data.moveOn);
                                 if(data.data.moveOn && points > 4){
                                     setTimeout(() => {
                                         socket.emit("nextQuestion", roomID)
@@ -276,7 +276,7 @@
                         }
                         else {
                             e.currentTarget.classList.add("bg-red-500");
-                            console.log(-5);
+                            
                             // WRONG ANSWER LOGIC
                             fetch(`${DOMAIN}/api/v1/leaderboard/updatePoints/${leadID}/${roomID}?totalParti=${totalParti}`, {
                                 method: "POST",
@@ -290,7 +290,7 @@
                             })
                             .then(res => res.json())
                             .then(data => {
-                                console.log(data);
+                                console.log("Move on --> ", data.data.moveOn);
                                 if(data.data.moveOn && points > 4){
                                     setTimeout(() => {
                                         socket.emit("nextQuestion", roomID)
