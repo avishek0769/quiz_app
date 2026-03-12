@@ -4,67 +4,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Sign Up - Quiz Arena</title>
     <link rel="stylesheet" href="./src/output.css">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
-        rel="stylesheet">
-
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 </head>
 
-<body class="font-[Roboto]">
-    <header class="sticky inset-x-0 top-0 z-50 w-full border-b border-white bg-[#121212] px-4">
-        <nav class="mx-auto flex max-w-7xl justify-between items-center py-2">
-            <div class="">
-                <svg width="150" height="60" xmlns="http://www.w3.org/2000/svg">
-                    <!-- Background -->
-                    <rect width="100%" height="100%" fill="#121212" />
+<body class="font-sans bg-surface min-h-screen bg-dots">
+    <!-- Ambient background glow -->
+    <div class="fixed inset-0 bg-mesh pointer-events-none"></div>
 
-                    <!-- Gradient Definition -->
-                    <defs>
-                        <linearGradient id="textGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" style="stop-color: #a66ffe; stop-opacity: 1" />
-                            <stop offset="100%" style="stop-color: #ae7aff; stop-opacity: 1" />
-                        </linearGradient>
-                        <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
-                            <feDropShadow dx="2" dy="4" stdDeviation="3" flood-color="#00000099" />
-                        </filter>
-                    </defs>
-
-                    <!-- Text with Gradient Fill -->
-                    <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle"
-                        font-family="Arial, Helvetica, sans-serif" font-size="40" font-weight="bold"
-                        fill="url(#textGradient)" filter="url(#shadow)">
-                        QUIZ
-                    </text>
-                </svg>
-            </div>
+    <header class="sticky inset-x-0 top-0 z-50 w-full glass border-b border-white/5 px-4">
+        <nav class="mx-auto flex max-w-7xl justify-between items-center py-3">
+            <a href="/home" class="flex items-center gap-2 group">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-accent-dark to-accent flex items-center justify-center shadow-glow group-hover:shadow-glow-lg transition-shadow duration-300">
+                    <span class="text-white font-display font-bold text-lg">Q</span>
+                </div>
+                <span class="font-display font-bold text-xl gradient-text hidden sm:block">QUIZ ARENA</span>
+            </a>
         </nav>
     </header>
 
-    <div id="bufferingDiv" class="hidden flex-col gap-3 items-center absolute z-50 w-screen h-screen justify-center bg-[#000000bd] ">
-        <div id="showMessage" class="text-white text-2xl text-center font-bold"> Please wait...</div>
-        <dotlottie-player class="" src="https://lottie.host/27feff6c-53ae-48c7-9539-9a37724286be/8okSjWIQl7.json" background="transparent" speed="1" style="width: 70px; height: 70px;" loop autoplay></dotlottie-player>
+    <div id="bufferingDiv" class="hidden flex-col gap-3 items-center fixed inset-0 z-50 justify-center bg-black/70 backdrop-blur-sm">
+        <div id="showMessage" class="text-white text-xl text-center font-semibold"> Please wait...</div>
+        <dotlottie-player src="https://lottie.host/27feff6c-53ae-48c7-9539-9a37724286be/8okSjWIQl7.json" background="transparent" speed="1" style="width: 70px; height: 70px;" loop autoplay></dotlottie-player>
     </div>
-    <div class="h-screen overflow-y-auto bg-[#121212] text-white">
 
-        <div id="alertDiv" class="absolute top-24 flex flex-col justify-center items-center w-screen z-[100] gap-2">
-        
+    <div class="relative min-h-[calc(100vh-65px)] flex items-center justify-center overflow-y-auto text-white">
+
+        <div id="alertDiv" class="fixed top-20 flex flex-col justify-center items-center w-screen z-[100] gap-2">
         </div>
 
-        <div class="mx-auto my-8 flex w-full max-w-sm flex-col px-4">
-            <h1 class="font-bold text-3xl text-[#ae7aff] mb-10">Sign up to play the quiz</h1>
+        <div class="mx-auto w-full max-w-md px-4 py-10 animate-slide-up">
+            <!-- Card -->
+            <div class="card p-8 sm:p-10">
+                <!-- Icon -->
+                <div class="flex justify-center mb-6">
+                    <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-accent-dark to-accent flex items-center justify-center shadow-glow animate-float">
+                        <span class="material-symbols-outlined text-white" style="font-size: 32px;">person_add</span>
+                    </div>
+                </div>
 
-            <label for="fullname" class="mb-1 inline-block text-gray-300">Full name</label>
-            <input id="fullname" type="text" placeholder="Enter your fullname" class="mb-4 rounded-lg border bg-transparent px-3 py-2" />
+                <h1 class="font-display font-bold text-3xl gradient-text text-center mb-2">Join the Arena</h1>
+                <p class="text-white/40 text-center mb-8 text-sm">Create your account and start competing</p>
 
-            <label for="username" class="mb-1 inline-block text-gray-300">Username</label>
-            <input id="username" type="text" placeholder="Enter your username" class="mb-4 rounded-lg border bg-transparent px-3 py-2" />
+                <div class="space-y-5">
+                    <div>
+                        <label for="fullname" class="block mb-2 text-sm font-medium text-white/60">Full name</label>
+                        <div class="relative">
+                            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-white/30" style="font-size: 20px;">badge</span>
+                            <input id="fullname" type="text" placeholder="Enter your full name" class="input-field pl-10" />
+                        </div>
+                    </div>
 
-            <label for="password" class="mb-1 inline-block text-gray-300">Password*</label>
-            <input id="password" type="text" placeholder="Enter your password" class="mb-4 rounded-lg border bg-transparent px-3 py-2" />
+                    <div>
+                        <label for="username" class="block mb-2 text-sm font-medium text-white/60">Username</label>
+                        <div class="relative">
+                            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-white/30" style="font-size: 20px;">person</span>
+                            <input id="username" type="text" placeholder="Choose a username" class="input-field pl-10" />
+                        </div>
+                    </div>
 
-            <button id="signUpSubmit" class="bg-[#ae7aff] px-4 py-3 text-black mb-5">Sign up</button>
-            <div>Already have an account ? <a href="/login" class="text-[#ae7aff] ">Log in</a></div>
+                    <div>
+                        <label for="password" class="block mb-2 text-sm font-medium text-white/60">Password</label>
+                        <div class="relative">
+                            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-white/30" style="font-size: 20px;">lock</span>
+                            <input id="password" type="password" placeholder="Create a password" class="input-field pl-10" />
+                        </div>
+                    </div>
+
+                    <button id="signUpSubmit" class="btn-primary w-full text-center">
+                        <span>Create Account</span>
+                    </button>
+                </div>
+
+                <div class="mt-6 text-center text-sm text-white/40">
+                    Already have an account? 
+                    <a href="/login" class="text-accent-light hover:text-accent font-semibold transition-colors">Log in</a>
+                </div>
+            </div>
         </div>
     </div>
 

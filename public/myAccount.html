@@ -4,110 +4,108 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz</title>
+    <title>Quiz Arena - My Account</title>
     <link rel="stylesheet" href="src/output.css">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 </head>
 
-<body class="bg-[#121212] font-[Roboto] text-white">
-    <div id="removeFrndDiv" class="hidden absolute z-50 w-screen h-screen justify-center items-center bg-[#00000096]">
-        <div class=" w-[18rem]  sm:w-auto bg-black border border-[#ae7aff] px-6 py-5 z-50 rounded-lg ">
-            <div class="text-white font-medium text-lg pb-5">Are you sure you want to remove your friend ?</div>
-            <div class="space-x-6">
-                <button id="yesRemove" class="rounded-full px-5 py-1 bg-red-500 hover:bg-red-400 font-semibold">Yes</button>
-                <button id="noRemove" class="rounded-full bg-[#ffffff9a] hover:bg-[#ffffffab] px-5 py-1">No</button>
+<body class="bg-surface font-sans text-white bg-dots min-h-screen">
+    <!-- Ambient background -->
+    <div class="fixed inset-0 bg-mesh pointer-events-none"></div>
+
+    <!-- Remove Friend Confirmation Modal -->
+    <div id="removeFrndDiv" class="hidden fixed inset-0 z-50 justify-center items-center bg-black/60 backdrop-blur-sm">
+        <div class="card max-w-sm w-[90%] animate-scale-in p-6 text-center">
+            <div class="flex justify-center mb-4">
+                <div class="w-14 h-14 rounded-2xl bg-red-500/10 flex items-center justify-center">
+                    <span class="material-symbols-outlined text-red-400" style="font-size: 28px;">person_remove</span>
+                </div>
+            </div>
+            <h3 class="text-white font-semibold text-lg mb-2">Remove Friend</h3>
+            <p class="text-white/50 text-sm mb-6">Are you sure you want to remove this friend from your list?</p>
+            <div class="flex justify-center gap-3">
+                <button id="noRemove" class="btn-outline py-2 px-6">Cancel</button>
+                <button id="yesRemove" class="bg-red-500 hover:bg-red-400 text-white font-semibold py-2 px-6 rounded-xl transition-colors">Remove</button>
             </div>
         </div>
     </div>
     
-    <div id="alertDiv" class="absolute top-24 flex flex-col justify-center items-center w-screen z-[100] gap-2">
-        
+    <div id="alertDiv" class="fixed top-20 flex flex-col justify-center items-center w-screen z-[100] gap-2">
     </div>
 
-    <div id="bufferingDiv" class="hidden flex-col gap-3 items-center absolute z-[100] w-screen h-screen justify-center bg-[#000000bd] ">
-        <div id="showMessage" class="text-white text-2xl text-center font-bold"> Please wait.... </div>
-        <dotlottie-player class="" src="https://lottie.host/27feff6c-53ae-48c7-9539-9a37724286be/8okSjWIQl7.json" background="transparent" speed="1" style="width: 70px; height: 70px;" loop autoplay></dotlottie-player>
+    <div id="bufferingDiv" class="hidden flex-col gap-3 items-center fixed inset-0 z-[100] justify-center bg-black/70 backdrop-blur-sm">
+        <div id="showMessage" class="text-white text-xl text-center font-semibold"> Please wait.... </div>
+        <dotlottie-player src="https://lottie.host/27feff6c-53ae-48c7-9539-9a37724286be/8okSjWIQl7.json" background="transparent" speed="1" style="width: 70px; height: 70px;" loop autoplay></dotlottie-player>
     </div>
 
-    <div id="frndReqDiv" class="overflow-hidden absolute w-screen bottom-10 ">
-         
+    <div id="frndReqDiv" class="overflow-hidden fixed w-screen bottom-10 z-[90]">
     </div>
 
     <form id="imageForm">
         <input id="avatarInput" name="avatar" class="hidden" type="file">
     </form>
     
-    <header class="sticky inset-x-0 top-0 z-50 w-full border-b border-white bg-[#121212] px-1">
-        <nav class="mx-auto flex max-w-7xl justify-between items-center py-2">
-            <div class="">
-                <svg width="100" height="40" xmlns="http://www.w3.org/2000/svg">
-                    <!-- Background -->
-                    <rect width="100%" height="100%" fill="#121212" />
+    <header class="sticky inset-x-0 top-0 z-50 w-full glass border-b border-white/5 px-4">
+        <nav class="mx-auto flex max-w-7xl justify-between items-center py-3">
+            <a href="/home" class="flex items-center gap-2 group">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-accent-dark to-accent flex items-center justify-center shadow-glow group-hover:shadow-glow-lg transition-shadow duration-300">
+                    <span class="text-white font-display font-bold text-lg">Q</span>
+                </div>
+                <span class="font-display font-bold text-xl gradient-text hidden sm:block">QUIZ ARENA</span>
+            </a>
             
-                    <!-- Gradient Definition -->
-                    <defs>
-                        <linearGradient id="textGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" style="stop-color: #a66ffe; stop-opacity: 1" />
-                            <stop offset="100%" style="stop-color: #ae7aff; stop-opacity: 1" />
-                        </linearGradient>
-                        <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
-                            <feDropShadow dx="2" dy="4" stdDeviation="3" flood-color="#00000099" />
-                        </filter>
-                    </defs>
-            
-                    <!-- Text with Gradient Fill -->
-                    <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle"
-                        font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="bold"
-                        fill="url(#textGradient)" filter="url(#shadow)">
-                        QUIZ
-                    </text>
-                </svg>
-            </div>
-            
-            <!-- SIGN UP & LOG IN  -->
-            <div class="mb-3 text-white mt-auto flex flex-wrap gap-4 px-4 sm:mb-0 sm:mt-0 sm:items-center sm:px-0">
-                <button id="logOut"
-                    class="w-full bg-[#383737] px-3 py-2 hover:bg-[#4f4e4e] sm:w-auto sm:bg-transparent">Log
-                    out</button>
-            </div>
+            <button id="logOut" class="btn-outline py-2 px-4 text-sm flex items-center gap-2">
+                <span class="material-symbols-outlined" style="font-size: 18px;">logout</span>
+                Log out
+            </button>
         </nav>
     </header>
 
-    <section class="sm:px-36 "> 
-        <div class="flex border border-t-0 border-l-0 border-r-0">
-            <div class="p-1 flex items-center">
-                <div class="h-fit relative">
-                    <img id="avatar" class="rounded-full object-cover w-32 h-32" >
-                    <span id="editAvatar" class="material-symbols-outlined  absolute -bottom-1 right-0 bg-[#a66ffe] cursor-pointer text-black rounded-full p-1">edit</span>
-                    <span id="saveAvatar" class=" hidden absolute -bottom-1 right-0 bg-green-400 cursor-pointer text-black rounded-full p-1">save</span>
+    <section class="relative max-w-2xl mx-auto px-4 py-6"> 
+        <!-- Profile Card -->
+        <div class="card p-6 mb-6 animate-slide-up">
+            <div class="flex items-start gap-5">
+                <div class="relative shrink-0">
+                    <img id="avatar" class="rounded-2xl object-cover w-24 h-24 sm:w-28 sm:h-28 ring-2 ring-accent/30">
+                    <button id="editAvatar" class="absolute -bottom-1.5 -right-1.5 w-8 h-8 bg-gradient-to-br from-accent-dark to-accent rounded-xl flex items-center justify-center shadow-glow cursor-pointer hover:scale-110 transition-transform">
+                        <span class="material-symbols-outlined text-white" style="font-size: 16px;">edit</span>
+                    </button>
+                    <button id="saveAvatar" class="hidden absolute -bottom-1.5 -right-1.5 w-8 h-8 bg-emerald-500 rounded-xl flex items-center justify-center shadow-lg cursor-pointer hover:scale-110 transition-transform">
+                        <span class="material-symbols-outlined text-white" style="font-size: 16px;">save</span>
+                    </button>
                 </div>
-            </div>
-            <div class="text-md space-y-2 px-1 py-2 shadow-lg rounded-lg text-white">
-                <div id="fullname" class="text-lg font-semibold">  </div>
-                <div class="flex items-center gap-2 text-gray-300">
-                    <div class="font-medium">Username:</div>
-                    <div id="username" class="bg-gray-800 px-2 py-1 rounded-md text-sm"> </div>
-                </div>
-                <div class="flex items-center gap-1 text-gray-300">
-                    <span class="font-medium">Likes:</span>
-                    <span id="likes" class="text-green-400"> </span>
-                </div>
-                <div class="flex items-center gap-1 text-gray-300">
-                    <span class="font-medium">Total points:</span>
-                    <span id="totalPoints" class="text-yellow-400"> </span>
+                <div class="flex-1 min-w-0 space-y-2 pt-1">
+                    <h2 id="fullname" class="font-display font-bold text-xl sm:text-2xl text-white truncate"></h2>
+                    <div class="flex items-center gap-2">
+                        <span id="username" class="text-sm text-white/50 bg-white/5 px-3 py-1 rounded-lg cursor-pointer hover:bg-white/10 transition-colors font-mono"></span>
+                    </div>
+                    <div class="flex gap-4 pt-1">
+                        <div class="flex items-center gap-1.5">
+                            <span class="material-symbols-outlined text-emerald-400" style="font-size: 18px;">thumb_up</span>
+                            <span id="likes" class="text-sm font-semibold text-emerald-400"></span>
+                            <span class="text-xs text-white/30">likes</span>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <span class="material-symbols-outlined text-amber-400" style="font-size: 18px;">star</span>
+                            <span id="totalPoints" class="text-sm font-semibold text-amber-400"></span>
+                            <span class="text-xs text-white/30">points</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="px-5 pt-3 font-bold text-2xl text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-green-500">
-            Friend List</div>
-
-        <div id="friendListDiv" class="p-3 space-y-3">
-           
+        <!-- Friend List -->
+        <div class="animate-slide-up" style="animation-delay: 0.1s;">
+            <h3 class="font-display font-bold text-xl gradient-text mb-4 flex items-center gap-2">
+                <span class="material-symbols-outlined" style="font-size: 24px;">group</span>
+                Friend List
+            </h3>
+            <div id="friendListDiv" class="space-y-2">
+            </div>
         </div>
     </section>
 
@@ -253,8 +251,10 @@
                 const reader = new FileReader();
                 reader.onload = function(event) {
                     document.getElementById("avatar").setAttribute("src", event.target.result);
-                    document.getElementById("saveAvatar").classList.replace("hidden", "material-symbols-outlined");
-                    document.getElementById("editAvatar").classList.replace("material-symbols-outlined", "hidden");
+                    document.getElementById("saveAvatar").classList.remove("hidden");
+                    document.getElementById("saveAvatar").classList.add("flex");
+                    document.getElementById("editAvatar").classList.add("hidden");
+                    document.getElementById("editAvatar").classList.remove("flex");
                     alerts("Now, Save it !")
                 };
                 reader.readAsDataURL(file);
@@ -272,8 +272,10 @@
             .then((data)=>{
                 console.log(data);
                 document.getElementById("bufferingDiv").classList.replace("flex", "hidden");
-                document.getElementById("saveAvatar").classList.replace("material-symbols-outlined", "hidden");
-                document.getElementById("editAvatar").classList.replace( "hidden", "material-symbols-outlined");
+                document.getElementById("saveAvatar").classList.add("hidden");
+                document.getElementById("saveAvatar").classList.remove("flex");
+                document.getElementById("editAvatar").classList.remove("hidden");
+                document.getElementById("editAvatar").classList.add("flex");
             })
         })
 
@@ -292,26 +294,26 @@
         socket.on("frndReq", (user) => {
             sender[`div${i}`] = user._id
             let Div = document.createElement("div");
-            Div.classList.add("relative", "z-[100]", "py-2", "flex", "p-1", "gap-3", "text-white", "bg-[#2f2f2f]", "border", "border-[#ae7aff]", "transition-transform", "duration-700", "ease-in-out", "transform", "translate-x-[100%]", "rounded-md");
+            Div.classList.add("relative", "z-[100]", "py-3", "flex", "p-3", "gap-3", "text-white", "glass-strong", "border", "border-accent/30", "transition-transform", "duration-700", "ease-in-out", "transform", "translate-x-[100%]", "rounded-2xl", "shadow-glow");
             Div.id = `div${i}`;
             Div.innerHTML = `
                 <div class="flex justify-center items-center">
-                        <img class="w-16 h-16 rounded-full object-cover" src="${user.avatar}" />
-                    </div>
-                    <div>
-                        <div class="font-bold text-lg text-[#ae7aff]">Friend Request</div>
-                        <div class="font-bold">${user.fullname}</div>
-                        <div class="text-[#ffffff84]">${user.username}</div>
-                    </div>
-                    <div data-userid=${user._id} class="flex flex-col gap-1 justify-center absolute top-1 right-1">
-                        <button class="accept bg-green-500 rounded-full text-black flex justify-center items-center w-10 h-10">
-                            <span class="material-symbols-outlined h-6">group_add</span>
-                        </button>
-                        <button class="reject bg-red-500 rounded-full text-black flex justify-center items-center w-10 h-10">
-                            <span class="material-symbols-outlined h-6">close</span>
-                        </button>
-                    </div>
-                    <div id="load${i}" class="absolute bottom-0 left-0 h-1 bg-[#ae7aff]" style="width: 100%;"></div>
+                    <img class="w-14 h-14 rounded-xl object-cover ring-2 ring-accent/30" src="${user.avatar}" />
+                </div>
+                <div class="flex-1 min-w-0">
+                    <div class="font-display font-bold text-sm text-accent-light">Friend Request</div>
+                    <div class="font-semibold text-white truncate">${user.fullname}</div>
+                    <div class="text-white/50 text-sm truncate">${user.username}</div>
+                </div>
+                <div data-userid=${user._id} class="flex flex-col gap-1.5 justify-center">
+                    <button class="accept bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/30 rounded-xl text-emerald-400 flex justify-center items-center w-9 h-9 transition-colors">
+                        <span class="material-symbols-outlined" style="font-size: 20px;">check</span>
+                    </button>
+                    <button class="reject bg-red-500/20 hover:bg-red-500/30 border border-red-500/30 rounded-xl text-red-400 flex justify-center items-center w-9 h-9 transition-colors">
+                        <span class="material-symbols-outlined" style="font-size: 20px;">close</span>
+                    </button>
+                </div>
+                <div id="load${i}" class="absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-accent to-accent-light rounded-full" style="width: 100%;"></div>
             `
 
             document.getElementById("frndReqDiv").insertAdjacentElement("afterbegin", Div);
@@ -370,26 +372,26 @@
         let j = 1;
         socket.on("invitation", ({fullname, username, avatar, _id, roomID})=>{
             let Div = document.createElement("div");
-            Div.classList.add("relative", "z-[100]", "py-2", "flex", "p-1", "gap-3", "text-white", "bg-[#2f2f2f]", "border", "border-green-500", "transition-transform", "duration-700", "ease-in-out", "transform", "translate-x-[100%]", "rounded-md");
+            Div.classList.add("relative", "z-[100]", "py-3", "flex", "p-3", "gap-3", "text-white", "glass-strong", "border", "border-emerald-500/30", "transition-transform", "duration-700", "ease-in-out", "transform", "translate-x-[100%]", "rounded-2xl", "shadow-glow");
             Div.id = `div${i}`;
             Div.innerHTML = `
                 <div class="flex justify-center items-center">
-                        <img class="w-16 h-16 rounded-full object-cover" src="${avatar}" />
-                    </div>
-                    <div>
-                        <div class="font-bold text-lg text-green-500">Room joining invitation</div>
-                        <div class="font-bold">${fullname}</div>
-                        <div class="text-[#ffffff84]">${username}</div>
-                    </div>
-                    <div data-userid=${_id} class="flex flex-col gap-1 justify-center absolute top-1 right-1">
-                        <button class="accept bg-green-500 rounded-full text-black flex justify-center items-center w-10 h-10">
-                            <span class="material-symbols-outlined h-6">group_add</span>
-                        </button>
-                        <button class="reject bg-red-500 rounded-full text-black flex justify-center items-center w-10 h-10">
-                            <span class="material-symbols-outlined h-6">close</span>
-                        </button>
-                    </div>
-                    <div id="load${i}" class="absolute bottom-0 left-0 h-1 bg-green-500" style="width: 100%;"></div>
+                    <img class="w-14 h-14 rounded-xl object-cover ring-2 ring-emerald-500/30" src="${avatar}" />
+                </div>
+                <div class="flex-1 min-w-0">
+                    <div class="font-display font-bold text-sm text-emerald-400">Room Invitation</div>
+                    <div class="font-semibold text-white truncate">${fullname}</div>
+                    <div class="text-white/50 text-sm truncate">${username}</div>
+                </div>
+                <div data-userid=${_id} class="flex flex-col gap-1.5 justify-center">
+                    <button class="accept bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/30 rounded-xl text-emerald-400 flex justify-center items-center w-9 h-9 transition-colors">
+                        <span class="material-symbols-outlined" style="font-size: 20px;">check</span>
+                    </button>
+                    <button class="reject bg-red-500/20 hover:bg-red-500/30 border border-red-500/30 rounded-xl text-red-400 flex justify-center items-center w-9 h-9 transition-colors">
+                        <span class="material-symbols-outlined" style="font-size: 20px;">close</span>
+                    </button>
+                </div>
+                <div id="load${i}" class="absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-emerald-500 to-emerald-400 rounded-full" style="width: 100%;"></div>
             `
 
             document.getElementById("frndReqDiv").insertAdjacentElement("afterbegin", Div);

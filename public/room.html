@@ -4,124 +4,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz</title>
+    <title>Quiz Arena - Room</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link rel="stylesheet" href="./src/output.css">
-
 </head>
 
-<body class="bg-[#121212] text-white font-[Roboto]">
-    <div id="bufferingDiv" class="hidden flex-col gap-3 items-center absolute z-[100] w-screen h-screen justify-center bg-[#000000bd] ">
-        <div id="showMessage" class="text-white text-2xl text-center font-bold"> Please wait </div>
-        <dotlottie-player class="" src="https://lottie.host/27feff6c-53ae-48c7-9539-9a37724286be/8okSjWIQl7.json" background="transparent" speed="1" style="width: 70px; height: 70px;" loop autoplay></dotlottie-player>
+<body class="bg-surface text-white font-sans bg-dots min-h-screen">
+    <!-- Ambient background -->
+    <div class="fixed inset-0 bg-mesh pointer-events-none"></div>
+
+    <div id="bufferingDiv" class="hidden flex-col gap-3 items-center fixed inset-0 z-[100] justify-center bg-black/70 backdrop-blur-sm">
+        <div id="showMessage" class="text-white text-xl text-center font-semibold"> Please wait </div>
+        <dotlottie-player src="https://lottie.host/27feff6c-53ae-48c7-9539-9a37724286be/8okSjWIQl7.json" background="transparent" speed="1" style="width: 70px; height: 70px;" loop autoplay></dotlottie-player>
     </div>
 
-    <div id="onlineFriendsSection" class="absolute hidden   z-[200] w-screen h-screen justify-center items-center">
-        <div class="p-2 border-2 border-green-400 bg-black rounded-lg w-[85%]">
-            <div class="flex justify-between px-2">
-                <div class="text-xl font-bold text-green-400">Friends online</div>
-                <span id="closeInvite" class="material-symbols-outlined cursor-pointer">close</span>
+    <div id="onlineFriendsSection" class="fixed hidden z-[200] w-screen h-screen top-0 left-0 justify-center items-center bg-black/60 backdrop-blur-sm">
+        <div class="card max-w-sm w-[90%] animate-scale-in p-5">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-display font-bold text-lg text-emerald-400 flex items-center gap-2">
+                    <span class="material-symbols-outlined" style="font-size: 22px;">group</span>
+                    Friends Online
+                </h3>
+                <button id="closeInvite" class="w-8 h-8 rounded-lg hover:bg-white/10 flex items-center justify-center transition-colors text-white/60 hover:text-white">
+                    <span class="material-symbols-outlined" style="font-size: 20px;">close</span>
+                </button>
             </div>
-            <div id="onlineFriendsDiv" class="space-y-2 mt-3 max-h-[25rem] overflow-auto">
-                <!-- <div class="relative flex items-center gap-3 rounded-full bg-[#3c3c3ca5] p-1">
-                    <img src="https://res.cloudinary.com/dce0jp2rc/image/upload/v1725633416/quiz_app_avatars/avatar_1725633405132.jpg" class="w-10 h-10 object-cover rounded-full">
-                    <div class="font-bold">Avishek Adhikary</div>
-                    <button class="bg-green-500 absolute right-2 rounded-full px-2 py-0.5">Invite</button>
-                </div> -->
+            <div id="onlineFriendsDiv" class="space-y-2 max-h-[25rem] overflow-auto">
             </div>
         </div>
     </div>
 
-    <div id="alertDiv" class="absolute top-24 flex flex-col justify-center items-center w-screen z-[100] gap-2">
-
+    <div id="alertDiv" class="fixed top-20 flex flex-col justify-center items-center w-screen z-[100] gap-2">
     </div>
 
-    <div id="frndReqDiv" class="overflow-hidden space-y-3 absolute w-screen bottom-10 pl-4 pr-1">
-         
+    <div id="frndReqDiv" class="overflow-hidden space-y-3 fixed w-screen bottom-10 pl-4 pr-1 z-[90]">
     </div>
 
-    <header class="sticky inset-x-0 top-0 z-50 w-full border-b border-white bg-[#121212] px-4">
-        <nav class="mx-auto flex max-w-7xl justify-between items-center py-2">
-            <div class="">
-                <svg width="150" height="60" xmlns="http://www.w3.org/2000/svg">
-                    <!-- Background -->
-                    <rect width="100%" height="100%" fill="#121212" />
-
-                    <!-- Gradient Definition -->
-                    <defs>
-                        <linearGradient id="textGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" style="stop-color: #a66ffe; stop-opacity: 1" />
-                            <stop offset="100%" style="stop-color: #ae7aff; stop-opacity: 1" />
-                        </linearGradient>
-                        <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
-                            <feDropShadow dx="2" dy="4" stdDeviation="3" flood-color="#00000099" />
-                        </filter>
-                    </defs>
-
-                    <!-- Text with Gradient Fill -->
-                    <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle"
-                        font-family="Arial, Helvetica, sans-serif" font-size="40" font-weight="bold"
-                        fill="url(#textGradient)" filter="url(#shadow)">
-                        QUIZ
-                    </text>
-                </svg>
-            </div>
+    <header class="sticky inset-x-0 top-0 z-50 w-full glass border-b border-white/5 px-4">
+        <nav class="mx-auto flex max-w-7xl justify-between items-center py-3">
+            <a href="/home" class="flex items-center gap-2 group">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-accent-dark to-accent flex items-center justify-center shadow-glow group-hover:shadow-glow-lg transition-shadow duration-300">
+                    <span class="text-white font-display font-bold text-lg">Q</span>
+                </div>
+                <span class="font-display font-bold text-xl gradient-text hidden sm:block">QUIZ ARENA</span>
+            </a>
         </nav>
     </header>
 
-    <div class="flex justify-center px-2">
-        <div class="p-2 sm:w-[55%]">
-            <div class="font-bold flex gap-3 text-lg">
-                <span class="text-gray-400">Room Name :</span>
-                <h1 id="roomName"> </h1>
-            </div>
-            <div class="font-bold flex gap-3 text-lg">
-                <span class="text-gray-400">Quiz Topic :</span>
-                <h1 id="topic">  </h1>
-            </div>
-            <div class="font-bold flex gap-3 text-lg">
-                <span class="text-gray-400">ID :</span>
-                <h1 id="roomID">  </h1>
-                <span id="copyID" class="material-symbols-outlined cursor-pointer">content_copy</span>
-            </div>
-    
-            <div class="flex relative items-center gap-2 rounded-full mt-5 border border-green-300 px-2 py-1.5">
-                <div class="w-[3.1rem] flex">
-                    <img id="adminAvatar" width="100%" class="rounded-full object-cover w-10 h-10" />
+    <div class="flex justify-center px-4 py-6 relative">
+        <div class="w-full sm:w-[55%] max-w-2xl space-y-5 animate-slide-up">
+            <!-- Room Info Card -->
+            <div class="card p-5">
+                <div class="space-y-2">
+                    <div class="flex items-center gap-3">
+                        <span class="text-white/40 text-sm font-medium min-w-[5rem]">Room Name</span>
+                        <h1 id="roomName" class="font-semibold text-white"></h1>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="text-white/40 text-sm font-medium min-w-[5rem]">Quiz Topic</span>
+                        <h1 id="topic" class="font-semibold text-accent-light"></h1>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="text-white/40 text-sm font-medium min-w-[5rem]">Room ID</span>
+                        <code id="roomID" class="font-mono text-sm text-white/70 bg-white/5 px-2 py-0.5 rounded-md"></code>
+                        <button id="copyID" class="w-7 h-7 rounded-md hover:bg-white/10 flex items-center justify-center transition-colors text-white/40 hover:text-white">
+                            <span class="material-symbols-outlined" style="font-size: 16px;">content_copy</span>
+                        </button>
+                    </div>
                 </div>
-                <div>
-                    <h3 id="adminName">  </h3>
-                    <h6 id="adminUsername" class="text-sm text-[#ffffff91]"> </h6>
-                </div> 
-                <div class="font-bold bg-green-300 rounded-full absolute right-2 text-black px-3 py-1">Admin</div>
-            </div>
-            
-            <div class="flex justify-center py-4 gap-3">
-                <button id="startQuizBtn" class="hidden bg-[#a66ffe] rounded-md text-black px-5 font-bold py-2">Start Quiz</button>
-                <button id="leaveQuizBtn" class="hidden border  border-red-500 text-red-500 font-bold rounded-md  px-5 py-2">Leave Quiz</button>
-                <button id="disposeQuizBtn" class="hidden border  border-red-500 text-red-500 font-bold rounded-md  px-5 py-2">Dispose Quiz</button>
             </div>
 
-            <div class="p-4 border border-[#a66ffe] rounded-lg mt-2">
-                <h1 class="font-bold text-2xl text-center">Participants</h1>
-                <div class="my-4 flex justify-between items-center">
-                    <div class="font-bold flex gap-3 text-xl">
-                        <span class="text-gray-400 ">Total :</span>
-                        <h1 id="noOfPart"></h1>
+            <!-- Admin Card -->
+            <div class="flex items-center gap-3 p-3 rounded-2xl glass border-emerald-500/20 border">
+                <img id="adminAvatar" class="rounded-xl object-cover w-12 h-12 ring-2 ring-emerald-500/30" />
+                <div class="flex-1 min-w-0">
+                    <h3 id="adminName" class="font-semibold text-white truncate"></h3>
+                    <h6 id="adminUsername" class="text-sm text-white/40 truncate"></h6>
+                </div> 
+                <span class="badge bg-emerald-500/10 text-emerald-400 ring-emerald-500/20">Admin</span>
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="flex justify-center gap-3">
+                <button id="startQuizBtn" class="hidden btn-primary flex items-center gap-2">
+                    <span class="material-symbols-outlined" style="font-size: 20px;">play_arrow</span>
+                    Start Quiz
+                </button>
+                <button id="leaveQuizBtn" class="hidden btn-danger flex items-center gap-2">
+                    <span class="material-symbols-outlined" style="font-size: 20px;">logout</span>
+                    Leave Room
+                </button>
+                <button id="disposeQuizBtn" class="hidden btn-danger flex items-center gap-2">
+                    <span class="material-symbols-outlined" style="font-size: 20px;">delete</span>
+                    Dispose Room
+                </button>
+            </div>
+
+            <!-- Participants Card -->
+            <div class="card p-5">
+                <div class="flex justify-between items-center mb-4">
+                    <div class="flex items-center gap-3">
+                        <h2 class="font-display font-bold text-xl">Participants</h2>
+                        <span id="noOfPart" class="badge bg-accent/10 text-accent-light ring-accent/20 text-sm"></span>
                     </div>
-                    <button id="invitePart" class="flex border-2 border-green-500 bg-[#c3ffcc] font-bold text-green-500 rounded-full justify-center items-center pl-4 pr-2 py-1 gap-1">
-                        <div>Invite</div>
-                        <span class="material-symbols-outlined font-bold">add</span>
+                    <button id="invitePart" class="btn-success py-2 px-4 text-sm flex items-center gap-1.5">
+                        <span class="material-symbols-outlined" style="font-size: 18px;">person_add</span>
+                        Invite
                     </button>
                 </div>
 
-                <div id="participantsDiv">
-                    
+                <div id="participantsDiv" class="space-y-2">
                 </div>
             </div>
         </div>
@@ -559,26 +554,26 @@
         socket.on("frndReq", (user) => {
             sender[`div${i}`] = user._id
             let Div = document.createElement("div");
-            Div.classList.add("relative", "z-[100]", "py-2", "flex", "p-1", "gap-3", "text-white", "bg-[#2f2f2f]", "border", "border-[#ae7aff]", "transition-transform", "duration-700", "ease-in-out", "transform", "translate-x-[100%]", "rounded-md");
+            Div.classList.add("relative", "z-[100]", "py-3", "flex", "p-3", "gap-3", "text-white", "glass-strong", "border", "border-accent/30", "transition-transform", "duration-700", "ease-in-out", "transform", "translate-x-[100%]", "rounded-2xl", "shadow-glow");
             Div.id = `div${i}`;
             Div.innerHTML = `
                 <div class="flex justify-center items-center">
-                    <img class="w-16 h-16 rounded-full object-cover" src="${user.avatar}" />
+                    <img class="w-14 h-14 rounded-xl object-cover ring-2 ring-accent/30" src="${user.avatar}" />
                 </div>
-                <div>
-                    <div class="font-bold text-lg text-[#ae7aff]">Friend Request</div>
-                    <div class="font-bold">${user.fullname}</div>
-                    <div class="text-[#ffffff84]">${user.username}</div>
+                <div class="flex-1 min-w-0">
+                    <div class="font-display font-bold text-sm text-accent-light">Friend Request</div>
+                    <div class="font-semibold text-white truncate">${user.fullname}</div>
+                    <div class="text-white/50 text-sm truncate">${user.username}</div>
                 </div>
-                <div data-userid=${user._id} class="flex flex-col gap-1 justify-center absolute top-1 right-1">
-                    <button class="accept bg-green-500 rounded-full text-black flex justify-center items-center w-10 h-10">
-                        <span class="material-symbols-outlined h-6">group_add</span>
+                <div data-userid=${user._id} class="flex flex-col gap-1.5 justify-center">
+                    <button class="accept bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/30 rounded-xl text-emerald-400 flex justify-center items-center w-9 h-9 transition-colors">
+                        <span class="material-symbols-outlined" style="font-size: 20px;">check</span>
                     </button>
-                    <button class="reject bg-red-500 rounded-full text-black flex justify-center items-center w-10 h-10">
-                        <span class="material-symbols-outlined h-6">close</span>
+                    <button class="reject bg-red-500/20 hover:bg-red-500/30 border border-red-500/30 rounded-xl text-red-400 flex justify-center items-center w-9 h-9 transition-colors">
+                        <span class="material-symbols-outlined" style="font-size: 20px;">close</span>
                     </button>
                 </div>
-                <div id="load${i}" class="absolute bottom-0 left-0 h-1 bg-[#ae7aff]" style="width: 100%;"></div>
+                <div id="load${i}" class="absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-accent to-accent-light rounded-full" style="width: 100%;"></div>
             `
 
             document.getElementById("frndReqDiv").insertAdjacentElement("afterbegin", Div);

@@ -5,68 +5,67 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz-App-Advance</title>
+    <title>Quiz Arena - Playing</title>
     <link rel="stylesheet" href="./src/output.css">
-
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 </head>
 
-<body class="bg-[#121212] text-white">
-    <div id="nextAlert" class="fixed hidden top-20 left-1/2 -translate-x-1/2 p-3 border border-[#a66ffe] rounded-lg z-[100] bg-black text-white font-bold text-lg">
-        Only admin can proceed to next !
+<body class="bg-surface text-white font-sans bg-dots min-h-screen">
+    <!-- Ambient background -->
+    <div class="fixed inset-0 bg-mesh pointer-events-none"></div>
+
+    <div id="nextAlert" class="fixed hidden top-20 left-1/2 -translate-x-1/2 glass-strong py-3 px-5 rounded-xl z-[100] text-white font-semibold text-sm animate-slide-down border border-accent/20 shadow-glow">
+        <span class="text-accent-light">Only the admin</span> can proceed to next question
     </div>
 
-    <header class="sticky inset-x-0 top-0 z-50 w-full border-b border-white bg-[#121212] px-4">
-        <nav class="mx-auto  flex max-w-7xl justify-between items-center py-2">
-            <div class="flex justify-between">
-                <svg width="150" height="60" xmlns="http://www.w3.org/2000/svg">
-                    <!-- Background -->
-                    <rect width="100%" height="100%" fill="#121212" />
+    <header class="sticky inset-x-0 top-0 z-50 w-full glass border-b border-white/5 px-4">
+        <nav class="mx-auto flex max-w-7xl justify-between items-center py-3">
+            <a href="/home" class="flex items-center gap-2 group">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-accent-dark to-accent flex items-center justify-center shadow-glow group-hover:shadow-glow-lg transition-shadow duration-300">
+                    <span class="text-white font-display font-bold text-lg">Q</span>
+                </div>
+                <span class="font-display font-bold text-xl gradient-text hidden sm:block">QUIZ ARENA</span>
+            </a>
 
-                    <!-- Gradient Definition -->
-                    <defs>
-                        <linearGradient id="textGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" style="stop-color: #a66ffe; stop-opacity: 1" />
-                            <stop offset="100%" style="stop-color: #ae7aff; stop-opacity: 1" />
-                        </linearGradient>
-                        <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
-                            <feDropShadow dx="2" dy="4" stdDeviation="3" flood-color="#00000099" />
-                        </filter>
-                    </defs>
-
-                    <!-- Text with Gradient Fill -->
-                    <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle"
-                        font-family="Arial, Helvetica, sans-serif" font-size="40" font-weight="bold"
-                        fill="url(#textGradient)" filter="url(#shadow)">
-                        QUIZ
-                    </text>
-                </svg>
-
-                <div class="flex justify-center items-center absolute right-5 ">
-                    <h1 id="countDown" class="text-3xl font-bold ">30</h1>
+            <!-- Timer -->
+            <div class="flex items-center gap-2">
+                <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-accent-dark to-accent flex items-center justify-center shadow-glow animate-glow">
+                    <h1 id="countDown" class="text-2xl font-display font-bold text-white">30</h1>
                 </div>
             </div>
         </nav>
     </header>
 
-    <div>
-        <div class="py-4 px-6 flex justify-center">
-            <span id="firstAnswerDiv" class="text-lg font-bold hidden"><a id="firstAnswerUser" class="text-green-400 font-bold">Sai Suman Sandeeb Das</a>
-                gave the correct answer first !</span>
+    <div class="relative">
+        <!-- First answer banner -->
+        <div class="py-3 px-6 flex justify-center">
+            <span id="firstAnswerDiv" class="text-sm font-medium hidden glass-strong py-2 px-4 rounded-full border border-emerald-500/20 animate-slide-down">
+                <span class="material-symbols-outlined text-emerald-400 align-middle mr-1" style="font-size: 18px;">emoji_events</span>
+                <a id="firstAnswerUser" class="text-emerald-400 font-semibold"></a>
+                answered first!
+            </span>
         </div>
     </div>
 
-    <div class="flex justify-center p-4 absolute w-[95%] sm:w-auto top-[10rem] left-1/2 -translate-x-1/2">
-        <div class="border border-[#ae7aff] rounded-md p-4">
-            <div class="mb-4">
-                <span id="noOfQ" class="font-bold text-xl text-[#ae7aff]"> </span>
-                <span id="question" class="font-bold text-lg"> </span>
+    <div class="flex justify-center p-4 relative">
+        <div class="card max-w-2xl w-full animate-slide-up">
+            <!-- Question -->
+            <div class="mb-6">
+                <span id="noOfQ" class="badge bg-accent/10 text-accent-light ring-accent/20 text-sm mb-3 inline-block"></span>
+                <p id="question" class="font-semibold text-lg leading-relaxed text-white/90"></p>
             </div>
 
-            <div id="optionsDiv">
-
+            <!-- Options -->
+            <div id="optionsDiv" class="space-y-3">
             </div>
 
-            <button id="nextBtn" class="bg-[#ae7aff] px-4 py-3 text-black rounded-sm mt-5">Next</button>
+            <button id="nextBtn" class="btn-primary mt-6 flex items-center gap-2">
+                <span>Next</span>
+                <span class="material-symbols-outlined" style="font-size: 20px;">arrow_forward</span>
+            </button>
         </div>
     </div>
 
@@ -81,6 +80,13 @@
         const totalParti = params.get("totalParti");
         const answerLS = localStorage.getItem("answer");
         let currentUser;
+
+        // Helper to lock option buttons after selection
+        function lockOptions() {
+            document.querySelectorAll(".optionButton").forEach(btn => {
+                btn.classList.remove("hover:border-accent/50", "hover:bg-white/[0.04]", "hover:text-white");
+            });
+        }
 
         fetch(`${DOMAIN}/api/v1/user/getCurrentUser`).then(res => res.json())
         .then(user =>{
@@ -102,13 +108,14 @@
         }
 
         socket.on("currentQuestion", ({ question, options, answer, qNo }) => {
+            document.getElementById("nextBtn").disabled = false;
             document.getElementById("optionsDiv").innerHTML = "";
-            document.getElementById("noOfQ").innerHTML = qNo + " . ";
+            document.getElementById("noOfQ").innerHTML = "Q" + qNo;
             document.getElementById("optionsDiv").dataset.answer = answer;
             document.getElementById("question").innerHTML = question;
             options.forEach((option, index) => {
                 let html = `
-                    <button id=${"o" + (++index)} class="optionButton w-full border-2 hover:border-[#ae7aff] px-4 py-2 mt-2 rounded-md text-left "> ${option} </button>
+                    <button id=${"o" + (++index)} class="optionButton w-full border border-white/10 hover:border-accent/50 hover:bg-white/[0.04] px-5 py-3.5 rounded-xl text-left transition-all duration-200 text-white/80 hover:text-white font-medium"> ${option} </button>
                 `
                 document.getElementById("optionsDiv").insertAdjacentHTML("beforeend", html);
             });
@@ -121,6 +128,7 @@
                     document.querySelectorAll(".optionButton").forEach(button => {
                         button.disabled = true;
                     });
+                    lockOptions();
 
                     document.querySelectorAll(".optionButton").forEach(button => {
                         if (button.id === obj.correctAnswer) {
@@ -144,6 +152,7 @@
                     document.querySelectorAll(".optionButton").forEach(button => {
                         button.disabled = true;
                     });
+                    lockOptions();
 
                     if (myAnswer === correctAnswer) {
                         e.currentTarget.classList.add("bg-green-500");
@@ -206,16 +215,17 @@
         })
 
         socket.on("newQuestion", ({ question, options, answer, qNo }) => {
+            document.getElementById("nextBtn").disabled = false;
             localStorage.clear("answer");
             localStorage.clear("firstAnswer");
             document.getElementById("firstAnswerDiv").classList.add("hidden");
-            document.getElementById("noOfQ").innerHTML = qNo + " . ";
+            document.getElementById("noOfQ").innerHTML = "Q" + qNo;
             document.getElementById("optionsDiv").innerHTML = "";
             document.getElementById("optionsDiv").dataset.answer = answer;
             document.getElementById("question").innerHTML = question;
             options.forEach((option, index) => {
                 let html = `
-                    <button id=${"o" + (++index)} class="optionButton w-full border-2 hover:border-[#ae7aff] px-4 py-2 mt-2 rounded-md text-left "> ${option} </button>
+                    <button id=${"o" + (++index)} class="optionButton w-full border border-white/10 hover:border-accent/50 hover:bg-white/[0.04] px-5 py-3.5 rounded-xl text-left transition-all duration-200 text-white/80 hover:text-white font-medium"> ${option} </button>
                 `
                 document.getElementById("optionsDiv").insertAdjacentHTML("beforeend", html);
             });
@@ -247,6 +257,7 @@
                         document.querySelectorAll(".optionButton").forEach(btn => {
                             btn.disabled = true;
                         });
+                        lockOptions();
 
                         if (myAnswer === correctAnswer) {
                             e.currentTarget.classList.add("bg-green-500");
@@ -320,6 +331,7 @@
         // NEXT BUTTON LOGIC
         document.getElementById("nextBtn").addEventListener("click", ()=>{
             if(admin == "true"){
+                document.getElementById("nextBtn").disabled = true;
                 socket.emit("nextQuestion", roomID);
             }
             else{

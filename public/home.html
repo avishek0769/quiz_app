@@ -4,195 +4,168 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz</title>
+    <title>Quiz Arena</title>
     <link rel="stylesheet" href="./src/output.css">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 </head>
 
-<body class="bg-[#121212] font-[Roboto] overflow-hidden">
-    <div id="bufferingDiv" class="hidden flex-col gap-3 items-center absolute z-[100] w-screen h-screen justify-center bg-[#000000bd] ">
-        <div id="showMessage" class="text-white text-2xl text-center font-bold"> Please wait </div>
-        <dotlottie-player class="" src="https://lottie.host/27feff6c-53ae-48c7-9539-9a37724286be/8okSjWIQl7.json" background="transparent" speed="1" style="width: 70px; height: 70px;" loop autoplay></dotlottie-player>
+<body class="bg-surface font-sans overflow-hidden">
+    <!-- Ambient background -->
+    <div class="fixed inset-0 bg-mesh pointer-events-none"></div>
+    <div class="fixed inset-0 bg-dots pointer-events-none opacity-50"></div>
+
+    <div id="bufferingDiv" class="hidden flex-col gap-3 items-center fixed inset-0 z-[100] justify-center bg-black/70 backdrop-blur-sm">
+        <div id="showMessage" class="text-white text-xl text-center font-semibold"> Please wait </div>
+        <dotlottie-player src="https://lottie.host/27feff6c-53ae-48c7-9539-9a37724286be/8okSjWIQl7.json" background="transparent" speed="1" style="width: 70px; height: 70px;" loop autoplay></dotlottie-player>
     </div>
 
-    <div id="alertDiv" class="absolute top-24 flex flex-col justify-center items-center w-screen z-[100] gap-2">
-        
+    <div id="alertDiv" class="fixed top-20 flex flex-col justify-center items-center w-screen z-[100] gap-2">
     </div>
 
-    <div id="frndReqDiv" class="overflow-hidden space-y-3 absolute w-screen bottom-10 pl-4 pr-1">
-         
+    <div id="frndReqDiv" class="overflow-hidden space-y-3 fixed w-screen bottom-10 pl-4 pr-1 z-[90]">
     </div>
 
-    <header class="sticky inset-x-0 top-0 z-50 w-full border-b border-white bg-[#121212] px-1">
-        <nav class="mx-auto flex max-w-7xl justify-between items-center py-2">
-            <div class="">
-                <svg width="100" height="40" xmlns="http://www.w3.org/2000/svg">
-                    <!-- Background -->
-                    <rect width="100%" height="100%" fill="#121212" />
-            
-                    <!-- Gradient Definition -->
-                    <defs>
-                        <linearGradient id="textGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" style="stop-color: #a66ffe; stop-opacity: 1" />
-                            <stop offset="100%" style="stop-color: #ae7aff; stop-opacity: 1" />
-                        </linearGradient>
-                        <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
-                            <feDropShadow dx="2" dy="4" stdDeviation="3" flood-color="#00000099" />
-                        </filter>
-                    </defs>
-            
-                    <!-- Text with Gradient Fill -->
-                    <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle"
-                        font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="bold"
-                        fill="url(#textGradient)" filter="url(#shadow)">
-                        QUIZ
-                    </text>
-                </svg>
-            </div>
+    <header class="sticky inset-x-0 top-0 z-50 w-full glass border-b border-white/5 px-4">
+        <nav class="mx-auto flex max-w-7xl justify-between items-center py-3">
+            <a href="/home" class="flex items-center gap-2 group">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-accent-dark to-accent flex items-center justify-center shadow-glow group-hover:shadow-glow-lg transition-shadow duration-300">
+                    <span class="text-white font-display font-bold text-lg">Q</span>
+                </div>
+                <span class="font-display font-bold text-xl gradient-text hidden sm:block">QUIZ ARENA</span>
+            </a>
 
-            <!-- SIGN UP & LOG IN  -->
-            <div class="mb-1 text-white mt-auto justify-end flex flex-wrap gap-6 px-4 sm:mb-0 sm:mt-0 sm:items-center sm:px-0">
-                <button id="logIn" class="hidden w-full bg-[#383737] px-3 py-2 hover:bg-[#4f4e4e] sm:w-auto sm:bg-transparent">Log in</button>
-                <button id="signUp" class="hidden mr-1 w-full bg-[#ae7aff] px-3 py-2 text-center font-bold text-black shadow-[5px_5px_0px_0px_#4f4e4e] transition-all duration-150 ease-in-out active:translate-x-[5px] active:translate-y-[5px] active:shadow-[0px_0px_0px_0px_#4f4e4e] sm:w-auto">Sign up</button>
+            <!-- Nav actions -->
+            <div class="flex items-center gap-3 text-white">
+                <button id="logIn" class="hidden btn-outline py-2 px-4 text-sm">Log in</button>
+                <button id="signUp" class="hidden btn-primary py-2 px-4 text-sm">Sign up</button>
                 <div id="notiDiv" class="hidden justify-center items-center relative">
-                    <div id="redDot" class="hidden rounded-full bg-[red] p-[0.32rem] absolute top-[1.1rem] sm:top-[0.1rem] right-[0.25rem]"></div>
-                    <span id="notificationBell" class="material-symbols-outlined p-0 h-7 cursor-pointer" style="font-size: 30px;">notifications</span>
+                    <div id="redDot" class="hidden rounded-full bg-red-500 w-2.5 h-2.5 absolute -top-0.5 -right-0.5 z-10 animate-pulse"></div>
+                    <button id="notificationBell" class="w-10 h-10 rounded-xl glass-strong flex items-center justify-center hover:bg-white/10 transition-colors">
+                        <span class="material-symbols-outlined" style="font-size: 22px;">notifications</span>
+                    </button>
                 </div>
-                <div id="searchBtnDiv" class="hidden justify-center items-center ">
-                   <span id="searchBtn" class="material-symbols-outlined p-0 h-7 cursor-pointer" style="font-size: 30px;">search</span>
+                <div id="searchBtnDiv" class="hidden justify-center items-center">
+                    <button id="searchBtn" class="w-10 h-10 rounded-xl glass-strong flex items-center justify-center hover:bg-white/10 transition-colors">
+                        <span class="material-symbols-outlined" style="font-size: 22px;">search</span>
+                    </button>
                 </div>
-                <img id="userAcc" width="40" class="rounded-full object-cover w-16 h-16 border hidden" />
+                <img id="userAcc" width="40" class="rounded-xl object-cover w-10 h-10 ring-2 ring-accent/30 cursor-pointer hover:ring-accent/60 transition-all hidden" />
             </div>
         </nav>
     </header>    
 
-    <div class="flex justify-center items-center p-3">
-        <div class="m-auto border border-[#ae7aff] p-3 rounded-lg mt-10">
-            <h1 class="text-[#ae7aff] text-3xl text-center font-bold p-4">Welcome to the Quiz !</h1>
-            <p class="text-xl text-white p-6">To play a quiz competition first you need to Sign up and then join a room
-                created by the admin 😁 or you can create your own room 😎</p>
-            <div class="flex justify-center gap-5">
-                <button id="joinRoomBtn" class="bg-[#ae7aff] px-4 py-3 text-black rounded-sm ">Join Room</button>
-                <button id="createRoomBtn" class="bg-[#ae7aff] px-4 py-3 text-black rounded-sm ">Create Room</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Overlay div to cover the entire screen -->
-    <div id="createRoomDiv" class="w-[100vw] h-[100vh] bg-[#000000c3] hidden fixed top-0 left-0 z-50 items-center justify-center">
-        <div class="flex flex-col relative bg-black border border-[#ae7aff] p-5 rounded-lg">
-            <span id="closeCreateRoom" class="absolute right-6 material-symbols-outlined cursor-pointer text-white">
-                close
-            </span>
-            <label for="roomName" class="mb-2 inline-block text-gray-300 text-xl font-bold">Room name</label>
-            <input id="roomName" type="text" placeholder="Enter your Room name"
-                class="mb-4 rounded-lg border bg-transparent px-3 py-2 text-white" />
-
-            <div class="text-gray-300 mb-4 text-xl font-bold">Quiz Topic</div>
-
-            <div class="space-y-2">
-                <div class="flex items-center gap-3">
-                    <input id="gk" name="quizTopic" type="radio" class="topics w-4 h-4" />
-                    <label for="gk" class="text-gray-300">General Knowledge</label>
+    <div class="h-[calc(100vh-65px)] overflow-y-auto relative">
+        <div class="flex justify-center items-center p-4 min-h-[calc(100vh-65px)]">
+            <div class="card max-w-lg w-full animate-slide-up text-center">
+                <!-- Hero icon -->
+                <div class="flex justify-center mb-6">
+                    <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-accent-dark to-accent flex items-center justify-center shadow-glow-lg animate-float">
+                        <span class="material-symbols-outlined text-white" style="font-size: 40px;">quiz</span>
+                    </div>
                 </div>
-                <div class="flex items-center gap-3">
-                    <input id="cs" name="quizTopic" type="radio" class="topics w-4 h-4" />
-                    <label for="cs" class="text-gray-300">Computer Science</label>
-                </div>
-                <div class="flex items-center gap-3">
-                    <input id="maths" name="quizTopic" type="radio" class="topics w-4 h-4" />
-                    <label for="maths" class="text-gray-300">Mathematics</label>
-                </div>
-                <div class="flex items-center gap-3">
-                    <input id="sports" name="quizTopic" type="radio" class="topics w-4 h-4" />
-                    <label for="sports" class="text-gray-300">Sports</label>
-                </div>
-                <div class="flex items-center gap-3">
-                    <input id="geo" name="quizTopic" type="radio" class="topics w-4 h-4" />
-                    <label for="geo" class="text-gray-300">Geography</label>
-                </div>
-                <div class="flex items-center gap-3">
-                    <input id="anime" name="quizTopic" type="radio" class="topics w-4 h-4" />
-                    <label for="anime" class="text-gray-300">Anime / Manga</label>
+                <h1 class="font-display font-bold text-3xl sm:text-4xl gradient-text mb-3">Welcome to Quiz Arena!</h1>
+                <p class="text-white/50 text-base leading-relaxed mb-8 max-w-md mx-auto">
+                    Challenge your friends in real-time quiz battles. Sign up, create or join a room, and prove you're the smartest!
+                </p>
+                <div class="flex justify-center gap-4">
+                    <button id="joinRoomBtn" class="btn-outline flex items-center gap-2">
+                        <span class="material-symbols-outlined" style="font-size: 20px;">meeting_room</span>
+                        Join Room
+                    </button>
+                    <button id="createRoomBtn" class="btn-primary flex items-center gap-2">
+                        <span class="material-symbols-outlined" style="font-size: 20px;">add_circle</span>
+                        Create Room
+                    </button>
                 </div>
             </div>
-
-            <button id="createRoomSubmit" class="bg-[#ae7aff] px-4 py-3 text-black rounded-sm mt-5">Create Room</button>
         </div>
     </div>
 
-    <div id="joinRoomDiv"
-        class="w-[100vw] h-[100vh] bg-[#000000c3] hidden   fixed top-0 left-0 z-50 items-center justify-center"
-        id="createRoomDiv">
-        <div class="flex flex-col relative bg-black border border-[#ae7aff] p-5 rounded-lg">
-            <span id="closeJoinRoom" class="absolute right-6 material-symbols-outlined cursor-pointer text-white">
-                close
-            </span>
-            <label for="roomID" class="mb-2 inline-block text-gray-300">Room ID</label>
-            <input id="roomID" type="text" placeholder="Enter the Room ID" class="mb-4 text-white rounded-lg border bg-transparent px-3 py-2" />
+    <!-- Create Room Modal -->
+    <div id="createRoomDiv" class="w-screen h-screen bg-black/60 backdrop-blur-sm hidden fixed top-0 left-0 z-50 items-center justify-center">
+        <div class="card max-w-sm w-[90%] relative animate-scale-in p-6">
+            <button id="closeCreateRoom" class="absolute right-4 top-4 w-8 h-8 rounded-lg hover:bg-white/10 flex items-center justify-center transition-colors text-white/60 hover:text-white">
+                <span class="material-symbols-outlined" style="font-size: 20px;">close</span>
+            </button>
+            
+            <h2 class="font-display font-bold text-xl gradient-text mb-5">Create a Room</h2>
+            
+            <label for="roomName" class="block mb-2 text-sm font-medium text-white/60">Room name</label>
+            <input id="roomName" type="text" placeholder="Enter your Room name" class="input-field mb-5" />
 
-            <button id="joinRoomSubmit" disabled class="bg-[#ae7aff] disabled:bg-purple-300 px-4 py-3 text-black rounded-sm ">Join Room</button>
+            <div class="text-sm font-medium text-white/60 mb-3">Quiz Topic</div>
+
+            <div class="space-y-2 mb-6">
+                <label class="flex items-center gap-3 p-2.5 rounded-xl border border-white/5 hover:border-accent/30 hover:bg-white/[0.03] transition-all cursor-pointer group">
+                    <input id="gk" name="quizTopic" type="radio" class="topics w-4 h-4 accent-accent" />
+                    <span class="text-white/70 group-hover:text-white/90 transition-colors">General Knowledge</span>
+                </label>
+                <label class="flex items-center gap-3 p-2.5 rounded-xl border border-white/5 hover:border-accent/30 hover:bg-white/[0.03] transition-all cursor-pointer group">
+                    <input id="cs" name="quizTopic" type="radio" class="topics w-4 h-4 accent-accent" />
+                    <span class="text-white/70 group-hover:text-white/90 transition-colors">Computer Science</span>
+                </label>
+                <label class="flex items-center gap-3 p-2.5 rounded-xl border border-white/5 hover:border-accent/30 hover:bg-white/[0.03] transition-all cursor-pointer group">
+                    <input id="maths" name="quizTopic" type="radio" class="topics w-4 h-4 accent-accent" />
+                    <span class="text-white/70 group-hover:text-white/90 transition-colors">Mathematics</span>
+                </label>
+                <label class="flex items-center gap-3 p-2.5 rounded-xl border border-white/5 hover:border-accent/30 hover:bg-white/[0.03] transition-all cursor-pointer group">
+                    <input id="sports" name="quizTopic" type="radio" class="topics w-4 h-4 accent-accent" />
+                    <span class="text-white/70 group-hover:text-white/90 transition-colors">Sports</span>
+                </label>
+                <label class="flex items-center gap-3 p-2.5 rounded-xl border border-white/5 hover:border-accent/30 hover:bg-white/[0.03] transition-all cursor-pointer group">
+                    <input id="geo" name="quizTopic" type="radio" class="topics w-4 h-4 accent-accent" />
+                    <span class="text-white/70 group-hover:text-white/90 transition-colors">Geography</span>
+                </label>
+                <label class="flex items-center gap-3 p-2.5 rounded-xl border border-white/5 hover:border-accent/30 hover:bg-white/[0.03] transition-all cursor-pointer group">
+                    <input id="anime" name="quizTopic" type="radio" class="topics w-4 h-4 accent-accent" />
+                    <span class="text-white/70 group-hover:text-white/90 transition-colors">Anime / Manga</span>
+                </label>
+            </div>
+
+            <button id="createRoomSubmit" class="btn-primary w-full text-center">Create Room</button>
         </div>
     </div>
 
-    <div id="searchDiv" class="h-[90vh] hidden overflow-y-auto text-white w-[94vw] rounded-lg bg-black border border-[#ae7aff] absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 z-50 px-4 py-2">
-        <span id="crossSearch" class="cursor-pointer material-symbols-outlined absolute right-3 top-3">close</span>
-        <div class="text-center font-bold text-[#ae7aff] text-2xl">Search friends</div>
-        <input id="searchInput" type="text" class="rounded-lg outline-none bg-[#ffffff17] mx-auto border border-white px-3 py-1.5 w-full mt-4" placeholder="Search by username or fullname">
+    <!-- Join Room Modal -->
+    <div id="joinRoomDiv" class="w-screen h-screen bg-black/60 backdrop-blur-sm hidden fixed top-0 left-0 z-50 items-center justify-center">
+        <div class="card max-w-sm w-[90%] relative animate-scale-in p-6">
+            <button id="closeJoinRoom" class="absolute right-4 top-4 w-8 h-8 rounded-lg hover:bg-white/10 flex items-center justify-center transition-colors text-white/60 hover:text-white">
+                <span class="material-symbols-outlined" style="font-size: 20px;">close</span>
+            </button>
 
+            <h2 class="font-display font-bold text-xl gradient-text mb-5">Join a Room</h2>
+
+            <label for="roomID" class="block mb-2 text-sm font-medium text-white/60">Room ID</label>
+            <input id="roomID" type="text" placeholder="Paste the Room ID here" class="input-field mb-5" />
+
+            <button id="joinRoomSubmit" disabled class="btn-primary w-full text-center disabled:opacity-40">Join Room</button>
+        </div>
+    </div>
+
+    <!-- Search Modal -->
+    <div id="searchDiv" class="h-[90vh] hidden overflow-y-auto text-white w-[94vw] max-w-lg card fixed top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 z-50 p-5 animate-scale-in">
+        <button id="crossSearch" class="absolute right-4 top-4 w-8 h-8 rounded-lg hover:bg-white/10 flex items-center justify-center transition-colors text-white/60 hover:text-white">
+            <span class="material-symbols-outlined" style="font-size: 20px;">close</span>
+        </button>
+        <h2 class="font-display font-bold text-xl gradient-text mb-4">Search Friends</h2>
+        <div class="relative">
+            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-white/30" style="font-size: 20px;">search</span>
+            <input id="searchInput" type="text" class="input-field pl-10" placeholder="Search by username or fullname">
+        </div>
         <div id="searchResults" class="mt-5 space-y-2">
-            
         </div>
     </div>
 
-    <div id="notificationDiv" class="h-[90vh] hidden overflow-y-auto text-white w-[94vw] rounded-lg bg-black border border-[#ae7aff] absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 z-50 px-4 py-2">
-        <span id="crossNoti" class="cursor-pointer material-symbols-outlined absolute right-3 top-3">close</span>
-        <div class="text-center font-bold text-[#ae7aff] text-2xl">Notifications</div>
-        <div id="notiResults" class="mt-5 space-y-2">
-            
-            <!-- <div class="bg-[#252525] rounded-lg p-2 flex">
-                <div class="flex justify-center items-center w-[20%]">
-                    <img src="https://res.cloudinary.com/dce0jp2rc/image/upload/v1725814503/quiz_app_avatars/avatar_1725814492460.jpg" class="object-cover rounded-full w-12 h-12">
-                </div>
-                <div class="w-[65%] flex items-center pl-2">
-                    <div>
-                        <div class="font-bold">Avishek Adhikary</div>
-                        <div class="text-[#ffffff8d]">Sent you a friend request</div>                        
-                    </div>
-                </div>
-                <div class="w-[15%] flex flex-col gap-1">
-                    <button class="w-10 h-10 flex items-center justify-center border border-green-500 text-green-500 rounded-full">
-                        <span class="cursor-pointer material-symbols-outlined">group_add</span>
-                    </button>
-                    <button class="w-10 h-10 flex items-center justify-center border border-red-500 text-red-500 rounded-full">
-                        <span class="cursor-pointer material-symbols-outlined">close</span>
-                    </button>
-                </div>
-            </div> -->
-
-            <!-- <div class="bg-[#252525] rounded-lg p-2 flex">
-                <div class="flex justify-center items-center w-[20%]">
-                    <img src="https://res.cloudinary.com/dce0jp2rc/image/upload/v1725814503/quiz_app_avatars/avatar_1725814492460.jpg" class="object-cover rounded-full w-12 h-12">
-                </div>
-                <div class="w-[65%] flex items-center pl-2">
-                    <div>
-                        <div class="font-bold">Avishek Adhikary</div>
-                        <div class="text-[#ffffff8d]">Inviting you to join their room</div>                        
-                    </div>
-                </div>
-                <div class="w-[15%] flex flex-col gap-1">
-                    <button class="w-10 h-10 flex items-center justify-center border border-green-500 text-green-500 rounded-full">
-                        <span class="cursor-pointer material-symbols-outlined">check</span>
-                    </button>
-                    <button class="w-10 h-10 flex items-center justify-center border border-red-500 text-red-500 rounded-full">
-                        <span class="cursor-pointer material-symbols-outlined">close</span>
-                    </button>
-                </div>
-            </div> -->
+    <!-- Notification Modal -->
+    <div id="notificationDiv" class="h-[90vh] hidden overflow-y-auto text-white w-[94vw] max-w-lg card fixed top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 z-50 p-5 animate-scale-in">
+        <button id="crossNoti" class="absolute right-4 top-4 w-8 h-8 rounded-lg hover:bg-white/10 flex items-center justify-center transition-colors text-white/60 hover:text-white">
+            <span class="material-symbols-outlined" style="font-size: 20px;">close</span>
+        </button>
+        <h2 class="font-display font-bold text-xl gradient-text mb-4">Notifications</h2>
+        <div id="notiResults" class="mt-2 space-y-2">
         </div>
     </div>
 
@@ -435,26 +408,26 @@
         socket.on("frndReq", (user) => {
             sender[`div${i}`] = user._id
             let Div = document.createElement("div");
-            Div.classList.add("relative", "z-[100]", "py-2", "flex", "p-1", "gap-3", "text-white", "bg-[#2f2f2f]", "border", "border-[#ae7aff]", "transition-transform", "duration-700", "ease-in-out", "transform", "translate-x-[100%]", "rounded-md");
+            Div.classList.add("relative", "z-[100]", "py-3", "flex", "p-3", "gap-3", "text-white", "glass-strong", "border", "border-accent/30", "transition-transform", "duration-700", "ease-in-out", "transform", "translate-x-[100%]", "rounded-2xl", "shadow-glow");
             Div.id = `div${i}`;
             Div.innerHTML = `
                 <div class="flex justify-center items-center">
-                        <img class="w-16 h-16 rounded-full object-cover" src="${user.avatar}" />
-                    </div>
-                    <div>
-                        <div class="font-bold text-lg text-[#ae7aff]">Friend Request</div>
-                        <div class="font-bold">${user.fullname}</div>
-                        <div class="text-[#ffffff84]">${user.username}</div>
-                    </div>
-                    <div data-userid=${user._id} class="flex flex-col gap-1 justify-center absolute top-1 right-1">
-                        <button class="accept bg-green-500 rounded-full text-black flex justify-center items-center w-10 h-10">
-                            <span class="material-symbols-outlined h-6">group_add</span>
-                        </button>
-                        <button class="reject bg-red-500 rounded-full text-black flex justify-center items-center w-10 h-10">
-                            <span class="material-symbols-outlined h-6">close</span>
-                        </button>
-                    </div>
-                    <div id="load${i}" class="absolute bottom-0 left-0 h-1 bg-[#ae7aff]" style="width: 100%;"></div>
+                    <img class="w-14 h-14 rounded-xl object-cover ring-2 ring-accent/30" src="${user.avatar}" />
+                </div>
+                <div class="flex-1 min-w-0">
+                    <div class="font-display font-bold text-sm text-accent-light">Friend Request</div>
+                    <div class="font-semibold text-white truncate">${user.fullname}</div>
+                    <div class="text-white/50 text-sm truncate">${user.username}</div>
+                </div>
+                <div data-userid=${user._id} class="flex flex-col gap-1.5 justify-center">
+                    <button class="accept bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/30 rounded-xl text-emerald-400 flex justify-center items-center w-9 h-9 transition-colors">
+                        <span class="material-symbols-outlined" style="font-size: 20px;">check</span>
+                    </button>
+                    <button class="reject bg-red-500/20 hover:bg-red-500/30 border border-red-500/30 rounded-xl text-red-400 flex justify-center items-center w-9 h-9 transition-colors">
+                        <span class="material-symbols-outlined" style="font-size: 20px;">close</span>
+                    </button>
+                </div>
+                <div id="load${i}" class="absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-accent to-accent-light rounded-full" style="width: 100%;"></div>
             `
 
             document.getElementById("frndReqDiv").insertAdjacentElement("afterbegin", Div);
@@ -507,22 +480,20 @@
                 if(data.data.length == 0) document.getElementById("notiResults").innerHTML = "No Notifications"
                 data.data.forEach(elem => {
                     let html = `
-                    <div class="bg-[#252525] rounded-lg p-2 flex">
-                        <div class="flex justify-center items-center w-[20%]">
-                            <img src=${elem.sender.avatar} class="object-cover rounded-full w-12 h-12">
+                    <div class="glass-strong rounded-xl p-3 flex items-center gap-3 border border-white/10">
+                        <div class="shrink-0">
+                            <img src=${elem.sender.avatar} class="object-cover rounded-xl w-11 h-11 ring-2 ring-accent/20">
                         </div>
-                        <div class="w-[65%] flex items-center pl-2">
-                            <div>
-                                <div class="font-bold">${elem.sender.fullname}</div>
-                                <div class="text-[#ffffff8d]">${elem.type == 0? "Sent you a friend request" : "Inviting you to join their room"}</div>                        
-                            </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="font-semibold text-white truncate">${elem.sender.fullname}</div>
+                            <div class="text-white/50 text-sm">${elem.type == 0? "Sent you a friend request" : "Inviting you to join their room"}</div>                        
                         </div>
-                        <div data-notiid=${elem._id} data-userid=${elem.sender._id} class="w-[15%] flex flex-col gap-1">
-                            <button class=" ${elem.type == 0? "acceptFrndReq" : "acceptJoining"} w-10 h-10 flex items-center justify-center border border-green-500 text-green-500 rounded-full">
-                                <span class="cursor-pointer material-symbols-outlined">${elem.type == 0? "group_add" : "check"}</span>
+                        <div data-notiid=${elem._id} data-userid=${elem.sender._id} class="flex flex-col gap-1.5 shrink-0">
+                            <button class="${elem.type == 0? "acceptFrndReq" : "acceptJoining"} w-9 h-9 flex items-center justify-center bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 rounded-xl hover:bg-emerald-500/30 transition-colors">
+                                <span class="cursor-pointer material-symbols-outlined" style="font-size: 20px;">${elem.type == 0? "group_add" : "check"}</span>
                             </button>
-                            <button class="cancel w-10 h-10 flex items-center justify-center border border-red-500 text-red-500 rounded-full">
-                                <span class="cursor-pointer material-symbols-outlined">close</span>
+                            <button class="cancel w-9 h-9 flex items-center justify-center bg-red-500/20 border border-red-500/30 text-red-400 rounded-xl hover:bg-red-500/30 transition-colors">
+                                <span class="cursor-pointer material-symbols-outlined" style="font-size: 20px;">close</span>
                             </button>
                         </div>
                     </div>
@@ -554,26 +525,26 @@
         let j = 1;
         socket.on("invitation", ({fullname, username, avatar, _id, roomID})=>{
             let Div = document.createElement("div");
-            Div.classList.add("relative", "z-[100]", "py-2", "flex", "p-1", "gap-3", "text-white", "bg-[#2f2f2f]", "border", "border-green-500", "transition-transform", "duration-700", "ease-in-out", "transform", "translate-x-[100%]", "rounded-md");
+            Div.classList.add("relative", "z-[100]", "py-3", "flex", "p-3", "gap-3", "text-white", "glass-strong", "border", "border-emerald-500/30", "transition-transform", "duration-700", "ease-in-out", "transform", "translate-x-[100%]", "rounded-2xl", "shadow-glow");
             Div.id = `div${i}`;
             Div.innerHTML = `
                 <div class="flex justify-center items-center">
-                        <img class="w-16 h-16 rounded-full object-cover" src="${avatar}" />
-                    </div>
-                    <div>
-                        <div class="font-bold text-lg text-green-500">Room joining invitation</div>
-                        <div class="font-bold">${fullname}</div>
-                        <div class="text-[#ffffff84]">${username}</div>
-                    </div>
-                    <div data-userid=${_id} class="flex flex-col gap-1 justify-center absolute top-1 right-1">
-                        <button class="accept bg-green-500 rounded-full text-black flex justify-center items-center w-10 h-10">
-                            <span class="material-symbols-outlined h-6">group_add</span>
-                        </button>
-                        <button class="reject bg-red-500 rounded-full text-black flex justify-center items-center w-10 h-10">
-                            <span class="material-symbols-outlined h-6">close</span>
-                        </button>
-                    </div>
-                    <div id="load${i}" class="absolute bottom-0 left-0 h-1 bg-green-500" style="width: 100%;"></div>
+                    <img class="w-14 h-14 rounded-xl object-cover ring-2 ring-emerald-500/30" src="${avatar}" />
+                </div>
+                <div class="flex-1 min-w-0">
+                    <div class="font-display font-bold text-sm text-emerald-400">Room Invitation</div>
+                    <div class="font-semibold text-white truncate">${fullname}</div>
+                    <div class="text-white/50 text-sm truncate">${username}</div>
+                </div>
+                <div data-userid=${_id} class="flex flex-col gap-1.5 justify-center">
+                    <button class="accept bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/30 rounded-xl text-emerald-400 flex justify-center items-center w-9 h-9 transition-colors">
+                        <span class="material-symbols-outlined" style="font-size: 20px;">check</span>
+                    </button>
+                    <button class="reject bg-red-500/20 hover:bg-red-500/30 border border-red-500/30 rounded-xl text-red-400 flex justify-center items-center w-9 h-9 transition-colors">
+                        <span class="material-symbols-outlined" style="font-size: 20px;">close</span>
+                    </button>
+                </div>
+                <div id="load${i}" class="absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-emerald-500 to-emerald-400 rounded-full" style="width: 100%;"></div>
             `
 
             document.getElementById("frndReqDiv").insertAdjacentElement("afterbegin", Div);

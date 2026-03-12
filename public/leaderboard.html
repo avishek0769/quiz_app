@@ -4,66 +4,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz</title>
+    <title>Quiz Arena - Leaderboard</title>
     <link rel="stylesheet" href="./src/output.css">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 </head>
 
-<body class="bg-[#121212] font-[Roboto]">
-    <header class="sticky inset-x-0 top-0 z-50 w-full border-b border-white bg-[#121212] px-4">
-        <nav class="mx-auto flex max-w-7xl justify-between items-center py-2">
-            <div class="">
-                <svg width="150" height="60" xmlns="http://www.w3.org/2000/svg">
-                    <!-- Background -->
-                    <rect width="100%" height="100%" fill="#121212" />
+<body class="bg-surface font-sans bg-dots min-h-screen">
+    <!-- Ambient background -->
+    <div class="fixed inset-0 bg-mesh pointer-events-none"></div>
 
-                    <!-- Gradient Definition -->
-                    <defs>
-                        <linearGradient id="textGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" style="stop-color: #a66ffe; stop-opacity: 1" />
-                            <stop offset="100%" style="stop-color: #ae7aff; stop-opacity: 1" />
-                        </linearGradient>
-                        <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
-                            <feDropShadow dx="2" dy="4" stdDeviation="3" flood-color="#00000099" />
-                        </filter>
-                    </defs>
-
-                    <!-- Text with Gradient Fill -->
-                    <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle"
-                        font-family="Arial, Helvetica, sans-serif" font-size="40" font-weight="bold"
-                        fill="url(#textGradient)" filter="url(#shadow)">
-                        QUIZ
-                    </text>
-                </svg>
-            </div>
+    <header class="sticky inset-x-0 top-0 z-50 w-full glass border-b border-white/5 px-4">
+        <nav class="mx-auto flex max-w-7xl justify-between items-center py-3">
+            <a href="/home" class="flex items-center gap-2 group">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-accent-dark to-accent flex items-center justify-center shadow-glow group-hover:shadow-glow-lg transition-shadow duration-300">
+                    <span class="text-white font-display font-bold text-lg">Q</span>
+                </div>
+                <span class="font-display font-bold text-xl gradient-text hidden sm:block">QUIZ ARENA</span>
+            </a>
         </nav>
     </header>
 
-    <div id="bufferingDiv" class="hidden flex-col gap-3 items-center absolute z-[100] w-screen h-screen justify-center bg-[#000000bd] ">
-        <div id="showMessage" class="text-white text-2xl text-center font-bold"> Please wait... </div>
-        <dotlottie-player class="" src="https://lottie.host/27feff6c-53ae-48c7-9539-9a37724286be/8okSjWIQl7.json" background="transparent" speed="1" style="width: 70px; height: 70px;" loop autoplay></dotlottie-player>
+    <div id="bufferingDiv" class="hidden flex-col gap-3 items-center fixed inset-0 z-[100] justify-center bg-black/70 backdrop-blur-sm">
+        <div id="showMessage" class="text-white text-xl text-center font-semibold"> Please wait... </div>
+        <dotlottie-player src="https://lottie.host/27feff6c-53ae-48c7-9539-9a37724286be/8okSjWIQl7.json" background="transparent" speed="1" style="width: 70px; height: 70px;" loop autoplay></dotlottie-player>
     </div>
 
-    <h1 class=" text-5xl text-center py-3 font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 drop-shadow-lg">
-        Leaderboard
-    </h1>
-
-    <div class="flex justify-center py-4 gap-3">
-        <button id="backRoom" class=" bg-[#a66ffe] rounded-md text-black px-5 font-bold py-2">Return back to room</button>
-        <button id="leaveRoom" class="  border  border-red-500 text-red-500 font-bold rounded-md  px-5 py-2">Leave room</button>
-    </div>
-
-    <div class="flex justify-center ">
-
-        <div id="participantsDiv" class=" border-[#a66ffe] w-full sm:w-1/2 p-2 m-2 rounded-md ">
-            
-            
+    <div class="relative py-8 px-4">
+        <!-- Title -->
+        <div class="text-center mb-6 animate-slide-up">
+            <div class="flex justify-center mb-3">
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-yellow-500 to-amber-600 flex items-center justify-center shadow-lg">
+                    <span class="material-symbols-outlined text-white" style="font-size: 32px;">emoji_events</span>
+                </div>
+            </div>
+            <h1 class="font-display font-extrabold text-4xl sm:text-5xl text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-amber-400 to-orange-500">
+                Leaderboard
+            </h1>
         </div>
 
+        <div class="flex justify-center gap-3 mb-6 animate-fade-in">
+            <button id="backRoom" class="btn-primary flex items-center gap-2">
+                <span class="material-symbols-outlined" style="font-size: 20px;">arrow_back</span>
+                Return to Room
+            </button>
+            <button id="leaveRoom" class="btn-danger flex items-center gap-2">
+                <span class="material-symbols-outlined" style="font-size: 20px;">logout</span>
+                Leave Room
+            </button>
+        </div>
+
+        <div class="flex justify-center">
+            <div id="participantsDiv" class="w-full sm:w-1/2 max-w-xl space-y-2 animate-slide-up">
+            </div>
+        </div>
     </div>
 
     <script type="module">

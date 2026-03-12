@@ -1,3 +1,76 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #a855f7 #1a1a2e;
+  }
+  *::-webkit-scrollbar {
+    width: 6px;
+  }
+  *::-webkit-scrollbar-track {
+    background: #1a1a2e;
+  }
+  *::-webkit-scrollbar-thumb {
+    background: #a855f7;
+    border-radius: 3px;
+  }
+  ::selection {
+    background: #a855f780;
+    color: #fff;
+  }
+}
+
+@layer components {
+  .glass {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .glass-strong {
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  .btn-primary {
+    @apply relative overflow-hidden bg-gradient-to-r from-accent-dark to-accent px-6 py-3 font-semibold text-white rounded-xl transition-all duration-300 hover:shadow-glow hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100;
+  }
+  .btn-outline {
+    @apply relative border border-accent/40 text-accent-light px-6 py-3 font-semibold rounded-xl transition-all duration-300 hover:bg-accent/10 hover:border-accent/60 active:scale-[0.98];
+  }
+  .btn-danger {
+    @apply relative border border-red-500/40 text-red-400 px-6 py-3 font-semibold rounded-xl transition-all duration-300 hover:bg-red-500/10 hover:border-red-500/60 active:scale-[0.98];
+  }
+  .btn-success {
+    @apply relative border border-emerald-500/40 text-emerald-400 px-6 py-3 font-semibold rounded-xl transition-all duration-300 hover:bg-emerald-500/10 hover:border-emerald-500/60 active:scale-[0.98];
+  }
+  .input-field {
+    @apply w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder-white/30 outline-none transition-all duration-300 focus:border-accent/50 focus:ring-2 focus:ring-accent/20 focus:bg-white/[0.07];
+  }
+  .card {
+    @apply glass rounded-2xl p-6 transition-all duration-300;
+  }
+  .card-hover {
+    @apply card hover:border-accent/30 hover:shadow-glow;
+  }
+  .gradient-text {
+    @apply text-transparent bg-clip-text bg-gradient-to-r from-accent-dark via-accent to-accent-light;
+  }
+  .bg-dots {
+    background-image: radial-gradient(rgba(168, 85, 247, 0.08) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+  .bg-mesh {
+    background-image: 
+      radial-gradient(at 20% 20%, rgba(168, 85, 247, 0.12) 0px, transparent 50%),
+      radial-gradient(at 80% 80%, rgba(124, 58, 237, 0.08) 0px, transparent 50%),
+      radial-gradient(at 50% 50%, rgba(192, 132, 252, 0.05) 0px, transparent 50%);
+  }
+  .badge {
+    @apply inline-flex items-center rounded-full px-3 py-1 text-xs font-medium ring-1 ring-inset;
+  }
+}
